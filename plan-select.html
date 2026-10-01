@@ -1,0 +1,1569 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Plan Select</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand: #2563EB;
+            --brand-ink: #1E40AF;
+            --brand-hover: #93B4F5;
+            --brand-soft: #EAF1FE;
+            --ink: #0F1B2D;
+            --muted: #5B6B82;
+            --line: #DCE4EF;
+            --bg: #F5F8FC;
+            --card: #fff;
+            --danger: #B42318;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        [hidden] {
+            display: none !important;
+        }
+
+        h1, h2, h3, p, ul, ol {
+            margin: 0;
+        }
+
+        h1, h2, h3 {
+            font-size: inherit;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: var(--bg);
+            font-family: Inter, system-ui, sans-serif;
+            font-size: 16px;
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+        }
+
+        button, input, summary {
+            font: inherit;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--brand);
+            outline-offset: 2px;
+        }
+
+        a {
+            color: var(--brand-ink);
+        }
+
+        /* Header */
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background: var(--card);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .topbar-inner {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 16px 24px;
+        }
+
+        .brand {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--brand-ink);
+        }
+
+        .mobile-progress {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .eyebrow {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .progress-track {
+            height: 6px;
+            margin-top: 8px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: var(--line);
+        }
+
+        .progress-fill {
+            width: 0;
+            height: 100%;
+            background: var(--brand);
+            transition: width .2s ease;
+        }
+
+        /* Layout */
+        .app-shell {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 32px 24px 64px;
+            display: grid;
+            grid-template-columns: 240px minmax(0, 1fr);
+            gap: 40px;
+            align-items: start;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 88px;
+        }
+
+        .step-list {
+            display: grid;
+            gap: 4px;
+        }
+
+        .side-step {
+            width: 100%;
+            padding: 8px 10px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            color: var(--muted);
+            text-align: left;
+            background: transparent;
+            border: 0;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .side-step.current {
+            color: var(--brand-ink);
+            font-weight: 600;
+            background: var(--brand-soft);
+        }
+
+        .side-step.complete {
+            cursor: pointer;
+        }
+
+        .side-step.complete:hover {
+            background: var(--card);
+        }
+
+        .side-step.upcoming {
+            opacity: .6;
+        }
+
+        .side-chip {
+            width: 26px;
+            height: 26px;
+            flex: 0 0 26px;
+            display: grid;
+            place-items: center;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            background: var(--card);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .side-step.current .side-chip,
+        .side-step.complete .side-chip {
+            color: #fff;
+            border-color: var(--brand);
+            background: var(--brand);
+        }
+
+        .side-progress {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--line);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(30, 64, 175, .06);
+        }
+
+        .question-card {
+            max-width: 640px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .results-wrap {
+            max-width: 840px;
+            margin: 0 auto;
+        }
+
+        .title {
+            margin-top: 6px;
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: -.01em;
+        }
+
+        .lead {
+            margin-top: 10px;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .block {
+            margin-top: 24px;
+        }
+
+        .section-heading {
+            margin-bottom: 12px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .info-box {
+            padding: 12px 16px;
+            background: var(--brand-soft);
+            border-left: 3px solid var(--brand);
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        .nested {
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+        }
+
+        .nested-title {
+            margin-bottom: 12px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        /* Choices */
+        .choice-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .choice {
+            padding: 16px 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: var(--card);
+            border: 1.5px solid var(--line);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: border-color .15s ease, background-color .15s ease;
+        }
+
+        .choice:hover {
+            border-color: var(--brand-hover);
+        }
+
+        .choice.selected {
+            border-color: var(--brand);
+            background: var(--brand-soft);
+        }
+
+        .choice input {
+            width: 18px;
+            height: 18px;
+            flex: 0 0 18px;
+            margin: 3px 0 0;
+            accent-color: var(--brand);
+        }
+
+        .c-title {
+            display: block;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .c-sub {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 13.5px;
+        }
+
+        .or-divider {
+            margin: 20px 0;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .or-divider::before,
+        .or-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--line);
+        }
+
+        /* Count rows */
+        .segment-row {
+            padding: 14px 0;
+            display: grid;
+            grid-template-columns: 1fr 220px;
+            gap: 16px;
+            align-items: center;
+            border-top: 1px solid var(--line);
+        }
+
+        .segment-row:first-of-type {
+            padding-top: 0;
+            border-top: 0;
+        }
+
+        .row-title {
+            display: block;
+            font-size: 14.5px;
+            font-weight: 600;
+        }
+
+        .row-sub {
+            display: block;
+            color: var(--muted);
+            font-size: 12.5px;
+        }
+
+        .segments {
+            padding: 4px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+        }
+
+        .segments.two {
+            max-width: 240px;
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .segment {
+            min-height: 38px;
+            color: var(--muted);
+            background: transparent;
+            border: 0;
+            border-radius: 7px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .segment.selected {
+            color: #fff;
+            font-weight: 600;
+            background: var(--brand);
+        }
+
+        .exact-row {
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        .exact-row input {
+            width: 72px;
+            min-height: 38px;
+            text-align: center;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+        }
+
+        /* Buttons */
+        .actions {
+            margin-top: 28px;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-top: 1px solid var(--line);
+        }
+
+        .btn {
+            min-height: 44px;
+            padding: 10px 20px;
+            color: var(--ink);
+            background: var(--card);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--bg);
+        }
+
+        .btn-primary {
+            color: #fff;
+            background: var(--brand);
+            border-color: var(--brand);
+        }
+
+        .btn-primary:hover {
+            background: var(--brand-ink);
+            border-color: var(--brand-ink);
+        }
+
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: .45;
+        }
+
+        /* Key/value lists */
+        .kv-list {
+            border-top: 1px solid var(--line);
+        }
+
+        .kv {
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            border-bottom: 1px solid var(--line);
+            font-size: 14px;
+        }
+
+        .kv-label {
+            color: var(--muted);
+        }
+
+        .kv-value {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .terms {
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 14px 16px;
+            background: var(--bg);
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .accept {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .accept input {
+            width: 18px;
+            height: 18px;
+            flex: 0 0 18px;
+            margin-top: 3px;
+            accent-color: var(--brand);
+        }
+
+        .error {
+            min-height: 20px;
+            margin-top: 12px;
+            color: var(--danger);
+            font-size: 13px;
+        }
+
+        /* Results */
+        .result-card {
+            margin-top: 20px;
+            padding: 28px;
+        }
+
+        .best-card {
+            border-top: 4px solid var(--brand);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            color: var(--brand-ink);
+            background: var(--brand-soft);
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .plan-name {
+            margin-top: 10px;
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        .why {
+            margin-top: 14px;
+        }
+
+        .alternative-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .alternative-grid .result-card {
+            margin-top: 0;
+            padding: 18px;
+        }
+
+        .alternative-grid .plan-name {
+            font-size: 16px;
+        }
+
+        .alternative-grid .lead {
+            font-size: 14px;
+        }
+
+        details {
+            margin-top: 20px;
+        }
+
+        summary {
+            padding: 16px 20px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            padding: 0 20px 20px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 620px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 10px;
+            vertical-align: top;
+            text-align: left;
+            border-bottom: 1px solid var(--line);
+        }
+
+        th {
+            color: var(--muted);
+            font-size: 11px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+
+        .recommended {
+            background: var(--brand-soft);
+        }
+
+        .panel {
+            margin-top: 20px;
+            padding: 24px;
+        }
+
+        .panel h3 {
+            font-size: 17px;
+        }
+
+        .panel ul,
+        .panel ol {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .panel li + li {
+            margin-top: 6px;
+        }
+
+        .contacts {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid var(--line);
+            font-size: 14px;
+        }
+
+        .disclaimer {
+            margin-top: 24px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .toast {
+            position: fixed;
+            z-index: 60;
+            top: 16px;
+            left: 50%;
+            width: min(92vw, 480px);
+            padding: 12px 16px;
+            color: #fff;
+            background: var(--brand-ink);
+            border-radius: 10px;
+            text-align: center;
+            transform: translateX(-50%);
+        }
+
+        @media (max-width: 1023px) {
+            .mobile-progress {
+                display: block;
+            }
+
+            .app-shell {
+                display: block;
+                padding: 24px 16px 48px;
+            }
+
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .topbar-inner {
+                padding: 12px 16px;
+            }
+
+            .question-card,
+            .result-card,
+            .panel {
+                padding: 20px;
+            }
+
+            .segment-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+
+            .alternative-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions .btn {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .actions {
+                flex-direction: column-reverse;
+            }
+
+            .kv {
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .kv-value {
+                text-align: left;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="topbar">
+        <div class="topbar-inner">
+            <p class="brand">Plan Select</p>
+            <div class="mobile-progress">
+                <div id="mobileProgressText" class="eyebrow">Step 1 of 7</div>
+                <div class="progress-track" aria-hidden="true">
+                    <div id="mobileProgressFill" class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-shell">
+        <aside class="sidebar" aria-label="Profile steps">
+            <nav id="stepList" class="step-list"></nav>
+            <div class="side-progress">
+                <div id="sideProgressText" class="eyebrow">0 of 7 completed</div>
+                <div class="progress-track" aria-hidden="true">
+                    <div id="sideProgressFill" class="progress-fill"></div>
+                </div>
+            </div>
+        </aside>
+
+        <main id="mainContent">
+            <section data-screen="coverage">
+                <article class="card question-card">
+                    <div class="eyebrow">Step 1 of 7 · Coverage</div>
+                    <h1 class="title">Who are you planning to cover?</h1>
+                    <p class="lead">Select everyone who needs medical coverage.</p>
+
+                    <div class="choice-list block">
+                        <label class="choice selected">
+                            <input type="checkbox" checked disabled aria-label="Employee required">
+                            <span>
+                                <span class="c-title">Employee (required)</span>
+                                <span class="c-sub">You are included in every coverage option.</span>
+                            </span>
+                        </label>
+                        <label class="choice" data-choice>
+                            <input id="coverSpouse" type="checkbox">
+                            <span>
+                                <span class="c-title">Spouse</span>
+                                <span class="c-sub">Include your legal spouse or domestic partner.</span>
+                            </span>
+                        </label>
+                        <label class="choice" data-choice>
+                            <input id="coverChildren" type="checkbox">
+                            <span>
+                                <span class="c-title">Children</span>
+                                <span class="c-sub">Eligible dependent children may be covered up to age 26.</span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="info-box block">
+                        The guide doesn’t list employee contribution amounts by coverage tier, so monthly cost will show as “Confirm with HR.”
+                    </div>
+
+                    <div class="actions">
+                        <span></span>
+                        <button class="btn btn-primary next-button" type="button">Continue</button>
+                    </div>
+                </article>
+            </section>
+
+            <section data-screen="usage">
+                <article class="card question-card">
+                    <div class="eyebrow">Step 2 of 7 · Medical usage</div>
+                    <h1 class="title">How much care do you expect?</h1>
+                    <p class="lead">Pick a quick care level for each adult, or enter your own expected visits.</p>
+
+                    <div id="usageProfiles"></div>
+
+                    <div class="or-divider">OR</div>
+
+                    <label class="choice" data-choice>
+                        <input id="detailedPath" type="radio" name="usagePath" value="detailed">
+                        <span>
+                            <span class="c-title">Enter my own scenario</span>
+                            <span class="c-sub">Doctor visits, medications, and planned major events.</span>
+                        </span>
+                    </label>
+
+                    <div id="usageError" class="error" role="alert"></div>
+
+                    <div class="actions">
+                        <button class="btn back-button" type="button">Back</button>
+                        <button class="btn btn-primary next-button" type="button">Continue</button>
+                    </div>
+                </article>
+            </section>
+
+            <section data-screen="visits">
+                <article class="card question-card">
+                    <div class="eyebrow">Step 3 of 7 · Doctor visits</div>
+                    <h1 class="title">Estimate your doctor visits</h1>
+                    <p class="lead">Expected visits during the plan year. In-network preventive care is free.</p>
+
+                    <div id="visitAdults"></div>
+
+                    <div class="actions">
+                        <button class="btn back-button" type="button">Back</button>
+                        <button class="btn btn-primary next-button" type="button">Continue</button>
+                    </div>
+                </article>
+            </section>
+
+            <section data-screen="medications">
+                <article class="card question-card">
+                    <div class="eyebrow">Step 4 of 7 · Medications</div>
+                    <h1 class="title">Does anyone take medications regularly?</h1>
+
+                    <div class="segments two block" role="group" aria-label="Regular medications">
+                        <button class="segment selected" type="button" data-med-answer="no">No</button>
+                        <button class="segment" type="button" data-med-answer="yes">Yes</button>
+                    </div>
+
+                    <div id="medicationRows" class="nested" hidden></div>
+
+                    <div class="info-box block">
+                        Percentage-based prescription costs aren’t included in estimates because drug prices aren’t listed.
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn back-button" type="button">Back</button>
+                        <button class="btn btn-primary next-button" type="button">Continue</button>
+                    </div>
+                </article>
+            </section>
+
+            <section data-screen="events">
+                <article class="card question-card">
+                    <div class="eyebrow">Step 5 of 7 · Major events</div>
+                    <h1 class="title">Do you expect a major medical event?</h1>
+
+                    <div class="segments two block" role="group" aria-label="Major medical event">
+                        <button class="segment selected" type="button" data-event-answer="no">No</button>
+                        <button class="segment" type="button" data-event-answer="yes">Yes</button>
+                    </div>
+
+                    <div id="eventChoices" class="choice-list block" hidden>
+                        <label class="choice" data-choice>
+                            <input type="checkbox" value="Planned procedure" data-event-option>
+                            <span>
+                                <span class="c-title">Planned procedure</span>
+                                <span class="c-sub">For example, outpatient or inpatient surgery.</span>
+                            </span>
+                        </label>
+                        <label class="choice" data-choice>
+                            <input type="checkbox" value="Pregnancy or newborn delivery" data-event-option>
+                            <span>
+                                <span class="c-title">Pregnancy or newborn delivery</span>
+                            </span>
+                        </label>
+                        <label class="choice" data-choice>
+                            <input type="checkbox" value="Ongoing therapy" data-event-option>
+                            <span>
+                                <span class="c-title">Ongoing therapy</span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn back-button" type="button">Back</button>
+                        <button class="btn btn-primary next-button" type="button">Continue</button>
+                    </div>
+                </article>
+            </section>
+
+            <section data-screen="preferences">
+                <article class="card question-card">
+                    <div class="eyebrow">Step 6 of 7 · Preferences</div>
+                    <h1 class="title">Which plan structure feels better?</h1>
+
+                    <div class="choice-list block">
+                        <label class="choice" data-choice>
+                            <input type="radio" name="preference" value="predictable">
+                            <span>
+                                <span class="c-title">Predictable copays</span>
+                                <span class="c-sub">I prefer set copays for common visits.</span>
+                            </span>
+                        </label>
+                        <label class="choice" data-choice>
+                            <input type="radio" name="preference" value="hsa">
+                            <span>
+                                <span class="c-title">HDHP with a Health Savings Account</span>
+                                <span class="c-sub">Higher deductible ($5,000 single) plus a $1,500 employer HSA contribution.</span>
+                            </span>
+                        </label>
+                        <label class="choice" data-choice>
+                            <input type="radio" name="preference" value="unsure">
+                            <span>
+                                <span class="c-title">I’m not sure</span>
+                                <span class="c-sub">Base it on my expected medical use.</span>
+                            </span>
+                        </label>
+                    </div>
+
+                    <div id="preferenceError" class="error" role="alert"></div>
+
+                    <div class="actions">
+                        <button class="btn back-button" type="button">Back</button>
+                        <button class="btn btn-primary next-button" type="button">Review</button>
+                    </div>
+                </article>
+            </section>
+
+            <section data-screen="summary">
+                <article class="card question-card">
+                    <div class="eyebrow">Step 7 of 7 · Summary</div>
+                    <h1 class="title">Review your answers</h1>
+
+                    <div id="summaryList" class="kv-list block"></div>
+
+                    <div class="block">
+                        <h2 class="section-heading">Terms</h2>
+                        <div class="terms" tabindex="0">
+                            Results are estimates based on your answers and the Employee Benefits Guide for the 2026–2027 plan year. They are not medical, financial, tax, or legal advice. Official plan documents govern. The guide is a partial listing of covered benefits, limitations, and exclusions. Employee contribution amounts are not included, so premiums cannot be calculated. Percentage-based coinsurance cannot be priced without the allowed charge or prescription price. Confirm eligibility, provider network status, coverage, and costs before receiving care.
+                        </div>
+                    </div>
+
+                    <label class="accept block">
+                        <input id="acceptTerms" type="checkbox">
+                        <span>I accept these terms and understand that official plan documents govern.</span>
+                    </label>
+
+                    <div class="actions">
+                        <button class="btn back-button" type="button">Back</button>
+                        <button id="recommendButton" class="btn btn-primary" type="button" disabled>Get recommendation</button>
+                    </div>
+                </article>
+            </section>
+
+            <section data-screen="results">
+                <div class="results-wrap">
+                    <div class="eyebrow">Your recommendation</div>
+                    <h1 class="title">Your best match</h1>
+                    <p id="resultSubtitle" class="lead"></p>
+
+                    <article class="card result-card best-card">
+                        <div class="badge">Best match</div>
+                        <h2 id="bestPlanName" class="plan-name"></h2>
+                        <p id="bestWhy" class="why"></p>
+                        <div id="bestMetrics" class="kv-list block"></div>
+                    </article>
+
+                    <section class="block" aria-labelledby="alternativesHeading">
+                        <h2 id="alternativesHeading" class="section-heading">Also consider</h2>
+                        <div id="alternativeCards" class="alternative-grid"></div>
+                    </section>
+
+                    <details class="card">
+                        <summary>Compare all plans</summary>
+                        <div class="table-wrap">
+                            <table id="comparisonTable"></table>
+                        </div>
+                    </details>
+
+                    <section class="card panel">
+                        <h3>Double-check with HR</h3>
+                        <ul id="hrList"></ul>
+                    </section>
+
+                    <section class="card panel">
+                        <h3>Good to know</h3>
+                        <ul>
+                            <li>Your employer contributes $1,500 to the HSA each year. Enroll in the HSA in Paylocity to receive it, even if you contribute $0.</li>
+                            <li>2026 HSA limits: $4,400 employee-only, $8,750 family (employer contribution counts toward the limit).</li>
+                            <li>2026 Medical FSA limit: $3,400, with $680 carryover. Dependent Care FSA limit: $7,500.</li>
+                            <li>Employer-paid life insurance: $50,000, with matching AD&amp;D.</li>
+                        </ul>
+                    </section>
+
+                    <section class="card panel">
+                        <h3>Next steps</h3>
+                        <ol>
+                            <li>Enroll August 20–26, 2026. Elections take effect September 1, 2026.</li>
+                            <li>Log in at <a href="https://access.paylocity.com">access.paylocity.com</a> or the Paylocity app and open Benefits Enhanced.</li>
+                            <li>Select “Action Needed” → Start → “Start Your Enrollment.”</li>
+                            <li>Submit your elections and save the confirmation PDF.</li>
+                        </ol>
+                        <div class="contacts">
+                            <p><strong>Benefits help:</strong> Samantha Miller · <a href="tel:4082228760">408-222-8760</a> · <a href="mailto:sam@kbibenefits.com">sam@kbibenefits.com</a></p>
+                            <p><strong>Cigna:</strong> <a href="tel:8664942111">866-494-2111</a> · <a href="https://www.cigna.com">www.cigna.com</a></p>
+                        </div>
+                    </section>
+
+                    <div class="actions">
+                        <button id="editAnswers" class="btn" type="button">Edit my answers</button>
+                        <button id="startOver" class="btn btn-primary" type="button">Start over</button>
+                    </div>
+
+                    <p class="disclaimer">
+                        Based on the partial benefit summaries in the 2026–2027 Employee Benefits Guide. For complete benefits, exclusions, and employee contribution amounts, refer to official plan documents and confirm with HR.
+                    </p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+    <script>
+        window.__APP_DATA__ = {
+            planYear: 'September 1, 2026 – August 31, 2027',
+            steps: [
+                { id: 'coverage', title: 'Coverage' },
+                { id: 'usage', title: 'Medical usage' },
+                { id: 'visits', title: 'Doctor visits' },
+                { id: 'medications', title: 'Medications' },
+                { id: 'events', title: 'Major events' },
+                { id: 'preferences', title: 'Preferences' },
+                { id: 'summary', title: 'Summary' }
+            ],
+            services: [
+                { id: 'pcp', label: 'Primary care', sub: 'Excludes preventive care' },
+                { id: 'specialist', label: 'Specialist', sub: 'Office visits' },
+                { id: 'urgent', label: 'Urgent care', sub: 'In-network' },
+                { id: 'er', label: 'Emergency room', sub: 'Copay and coinsurance may apply' }
+            ],
+            rxTiers: [
+                { id: 'generic', label: 'Generic (Tier 1)' },
+                { id: 'brand', label: 'Brand name (Tier 2)' },
+                { id: 'nonpreferred', label: 'Non-preferred (Tier 3)' },
+                { id: 'specialty', label: 'Specialty (Tier 4)' }
+            ],
+            plans: [{
+                    id: 'platinum',
+                    name: 'Cigna | OAP-IN Platinum 500',
+                    deductible: { single: '$500', family: '$1,000' },
+                    oop: { single: '$2,500', family: '$5,000' },
+                    services: {
+                        pcp: '$20 copay/visit',
+                        specialist: '$40 copay/visit',
+                        urgent: '$20 copay/visit',
+                        er: '$200 copay/visit',
+                        outpatient: '$150 deductible/admission',
+                        inpatient: '$500 deductible/admission'
+                    },
+                    fixedService: { pcp: 20, specialist: 40, urgent: 20, er: 200 },
+                    rx: {
+                        generic: '$5',
+                        brand: '$15',
+                        nonpreferred: '$25',
+                        specialty: '20% coinsurance, max $250/prescription'
+                    },
+                    fixedRx: { generic: 5, brand: 15, nonpreferred: 25 },
+                    alt: 'Lowest deductible, out-of-pocket max, and common copays.'
+                },
+                {
+                    id: 'gold',
+                    name: 'Cigna | OAP Gold 1500',
+                    deductible: { single: '$1,500', family: '$3,000' },
+                    oop: { single: '$8,150', family: '$16,300' },
+                    services: {
+                        pcp: '$30 copay/visit',
+                        specialist: '$55 copay/visit',
+                        urgent: '$35 copay/visit',
+                        er: '$250 copay/visit plus 20% coinsurance',
+                        outpatient: '20% coinsurance',
+                        inpatient: '20% coinsurance'
+                    },
+                    fixedService: { pcp: 30, specialist: 55, urgent: 35 },
+                    rx: {
+                        generic: '$10',
+                        brand: '$40',
+                        nonpreferred: '$70',
+                        specialty: '30% coinsurance, max $250/prescription'
+                    },
+                    fixedRx: { generic: 10, brand: 40, nonpreferred: 70 },
+                    alt: 'A middle ground between Platinum and Silver.'
+                },
+                {
+                    id: 'silver',
+                    name: 'Cigna | OAP Silver 2500',
+                    deductible: { single: '$2,500', family: '$5,000' },
+                    oop: { single: '$8,200', family: '$16,400' },
+                    services: {
+                        pcp: '$55 copay/visit',
+                        specialist: '$75 copay/visit',
+                        urgent: '$55 copay/visit',
+                        er: '$350 copay/visit plus 30% coinsurance',
+                        outpatient: '20% coinsurance',
+                        inpatient: '20% coinsurance'
+                    },
+                    fixedService: { pcp: 55, specialist: 75, urgent: 55 },
+                    rx: {
+                        generic: '$20',
+                        brand: '$75',
+                        nonpreferred: '$115',
+                        specialty: '$250'
+                    },
+                    fixedRx: { generic: 20, brand: 75, nonpreferred: 115, specialty: 250 },
+                    alt: 'Worth a look if its payroll cost is low enough to offset higher cost sharing.'
+                },
+                {
+                    id: 'hsa',
+                    name: 'Cigna | OAP HSA (HDHP 5000)',
+                    deductible: { single: '$5,000', family: '$10,000' },
+                    oop: { single: '$7,000', family: '$14,000' },
+                    services: {
+                        pcp: '20% coinsurance/visit',
+                        specialist: '20% coinsurance/visit',
+                        urgent: '20% coinsurance',
+                        er: '20% coinsurance',
+                        outpatient: '20% coinsurance',
+                        inpatient: '20% coinsurance'
+                    },
+                    fixedService: {},
+                    rx: {
+                        generic: '20% coinsurance/prescription',
+                        brand: '20% coinsurance/prescription',
+                        nonpreferred: '20% coinsurance/prescription',
+                        specialty: '$0'
+                    },
+                    fixedRx: { specialty: 0 },
+                    hsaContribution: '$1,500',
+                    alt: 'Includes a $1,500 employer HSA contribution; higher deductible.'
+                }
+            ]
+        };
+
+        (function() {
+            'use strict';
+
+            const data = window.__APP_DATA__;
+            const $ = function(id) { return document.getElementById(id); };
+            const screens = Array.from(document.querySelectorAll('[data-screen]'));
+            const allStepIds = data.steps.map(function(step) { return step.id; });
+            const detailedOnly = ['visits', 'medications', 'events'];
+            const state = {
+                current: 'coverage',
+                quick: false,
+                usage: '',
+                medAnswer: 'no',
+                eventAnswer: 'no',
+                counts: {}
+            };
+
+            function escapeHtml(value) {
+                return String(value == null ? '' : value)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+            }
+
+            function kvRows(items) {
+                return items.map(function(item) {
+                    return '<div class="kv"><span class="kv-label">' + escapeHtml(item[0]) + '</span>' +
+                        '<span class="kv-value">' + escapeHtml(item[1]) + '</span></div>';
+                }).join('');
+            }
+
+            function coverageTier() {
+                const spouse = $('coverSpouse').checked;
+                const children = $('coverChildren').checked;
+                if (spouse && children) return 'Family';
+                if (spouse) return 'Employee & Spouse';
+                if (children) return 'Employee & Child(ren)';
+                return 'Employee';
+            }
+
+            function tierKey() {
+                return coverageTier() === 'Employee' ? 'single' : 'family';
+            }
+
+            function coveredAdults() {
+                return $('coverSpouse').checked ? ['You', 'Your spouse'] : ['You'];
+            }
+
+            function activeSteps() {
+                return state.quick ? ['coverage', 'usage', 'preferences', 'summary'] : allStepIds;
+            }
+
+            function showToast(message) {
+                const toast = $('toast');
+                toast.textContent = message;
+                toast.hidden = false;
+                clearTimeout(showToast.timer);
+                showToast.timer = setTimeout(function() { toast.hidden = true; }, 2600);
+            }
+
+            function renderProgress() {
+                const total = data.steps.length;
+                const done = state.current === 'results' ? total : allStepIds.indexOf(state.current);
+                const percent = Math.round((done / total) * 100) + '%';
+
+                $('stepList').innerHTML = data.steps.map(function(step, index) {
+                    const current = step.id === state.current;
+                    const complete = !current && (index < done || (state.quick && detailedOnly.includes(step.id)));
+                    const cls = current ? 'current' : complete ? 'complete' : 'upcoming';
+                    return '<button type="button" class="side-step ' + cls + '" data-target-step="' + step.id + '"' +
+                        (complete ? '' : ' disabled') + '>' +
+                        '<span class="side-chip">' + (complete ? '✓' : index + 1) + '</span>' +
+                        escapeHtml(step.title) + '</button>';
+                }).join('');
+
+                $('sideProgressText').textContent = done + ' of ' + total + ' completed';
+                $('sideProgressFill').style.width = percent;
+                $('mobileProgressText').textContent = state.current === 'results' ? 'Done' : 'Step ' + (done + 1) + ' of ' + total;
+                $('mobileProgressFill').style.width = percent;
+            }
+
+            function showScreen(id) {
+                state.current = id;
+                screens.forEach(function(screen) {
+                    screen.hidden = screen.dataset.screen !== id;
+                });
+                if (id === 'summary') renderSummary();
+                renderProgress();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                const heading = document.querySelector('[data-screen="' + id + '"] h1');
+                heading.setAttribute('tabindex', '-1');
+                heading.focus({ preventScroll: true });
+            }
+
+            function updateChoice(label) {
+                const input = label && label.querySelector('input');
+                if (input) label.classList.toggle('selected', input.checked);
+            }
+
+            function renderUsageProfiles() {
+                const levels = [
+                    ['low', 'Low', 'Mostly preventive care'],
+                    ['medium', 'Medium', 'Regular check-ups and occasional care'],
+                    ['high', 'High', 'Ongoing care with regular specialist visits']
+                ];
+                $('usageProfiles').innerHTML = coveredAdults().map(function(adult, adultIndex) {
+                    return '<div class="nested"><h2 class="nested-title">' + escapeHtml(adult) + '</h2><div class="choice-list">' +
+                        levels.map(function(level) {
+                            return '<label class="choice" data-choice>' +
+                                '<input type="radio" name="usageAdult' + adultIndex + '" value="' + level[0] + '">' +
+                                '<span><span class="c-title">' + level[1] + '</span>' +
+                                '<span class="c-sub">' + level[2] + '</span></span></label>';
+                        }).join('') + '</div></div>';
+                }).join('');
+            }
+
+            // A row with 0 / 1 / 2 / 3+ segments; "3+" reveals an exact number field.
+            function countRow(label, sub, key) {
+                const value = state.counts[key] || 0;
+                state.counts[key] = value;
+                const segments = ['0', '1', '2', '3+'].map(function(text, index) {
+                    const selected = index === 3 ? value >= 3 : value === index;
+                    return '<button type="button" class="segment' + (selected ? ' selected' : '') + '"' +
+                        ' data-count-key="' + key + '" data-count-value="' + index + '">' + text + '</button>';
+                }).join('');
+                return '<div class="segment-row">' +
+                    '<div><span class="row-title">' + escapeHtml(label) + '</span>' +
+                    '<span class="row-sub">' + escapeHtml(sub) + '</span></div>' +
+                    '<div><div class="segments" role="group" aria-label="' + escapeHtml(label) + '">' + segments + '</div>' +
+                    '<label class="exact-row" data-exact-for="' + key + '"' + (value >= 3 ? '' : ' hidden') + '>Exact number' +
+                    '<input type="number" min="3" max="99" value="' + Math.max(3, value) + '" data-exact-input="' + key + '"></label>' +
+                    '</div></div>';
+            }
+
+            function renderVisitRows() {
+                $('visitAdults').innerHTML = coveredAdults().map(function(adult, adultIndex) {
+                    return '<div class="nested"><h2 class="nested-title">' + escapeHtml(adult) + '</h2>' +
+                        data.services.map(function(service) {
+                            return countRow(service.label, service.sub, 'visit_' + adultIndex + '_' + service.id);
+                        }).join('') + '</div>';
+                }).join('');
+            }
+
+            function renderMedicationRows() {
+                $('medicationRows').innerHTML = '<h2 class="nested-title">Household fills per month</h2>' +
+                    data.rxTiers.map(function(tier) {
+                        return countRow(tier.label, 'Fills per month', 'rx_' + tier.id);
+                    }).join('');
+            }
+
+            function sumCounts(prefix) {
+                return Object.keys(state.counts).reduce(function(total, key) {
+                    return key.indexOf(prefix) === 0 ? total + state.counts[key] : total;
+                }, 0);
+            }
+
+            function totalVisits() {
+                // Only count adults that are still covered.
+                const adults = coveredAdults().length;
+                return Object.keys(state.counts).reduce(function(total, key) {
+                    const parts = key.split('_');
+                    return parts[0] === 'visit' && Number(parts[1]) < adults ? total + state.counts[key] : total;
+                }, 0);
+            }
+
+            function usageLevel() {
+                if (state.quick) return state.usage;
+                if (state.eventAnswer === 'yes' || totalVisits() >= 8) return 'high';
+                if (totalVisits() >= 3 || state.medAnswer === 'yes') return 'medium';
+                return 'low';
+            }
+
+            function getPreference() {
+                const selected = document.querySelector('input[name="preference"]:checked');
+                return selected ? selected.value : '';
+            }
+
+            function eventList() {
+                if (state.quick || state.eventAnswer === 'no') return 'None';
+                const selected = Array.from(document.querySelectorAll('[data-event-option]:checked')).map(function(input) {
+                    return input.value;
+                });
+                return selected.length ? selected.join(', ') : 'Yes, type not selected';
+            }
+
+            function renderSummary() {
+                const prefs = { predictable: 'Predictable copays', hsa: 'HDHP with HSA', unsure: 'Not sure' };
+                const quickNote = 'Skipped (quick profile)';
+                $('summaryList').innerHTML = kvRows([
+                    ['Coverage', coverageTier()],
+                    ['Medical usage', state.quick ? state.usage.charAt(0).toUpperCase() + state.usage.slice(1) : 'Detailed scenario'],
+                    ['Doctor visits', state.quick ? quickNote : totalVisits() + ' per year'],
+                    ['Medications', state.quick ? quickNote : state.medAnswer === 'yes' ? sumCounts('rx_') + ' fills per month' : 'No'],
+                    ['Major events', state.quick ? quickNote : eventList()],
+                    ['Preference', prefs[getPreference()] || 'Not answered']
+                ]);
+            }
+
+            function recommendation() {
+                const usage = usageLevel();
+                const preference = getPreference();
+                const event = !state.quick && state.eventAnswer === 'yes';
+                if (preference === 'hsa' && usage === 'low' && !event) return 'hsa';
+                if (usage === 'high') return 'platinum';
+                if (usage === 'medium') return 'gold';
+                return preference === 'predictable' ? 'silver' : 'hsa';
+            }
+
+            function estimatedCopays(plan) {
+                let total = 0;
+                const adults = coveredAdults().length;
+                Object.keys(state.counts).forEach(function(key) {
+                    const parts = key.split('_');
+                    const count = state.counts[key];
+                    if (parts[0] === 'visit' && Number(parts[1]) < adults && parts[2] in plan.fixedService) {
+                        total += count * plan.fixedService[parts[2]];
+                    }
+                    if (parts[0] === 'rx' && state.medAnswer === 'yes' && parts[1] in plan.fixedRx) {
+                        total += count * 12 * plan.fixedRx[parts[1]];
+                    }
+                });
+                return total;
+            }
+
+            function whyText(planId) {
+                const eventText = !state.quick && state.eventAnswer === 'yes' ?
+                    ' You also expect a major medical event, so a low out-of-pocket maximum matters more.' : '';
+                const why = {
+                    platinum: 'Your answers point to higher medical use. This plan has the lowest deductible, out-of-pocket maximum, and office copays.' + eventText,
+                    gold: 'Your answers suggest regular but not intensive care. Gold has lower copays than Silver and a lower deductible than Silver or the HSA plan.',
+                    silver: 'Your answers suggest lighter use and a preference for set copays. Silver keeps copays for common visits, with a higher deductible than Platinum or Gold.',
+                    hsa: 'Your answers suggest lower medical use. You get a $1,500 employer HSA contribution, but the deductible is $5,000 (single) and most services are 20% coinsurance.'
+                };
+                return why[planId] + ' Payroll contributions aren’t in the guide, so confirm cost with HR.';
+            }
+
+            function renderResults() {
+                const best = data.plans.find(function(plan) { return plan.id === recommendation(); });
+                const tier = tierKey();
+
+                $('resultSubtitle').textContent = coverageTier() + ' · In-network · ' + data.planYear;
+                $('bestPlanName').textContent = best.name;
+                $('bestWhy').textContent = whyText(best.id);
+                $('bestMetrics').innerHTML = kvRows([
+                    ['Employee premium', 'Confirm with HR'],
+                    ['Deductible', best.deductible[tier]],
+                    ['Out-of-pocket max', best.oop[tier]],
+                    ['Employer HSA contribution', best.hsaContribution || 'N/A'],
+                    ['Estimated yearly copays', state.quick ? 'Not calculated (quick profile)' :
+                        '$' + estimatedCopays(best).toLocaleString('en-US') + ' (excludes coinsurance)']
+                ]);
+
+                $('alternativeCards').innerHTML = data.plans.filter(function(plan) {
+                    return plan.id !== best.id;
+                }).map(function(plan) {
+                    return '<article class="card result-card"><h3 class="plan-name">' + escapeHtml(plan.name) + '</h3>' +
+                        '<p class="lead">' + escapeHtml(plan.alt) + '</p></article>';
+                }).join('');
+
+                renderComparison(best.id);
+                renderHrList(best);
+                showScreen('results');
+            }
+
+            function renderComparison(bestId) {
+                const tier = tierKey();
+                const rows = [
+                    ['Deductible', function(p) { return p.deductible[tier]; }],
+                    ['Out-of-pocket max', function(p) { return p.oop[tier]; }],
+                    ['Primary care', function(p) { return p.services.pcp; }],
+                    ['Specialist', function(p) { return p.services.specialist; }],
+                    ['Urgent care', function(p) { return p.services.urgent; }],
+                    ['Emergency room', function(p) { return p.services.er; }],
+                    ['Outpatient surgery', function(p) { return p.services.outpatient; }],
+                    ['Inpatient stay', function(p) { return p.services.inpatient; }]
+                ].concat(data.rxTiers.map(function(rxTier) {
+                    return [rxTier.label, function(p) { return p.rx[rxTier.id]; }];
+                }));
+
+                function cell(tag, plan, content) {
+                    return '<' + tag + (plan.id === bestId ? ' class="recommended"' : '') + '>' + escapeHtml(content) + '</' + tag + '>';
+                }
+
+                $('comparisonTable').innerHTML =
+                    '<caption class="sr-only">In-network medical plan comparison</caption>' +
+                    '<thead><tr><th>Item</th>' + data.plans.map(function(plan) { return cell('th', plan, plan.name); }).join('') + '</tr></thead>' +
+                    '<tbody>' + rows.map(function(row) {
+                        return '<tr><td>' + escapeHtml(row[0]) + '</td>' +
+                            data.plans.map(function(plan) { return cell('td', plan, row[1](plan)); }).join('') + '</tr>';
+                    }).join('') + '</tbody>';
+            }
+
+            function renderHrList(best) {
+                const items = [
+                    'Employee contribution for ' + coverageTier() + ' coverage.',
+                    'Costs for lab, imaging, therapy, and anything shown as coinsurance.',
+                    'That your doctors and facilities are in network.'
+                ];
+                if (best.id === 'hsa') {
+                    items.push('HSA eligibility (Medicare, some TRICARE/VA benefits, or a spouse’s general Medical FSA can block contributions).');
+                }
+                if (!state.quick && state.eventAnswer === 'yes') {
+                    items.push('A full estimate and any authorization needed for: ' + eventList() + '.');
+                }
+                if (!state.quick && state.medAnswer === 'yes') {
+                    items.push('Formulary status and costs for your prescriptions.');
+                }
+                $('hrList').innerHTML = items.map(function(item) {
+                    return '<li>' + escapeHtml(item) + '</li>';
+                }).join('');
+            }
+
+            function validateCurrent() {
+                if (state.current === 'usage') {
+                    const detailed = $('detailedPath').checked;
+                    const picks = Array.from(document.querySelectorAll('#usageProfiles input:checked')).map(function(input) {
+                        return input.value;
+                    });
+                    if (!detailed && picks.length !== coveredAdults().length) {
+                        $('usageError').textContent = 'Choose a care level for each adult, or enter your own scenario.';
+                        return false;
+                    }
+                    $('usageError').textContent = '';
+                    state.quick = !detailed;
+                    state.usage = detailed ? 'detailed' :
+                        picks.includes('high') ? 'high' : picks.includes('medium') ? 'medium' : 'low';
+                }
+                if (state.current === 'preferences') {
+                    const missing = !getPreference();
+                    $('preferenceError').textContent = missing ? 'Choose the plan structure you prefer.' : '';
+                    return !missing;
+                }
+                return true;
+            }
+
+            function move(offset) {
+                if (offset > 0 && !validateCurrent()) return;
+                const active = activeSteps();
+                const next = active[active.indexOf(state.current) + offset];
+                if (!next) return;
+                if (next === 'visits') renderVisitRows();
+                showScreen(next);
+            }
+
+            function setCount(key, value) {
+                state.counts[key] = Math.max(0, Math.min(99, value));
+            }
+
+            function selectToggle(target, attr) {
+                document.querySelectorAll('[' + attr + ']').forEach(function(button) {
+                    button.classList.toggle('selected', button === target);
+                });
+                return target.getAttribute(attr);
+            }
+
+            document.addEventListener('change', function(event) {
+                const input = event.target;
+
+                if (input.closest('[data-choice]')) {
+                    const group = input.type === 'radio' ?
+                        document.querySelectorAll('input[name="' + input.name + '"]') : [input];
+                    group.forEach(function(item) { updateChoice(item.closest('[data-choice]')); });
+                }
+                if (input.id === 'detailedPath' || input.name.indexOf('usageAdult') === 0) {
+                    // Quick profile and detailed path are mutually exclusive.
+                    const others = input.id === 'detailedPath' ?
+                        document.querySelectorAll('#usageProfiles input') : [$('detailedPath')];
+                    others.forEach(function(other) {
+                        other.checked = false;
+                        updateChoice(other.closest('[data-choice]'));
+                    });
+                }
+                if (input.id === 'coverSpouse') renderUsageProfiles();
+                if (input.id === 'acceptTerms') $('recommendButton').disabled = !input.checked;
+                if (input.dataset.exactInput) {
+                    const value = Math.max(3, Math.min(99, Number(input.value) || 3));
+                    input.value = value;
+                    setCount(input.dataset.exactInput, value);
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                const target = event.target;
+
+                if (target.matches('.next-button')) return move(1);
+                if (target.matches('.back-button')) return move(-1);
+
+                const sideButton = target.closest('[data-target-step]');
+                if (sideButton && !sideButton.disabled) {
+                    const step = sideButton.dataset.targetStep;
+                    if (state.quick && detailedOnly.includes(step)) {
+                        state.quick = false;
+                        state.usage = 'detailed';
+                        $('detailedPath').checked = true;
+                        $('detailedPath').dispatchEvent(new Event('change', { bubbles: true }));
+                        renderVisitRows();
+                        showToast('Switched to detailed questions.');
+                    }
+                    return showScreen(step);
+                }
+
+                if (target.matches('[data-med-answer]')) {
+                    state.medAnswer = selectToggle(target, 'data-med-answer');
+                    $('medicationRows').hidden = state.medAnswer !== 'yes';
+                    return;
+                }
+
+                if (target.matches('[data-event-answer]')) {
+                    state.eventAnswer = selectToggle(target, 'data-event-answer');
+                    $('eventChoices').hidden = state.eventAnswer !== 'yes';
+                    return;
+                }
+
+                if (target.matches('[data-count-key]')) {
+                    const key = target.dataset.countKey;
+                    const index = Number(target.dataset.countValue);
+                    const exact = document.querySelector('[data-exact-for="' + key + '"]');
+                    target.parentElement.querySelectorAll('.segment').forEach(function(button) {
+                        button.classList.toggle('selected', button === target);
+                    });
+                    exact.hidden = index < 3;
+                    setCount(key, index < 3 ? index : Number(exact.querySelector('input').value) || 3);
+                }
+            });
+
+            $('recommendButton').addEventListener('click', renderResults);
+            $('editAnswers').addEventListener('click', function() { showScreen('summary'); });
+            $('startOver').addEventListener('click', function() { window.location.reload(); });
+
+            renderUsageProfiles();
+            renderMedicationRows();
+            screens.forEach(function(screen) {
+                screen.hidden = screen.dataset.screen !== 'coverage';
+            });
+            renderProgress();
+        }());
+    </script>
+</body>
+
+</html>
