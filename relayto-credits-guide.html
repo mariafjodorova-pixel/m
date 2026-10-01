@@ -3,76 +3,136 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Guide to Obtaining Enrollment and Tech Credits for Relayto AI Solutions</title>
+<title>Funding Relayto AI with Carrier Tech Credits</title>
 <style>
-  body { font-family: system-ui, sans-serif; line-height: 1.6; color: #111; max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
-  h1 { font-size: 2rem; line-height: 1.2; }
-  h2 { margin-top: 2.5rem; }
-  h3 { margin-bottom: .25rem; }
-  nav a { margin-right: 12px; }
-  .letter { border: 1px solid #ccc; padding: 16px 20px; border-radius: 8px; white-space: pre-wrap; }
-  button { padding: 8px 14px; cursor: pointer; }
-  footer { margin-top: 3rem; font-size: .9rem; color: #555; }
+  /* Brand tokens: swap these to the official Relayto AI palette */
+  :root {
+    --brand: #4F46E5;
+    --brand-ink: #3730A3;
+    --brand-soft: #EEF0FF;
+    --ink: #12142B;
+    --muted: #5B607A;
+    --line: #E0E3F2;
+    --bg: #FAFAFF;
+    --card: #fff;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --brand: #8B93FF; --brand-ink: #C3C8FF; --brand-soft: #1E2145; --ink: #F1F2FF; --muted: #A3A8C8; --line: #2B2F5A; --bg: #0E1024; --card: #161938; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 16px/1.65 Inter, system-ui, sans-serif; color: var(--ink); background: var(--bg); overflow-wrap: anywhere; }
+  a { color: var(--brand-ink); }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+  .top { background: var(--card); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+  .top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-top: 14px; padding-bottom: 14px; }
+  .logo { font-weight: 800; font-size: 20px; color: var(--ink); text-decoration: none; letter-spacing: -.02em; }
+  .logo span { color: var(--brand); }
+  .btn { display: inline-block; padding: 10px 18px; border-radius: 999px; background: var(--brand); color: #fff; font-weight: 600; text-decoration: none; border: 0; cursor: pointer; font-size: 15px; }
+  .btn.ghost { background: transparent; color: var(--brand-ink); border: 1px solid var(--line); }
+  .hero { padding: 64px 0 40px; }
+  .eyebrow { color: var(--brand-ink); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+  h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.1; letter-spacing: -.03em; margin: 12px 0 16px; }
+  h2 { font-size: 1.6rem; letter-spacing: -.02em; margin: 0 0 12px; }
+  h3 { font-size: 1.05rem; margin: 0 0 6px; }
+  .lead { font-size: 1.15rem; color: var(--muted); max-width: 680px; }
+  .cta { margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap; }
+  section { padding: 40px 0; border-top: 1px solid var(--line); }
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; }
+  .card p { margin: 0; color: var(--muted); font-size: .95rem; }
+  .steps { counter-reset: s; list-style: none; padding: 0; margin: 20px 0 0; display: grid; gap: 12px; }
+  .steps li { counter-increment: s; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px 16px 64px; position: relative; }
+  .steps li::before { content: counter(s); position: absolute; left: 18px; top: 16px; width: 30px; height: 30px; border-radius: 50%; background: var(--brand-soft); color: var(--brand-ink); font-weight: 700; display: grid; place-items: center; }
+  .callout { background: var(--brand-soft); border-radius: 14px; padding: 20px; margin-top: 20px; }
+  .letter { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px 24px; white-space: pre-wrap; margin-top: 16px; }
+  details { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 18px; margin-top: 10px; }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { color: var(--muted); margin: 10px 0 0; }
+  ul.check { padding-left: 20px; }
+  footer { border-top: 1px solid var(--line); padding: 28px 0 56px; color: var(--muted); font-size: .9rem; }
+  :focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
 </style>
 </head>
 <body>
 
-<header>
-  <p><strong>Relayto AI</strong></p>
-  <h1>Guide to Obtaining Enrollment and Tech Credits for Relayto AI Solutions</h1>
-  <p>Whether you're a broker, HR leader, or executive, keeping costs down while driving employee engagement is a top priority. Relayto AI's communication solutions educate, engage, and empower employees to help them understand and use their benefits, while optimizing your organization's investment.</p>
-  <nav>
-    <a href="#why">Why Relayto AI</a>
-    <a href="#features">Key features</a>
-    <a href="#funding">Funding options</a>
-    <a href="#letter">Sample letter</a>
-  </nav>
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top">Relayto<span> AI</span></a>
+    <a class="btn" href="#letter">Get the request letter</a>
+  </div>
 </header>
 
-<main>
-  <section id="why">
-    <h2>Why Relayto AI Is a Smart Investment</h2>
-    <p>We're your one-stop shop for employee communications, from benefits and wellness to new-hire onboarding, recruiting, and more. Whether you need strategic consultation, digital content, or the people and technology to get it all done, we've got you covered.</p>
-    <p>Designed for the modern workforce, our solutions drive better healthcare utilization, improve employee decision-making, and help companies manage costs efficiently.</p>
-  </section>
+<main id="top">
+  <div class="wrap">
 
-  <section id="features">
-    <h2>Key Features of Relayto AI Solutions</h2>
+    <div class="hero">
+      <div class="eyebrow">For brokers and their clients</div>
+      <h1>Let your carriers fund your Relayto AI benefits experience</h1>
+      <p class="lead">Carriers often set aside technology, enrollment and wellness credits to help employers and brokers communicate benefits better. Relayto AI turns your benefits guides, carrier decks and enrollment PDFs into interactive, AI-assisted experiences, and this guide shows you how to request credits to pay for it.</p>
+      <div class="cta">
+        <a class="btn" href="#letter">Copy the carrier letter</a>
+        <a class="btn ghost" href="#process">See the 5-step process</a>
+      </div>
+    </div>
 
-    <h3>Easy-Access Resources and Education</h3>
-    <p>Our year-round, interactive microsites ensure employees and their families have on-demand access to the information they need, when they need it. Videos and benefits materials also reduce questions and time-consuming meetings, freeing HR teams to focus on other tasks.</p>
+    <section id="credits">
+      <h2>Tech credits, in plain terms</h2>
+      <p>Many carriers offer credits that offset the cost of benefits communication and technology. They are usually tied to a client's carrier relationship and plan year, and the rules vary by carrier, so always confirm eligibility and paperwork with your carrier representative.</p>
+      <div class="grid">
+        <div class="card"><h3>Technology credits</h3><p>Support for platforms that improve how benefits information is delivered, understood and tracked.</p></div>
+        <div class="card"><h3>Enrollment credits</h3><p>Support for communication and education that drives open enrollment participation.</p></div>
+        <div class="card"><h3>Wellness credits</h3><p>Support for content that promotes wellness programs and helps employees use them.</p></div>
+      </div>
+      <div class="callout"><strong>Why it matters for brokers:</strong> funding the work with carrier credits can mean better client communication with little or no added cost to the employer, and a stronger story at renewal.</div>
+    </section>
 
-    <h3>Custom Carrier and Wellness Content</h3>
-    <p>From explainer videos to total rewards statements, we customize content to keep employees informed and help them get the most from their benefits.</p>
+    <section id="process">
+      <h2>How to request credits in 5 steps</h2>
+      <ol class="steps">
+        <li><h3>Check what your carriers offer</h3><p>Ask each carrier representative which credit programs exist (technology, enrollment, wellness), the amounts available, and the deadlines tied to the plan year.</p></li>
+        <li><h3>Scope your Relayto AI project</h3><p>Decide what you want to publish: benefits guide, carrier materials, onboarding content, or a year-round client hub. Relayto AI can confirm what is included.</p></li>
+        <li><h3>Send the request letter</h3><p>Customize the sample letter below and send it to your carrier representative.</p></li>
+        <li><h3>Provide documentation</h3><p>Carriers often ask for a proposal or invoice from the vendor. Request one from Relayto AI.</p></li>
+        <li><h3>Launch and report</h3><p>Publish the experience and share engagement analytics with your carrier and client where useful.</p></li>
+      </ol>
+    </section>
 
-    <h3>Benefits Decision Support</h3>
-    <p>Decision support helps employees identify their best-fit healthcare plan and provides education on available voluntary plans to increase enrollment. Built-in analytics let employers and brokers design and test multiple plan scenarios and compare the cost implications of plan designs ahead of open enrollment. It costs a fraction of competitive offerings and drives high completion rates.</p>
+    <section id="why">
+      <h2>What the credits pay for</h2>
+      <p>Relayto AI transforms static business documents into interactive digital experiences, without design or technical skills.</p>
+      <div class="grid">
+        <div class="card"><h3>Interactive benefits content</h3><p>Turn PDFs and presentations into engaging microsites, enriched with video, hotspots, forms, charts and animation.</p></div>
+        <div class="card"><h3>AI-enhanced support</h3><p>AI helps employees find answers in your benefits content instead of hunting through long documents.</p></div>
+        <div class="card"><h3>Your client's branding</h3><p>Set a background style and accent color once and apply them to every page, so each client sees their own look.</p></div>
+        <div class="card"><h3>Secure, controlled sharing</h3><p>Control who can see each experience, with privacy settings per piece of content.</p></div>
+        <div class="card"><h3>Engagement analytics</h3><p>See how employees engage with content so you can show results to clients and carriers.</p></div>
+        <div class="card"><h3>Hubs for every client</h3><p>Group guides, carrier materials and onboarding content into one hub that stays useful year-round.</p></div>
+      </div>
+    </section>
 
-    <h3>AI-Enhanced Employee Support</h3>
-    <p>Employees can use AI-powered chat inside the benefits microsite to get answers specific to your plans and be guided to further resources.</p>
-  </section>
+    <section id="gather">
+      <h2>What to have ready</h2>
+      <ul class="check">
+        <li>Client name, carrier and plan year</li>
+        <li>The credit types you are asking about</li>
+        <li>A short description of the Relayto AI project</li>
+        <li>A vendor proposal or invoice from Relayto AI</li>
+        <li>Your carrier representative's contact details</li>
+      </ul>
+    </section>
 
-  <section id="funding">
-    <h2>Funding Options: Enrollment and Tech Credits</h2>
-    <p>Many organizations cover the cost of their campaigns with carrier-provided enrollment, wellness, and technology credits. Below is a letter you can use to request payment for Relayto AI solutions from your carriers. Customize it for your organization and send it to your carrier.</p>
-    <ol>
-      <li>Copy the sample letter below and fill in the bracketed fields.</li>
-      <li>Send it to your carrier representative.</li>
-      <li>Ask which credit types (enrollment, technology, wellness) apply and what documentation they need.</li>
-    </ol>
-  </section>
-
-  <section id="letter">
-    <h2>Sample Request Letter for Carrier Funding</h2>
-    <div class="letter" id="letter-text">[Today's Date]
+    <section id="letter">
+      <h2>Sample request letter for carrier funding</h2>
+      <p>Customize the bracketed fields and send it to your carrier.</p>
+      <div class="letter" id="letter-text">[Today's Date]
 
 Dear [Carrier Representative],
 
 Our organization is looking to enhance our benefits communication and education by implementing solutions from Relayto AI, which are designed to simplify benefits education, improve utilization, and drive employee engagement.
 
-Relayto AI's on-demand resources allow employees and their families to access benefits information when questions arise throughout the year. Additionally, its communications and decision-support tools provide ongoing education and support, ensuring employees fully understand and use their benefits. These solutions align with our shared goals of improving plan performance, increasing benefits literacy, and optimizing cost efficiency.
+Relayto AI's interactive, on-demand resources allow employees and their families to access benefits information when questions arise throughout the year. Additionally, its AI-assisted communications and engagement analytics provide ongoing education and support, ensuring employees fully understand and use their benefits. These solutions align with our shared goals of improving plan performance, increasing benefits literacy, and optimizing cost efficiency.
 
-We're seeking your support in funding this initiative through enrollment, technology, or wellness credits, all of which align with this program's objectives.
+We're seeking your support in funding this initiative through technology, enrollment, or wellness credits, all of which align with this program's objectives.
 
 We appreciate your consideration and look forward to discussing how we can collaborate to enhance our benefits communications strategy. Please let us know a convenient time to connect.
 
@@ -81,12 +141,24 @@ Sincerely,
 [Your Name]
 [Your Title]
 [Your Company]</div>
-    <p><button id="copy" type="button">Copy letter</button> <span id="status" role="status"></span></p>
-  </section>
+      <div class="cta"><button class="btn" id="copy" type="button">Copy letter</button><span id="status" role="status"></span></div>
+    </section>
+
+    <section id="faq">
+      <h2>Questions</h2>
+      <details><summary>Will my carrier definitely cover this?</summary><p>No. Credit programs, amounts and eligibility differ by carrier and client. The letter opens the conversation, and your carrier decides.</p></details>
+      <details><summary>Can I use the credits for more than open enrollment?</summary><p>Often, yes. Technology and wellness credits can support year-round education, onboarding and recruiting content. Confirm with your carrier.</p></details>
+      <details><summary>What do I need from Relayto AI?</summary><p>Usually a proposal or invoice describing the scope. Contact us and we will provide one.</p></details>
+      <details><summary>Can I run this for several clients?</summary><p>Yes. Each client can have its own branded hubs and content.</p></details>
+    </section>
+
+  </div>
 </main>
 
 <footer>
-  <p>Relayto AI · [contact phone] · [contact email] · [website]</p>
+  <div class="wrap">
+    <strong>Relayto AI</strong> · [contact phone] · [contact email] · [website]
+  </div>
 </footer>
 
 <script>
