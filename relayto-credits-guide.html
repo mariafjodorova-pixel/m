@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guide to Obtaining Enrollment and Tech Credits for Relayto AI Solutions</title>
+<style>
+  body { font-family: system-ui, sans-serif; line-height: 1.6; color: #111; max-width: 760px; margin: 0 auto; padding: 24px 16px 64px; }
+  h1 { font-size: 2rem; line-height: 1.2; }
+  h2 { margin-top: 2.5rem; }
+  h3 { margin-bottom: .25rem; }
+  nav a { margin-right: 12px; }
+  .letter { border: 1px solid #ccc; padding: 16px 20px; border-radius: 8px; white-space: pre-wrap; }
+  button { padding: 8px 14px; cursor: pointer; }
+  footer { margin-top: 3rem; font-size: .9rem; color: #555; }
+</style>
+</head>
+<body>
+
+<header>
+  <p><strong>Relayto AI</strong></p>
+  <h1>Guide to Obtaining Enrollment and Tech Credits for Relayto AI Solutions</h1>
+  <p>Whether you're a broker, HR leader, or executive, keeping costs down while driving employee engagement is a top priority. Relayto AI's communication solutions educate, engage, and empower employees to help them understand and use their benefits, while optimizing your organization's investment.</p>
+  <nav>
+    <a href="#why">Why Relayto AI</a>
+    <a href="#features">Key features</a>
+    <a href="#funding">Funding options</a>
+    <a href="#letter">Sample letter</a>
+  </nav>
+</header>
+
+<main>
+  <section id="why">
+    <h2>Why Relayto AI Is a Smart Investment</h2>
+    <p>We're your one-stop shop for employee communications, from benefits and wellness to new-hire onboarding, recruiting, and more. Whether you need strategic consultation, digital content, or the people and technology to get it all done, we've got you covered.</p>
+    <p>Designed for the modern workforce, our solutions drive better healthcare utilization, improve employee decision-making, and help companies manage costs efficiently.</p>
+  </section>
+
+  <section id="features">
+    <h2>Key Features of Relayto AI Solutions</h2>
+
+    <h3>Easy-Access Resources and Education</h3>
+    <p>Our year-round, interactive microsites ensure employees and their families have on-demand access to the information they need, when they need it. Videos and benefits materials also reduce questions and time-consuming meetings, freeing HR teams to focus on other tasks.</p>
+
+    <h3>Custom Carrier and Wellness Content</h3>
+    <p>From explainer videos to total rewards statements, we customize content to keep employees informed and help them get the most from their benefits.</p>
+
+    <h3>Benefits Decision Support</h3>
+    <p>Decision support helps employees identify their best-fit healthcare plan and provides education on available voluntary plans to increase enrollment. Built-in analytics let employers and brokers design and test multiple plan scenarios and compare the cost implications of plan designs ahead of open enrollment. It costs a fraction of competitive offerings and drives high completion rates.</p>
+
+    <h3>AI-Enhanced Employee Support</h3>
+    <p>Employees can use AI-powered chat inside the benefits microsite to get answers specific to your plans and be guided to further resources.</p>
+  </section>
+
+  <section id="funding">
+    <h2>Funding Options: Enrollment and Tech Credits</h2>
+    <p>Many organizations cover the cost of their campaigns with carrier-provided enrollment, wellness, and technology credits. Below is a letter you can use to request payment for Relayto AI solutions from your carriers. Customize it for your organization and send it to your carrier.</p>
+    <ol>
+      <li>Copy the sample letter below and fill in the bracketed fields.</li>
+      <li>Send it to your carrier representative.</li>
+      <li>Ask which credit types (enrollment, technology, wellness) apply and what documentation they need.</li>
+    </ol>
+  </section>
+
+  <section id="letter">
+    <h2>Sample Request Letter for Carrier Funding</h2>
+    <div class="letter" id="letter-text">[Today's Date]
+
+Dear [Carrier Representative],
+
+Our organization is looking to enhance our benefits communication and education by implementing solutions from Relayto AI, which are designed to simplify benefits education, improve utilization, and drive employee engagement.
+
+Relayto AI's on-demand resources allow employees and their families to access benefits information when questions arise throughout the year. Additionally, its communications and decision-support tools provide ongoing education and support, ensuring employees fully understand and use their benefits. These solutions align with our shared goals of improving plan performance, increasing benefits literacy, and optimizing cost efficiency.
+
+We're seeking your support in funding this initiative through enrollment, technology, or wellness credits, all of which align with this program's objectives.
+
+We appreciate your consideration and look forward to discussing how we can collaborate to enhance our benefits communications strategy. Please let us know a convenient time to connect.
+
+Sincerely,
+
+[Your Name]
+[Your Title]
+[Your Company]</div>
+    <p><button id="copy" type="button">Copy letter</button> <span id="status" role="status"></span></p>
+  </section>
+</main>
+
+<footer>
+  <p>Relayto AI · [contact phone] · [contact email] · [website]</p>
+</footer>
+
+<script>
+  document.getElementById('copy').addEventListener('click', function () {
+    var s = document.getElementById('status');
+    navigator.clipboard.writeText(document.getElementById('letter-text').innerText)
+      .then(function () { s.textContent = 'Copied'; })
+      .catch(function () { s.textContent = 'Copy failed. Select the text manually.'; });
+  });
+</script>
+</body>
+</html>
