@@ -3,48 +3,56 @@
   var G = window.BG, VERBS = G.VERBS, TENSES = G.TENSES;
   var TBY = {}; TENSES.forEach(function (t) { TBY[t.id] = t; });
   var CORE = TENSES.filter(function (t) { return t.core; }), RARE = TENSES.filter(function (t) { return !t.core; });
+  var GROUPS = [
+    { id: "past", name: { ru: "Прошлое", bg: "Минало" }, t: ["aorist", "imperfect", "perfect", "pluperfect"] },
+    { id: "now", name: { ru: "Сейчас", bg: "Сега" }, t: ["present"] },
+    { id: "future", name: { ru: "Будущее", bg: "Бъдеще" }, t: ["future", "fip", "fp", "fpp"] },
+    { id: "mood", name: { ru: "Другое", bg: "Други" }, t: ["cond", "impv"] }
+  ];
+  function groupOf(tid) { return GROUPS.filter(function (g) { return g.t.indexOf(tid) >= 0; })[0]; }
+  var GRID_ORDER = [0, 3, 1, 4, 2, 5]; // аз ние / ти вие / той те
 
   /* ---------- UI strings ---------- */
   var U = {
     ru: {
-      sub: "Шпаргалка по болгарским глаголам",
-      tForm: "Форма", tTenses: "Времена", tVerbs: "Глаголы",
-      impfS: "НСВ", pfS: "СВ", legI: "процесс, повторение", legP: "одно завершённое действие",
-      m: "м", f: "ж", neg: "не", rare: "редкие",
-      tapHint: "Нажмите на часть слова, чтобы узнать, откуда она.",
-      allPersons: "Все лица", aboutTense: "О времени →", change: "сменить",
+      sub: "шпаргалка", tForm: "Форма", tTenses: "Времена", tVerbs: "Глаголы",
+      impfS: "НСВ", pfS: "СВ", m: "м", f: "ж", neg: "не", sg: "ед. ч.", pl: "мн. ч.",
+      legI: "несовершенный вид: процесс, повторение", legP: "совершенный вид: одно завершённое действие",
+      legH: "жёлтым — выбранная часть слова и то, что изменилось", legTap: "Нажмите на часть формы, чтобы узнать, откуда она.",
+      allPersons: "Все лица", aboutTense: "О времени",
       search: "Поиск: вземам, vzemam или «брать»",
       count: function (n) { return n + " " + plural(n, "глагол", "глагола", "глаголов"); },
       none: "Ничего не нашлось. Попробуйте форму «аз» (вземам) или русский перевод.",
       model: "модельный", back: "← Все глаголы", examples: "Примеры", tr: "Перевод",
-      openBuilder: "В конструктор", more: "Подробнее", less: "Свернуть",
-      choose: "Какое время выбрать?", say: "Хотите сказать…", use: "Берите",
-      aspectT: "НСВ или СВ?", rareT: "Редкие времена", stemsT: "Как получить основу",
+      openBuilder: "Открыть в конструкторе →", more: "Подробнее", less: "Свернуть",
+      choose: "Какое время выбрать?", aspectT: "НСВ или СВ?", rareT: "Редкие времена", stemsT: "Как получить основу",
       when: "Когда", signals: "Слова-сигналы", tips: "Ловушки", compare: "По-русски",
-      negL: "Отрицание", qL: "Вопрос", forms: "Формы", group: "спр.", grid: "Все времена"
+      negL: "Отрицание", qL: "Вопрос", group: "спр.", grid: "Все времена", formula: "Формула"
     },
     bg: {
-      sub: "Пищов за българските глаголи",
-      tForm: "Форма", tTenses: "Времена", tVerbs: "Глаголи",
-      impfS: "НСВ", pfS: "СВ", legI: "процес, повторение", legP: "едно завършено действие",
-      m: "м", f: "ж", neg: "не", rare: "редки",
-      tapHint: "Докоснете част от думата, за да видите откъде идва.",
-      allPersons: "Всички лица", aboutTense: "За времето →", change: "смени",
+      sub: "пищов", tForm: "Форма", tTenses: "Времена", tVerbs: "Глаголи",
+      impfS: "НСВ", pfS: "СВ", m: "м", f: "ж", neg: "не", sg: "ед.ч.", pl: "мн.ч.",
+      legI: "несвършен вид: процес, повторение", legP: "свършен вид: едно завършено действие",
+      legH: "в жълто – избраната част от думата и промяната", legTap: "Докоснете част от формата, за да видите откъде идва.",
+      allPersons: "Всички лица", aboutTense: "За времето",
       search: "Търсене: вземам, vzemam или „брать“",
       count: function (n) { return n + " " + (n === 1 ? "глагол" : "глагола"); },
       none: "Няма резултати. Опитайте с формата за „аз“ (вземам) или с превода.",
       model: "модел", back: "← Всички глаголи", examples: "Примери", tr: "Превод",
-      openBuilder: "В конструктора", more: "Още", less: "Скрий",
-      choose: "Кое време да избера?", say: "Искате да кажете…", use: "Време",
-      aspectT: "НСВ или СВ?", rareT: "Редки времена", stemsT: "Как се получава основата",
+      openBuilder: "Отвори в конструктора →", more: "Още", less: "Скрий",
+      choose: "Кое време да избера?", aspectT: "НСВ или СВ?", rareT: "Редки времена", stemsT: "Как се получава основата",
       when: "Кога", signals: "Сигнални думи", tips: "Капани", compare: "На руски",
-      negL: "Отрицание", qL: "Въпрос", forms: "Форми", group: "спр.", grid: "Всички времена"
+      negL: "Отрицание", qL: "Въпрос", group: "спр.", grid: "Всички времена", formula: "Образуване"
     }
   };
   function plural(n, one, few, many) {
     var a = n % 10, b = n % 100;
     return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
   }
+  var CHIP = {
+    ru: { present: "Настоящее", aorist: "Аорист", imperfect: "Имперфект", perfect: "Перфект", pluperfect: "Плюсквамперфект", future: "Будущее", fip: "Будущее в прош.", fp: "Буд. предварит.", fpp: "Буд. предв. в прош.", cond: "Условное", impv: "Повелительное" },
+    bg: { present: "Сегашно", aorist: "Аорист", imperfect: "Имперфект", perfect: "Перфект", pluperfect: "Мин. предварително", future: "Бъдеще", fip: "Бъдеще в миналото", fp: "Бъд. предварително", fpp: "Бъд. предв. в миналото", cond: "Условно", impv: "Повелително" }
+  };
 
   /* ---------- State ---------- */
   var store = {
@@ -56,22 +64,19 @@
   try { savedB = JSON.parse(store.get("builder") || "null"); } catch (e) { savedB = null; }
   var S = {
     lang: store.get("lang") === "bg" ? "bg" : "ru",
-    tab: "form", verb: null, query: "", tr: store.get("tr") !== "0",
+    tab: "form", verb: null, query: "", tr: store.get("tr") !== "0", legend: false,
     open: {}, showRare: false, vperson: 0, vrare: false,
-    B: { verb: DEFAULT_VERB, tense: "present", person: 0, pf: false, gender: "m", neg: false, sel: -1, picking: false, q: "", rare: false }
+    B: { verb: DEFAULT_VERB, tense: "present", person: 0, pf: false, gender: "m", neg: false, sel: -1, picking: false, q: "" },
+    anim: null, prev: null
   };
   if (savedB && VERBS[savedB.verb] && TBY[savedB.tense]) {
     ["verb", "tense", "person", "pf", "gender", "neg"].forEach(function (k) { S.B[k] = savedB[k]; });
   }
-  function saveB() { store.set("builder", JSON.stringify(S.B)); }
+  function saveB() { store.set("builder", JSON.stringify({ verb: S.B.verb, tense: S.B.tense, person: S.B.person, pf: S.B.pf, gender: S.B.gender, neg: S.B.neg })); }
   function t(k) { return U[S.lang][k]; }
   function L(o) { return o ? (o[S.lang] || o.ru) : ""; }
   function $(id) { return document.getElementById(id); }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  var CHIP = {
-    ru: { present: "Настоящее", aorist: "Аорист", imperfect: "Имперфект", perfect: "Перфект", pluperfect: "Плюсквамперфект", future: "Будущее", fip: "Будущее в прош.", fp: "Буд. предварит.", fpp: "Буд. предв. в прош.", cond: "Условное", impv: "Повелительное" },
-    bg: { present: "Сегашно", aorist: "Аорист", imperfect: "Имперфект", perfect: "Перфект", pluperfect: "Мин. предварително", future: "Бъдеще", fip: "Бъдеще в миналото", fp: "Бъд. предварително", fpp: "Бъд. предв. в миналото", cond: "Условно", impv: "Повелително" }
-  };
   function shortName(tn) { return CHIP[S.lang][tn.id]; }
 
   /* ---------- Verb helpers ---------- */
@@ -101,8 +106,13 @@
       return '<b class="' + cls + '">' + x + "</b>";
     }).join("");
   }
-  function ex(bg, ru) { return '<div class="ex-item"><span class="bgt">' + bg + '</span><span class="tr">' + esc(ru) + "</span></div>"; }
-  function trToggle() { return '<label class="tr-toggle"><input type="checkbox" class="trbox"' + (S.tr ? " checked" : "") + "> " + t("tr") + "</label>"; }
+  function quote(bg, ru) { return '<div class="quote"><span class="bgt">' + bg + '</span><span class="tr">' + esc(ru) + "</span></div>"; }
+  function trToggle() { return '<label class="trt"><input type="checkbox" class="trbox"' + (S.tr ? " checked" : "") + "> " + t("tr") + "</label>"; }
+  function examplesPanel(v) {
+    if (!v.ex || !v.ex.length) return "";
+    return '<div class="panel ex b-ex"><div class="ex-head"><span class="label">' + t("examples") + "</span>" + trToggle() + "</div>" +
+      v.ex.map(function (e) { return quote(highlight(e[0], v), e[1]); }).join("") + "</div>";
+  }
 
   function cellText(tid, v, pf, i, gender, neg) {
     var r = G.build(tid, v, pf, i, gender || "m", !!neg, S.lang);
@@ -120,10 +130,12 @@
   function renderChrome() {
     document.documentElement.lang = S.lang;
     $("sub").textContent = t("sub");
-    $("leg").innerHTML = '<span><i class="dot i"></i><b>' + t("impfS") + "</b> " + t("legI") + '</span><span><i class="dot p"></i><b>' + t("pfS") + "</b> " + t("legP") + "</span>";
     $("lang").innerHTML = ["ru", "bg"].map(function (l) { return '<button data-lang="' + l + '" aria-pressed="' + (S.lang === l) + '">' + l.toUpperCase() + "</button>"; }).join("");
+    $("help").setAttribute("aria-expanded", String(S.legend));
+    $("legend").hidden = !S.legend;
+    $("legend").innerHTML = '<div class="row"><i class="dot i"></i><span><b class="i">' + t("impfS") + "</b> " + t("legI") + '</span></div><div class="row"><i class="dot p"></i><span><b class="p">' + t("pfS") + "</b> " + t("legP") + '</span></div><div class="row"><i class="dot h"></i><span>' + t("legH") + '</span></div><p class="muted">' + t("legTap") + "</p>";
     ["form", "tenses", "verbs"].forEach(function (k) {
-      $("tab-btn-" + k).textContent = t({ form: "tForm", tenses: "tTenses", verbs: "tVerbs" }[k]);
+      $("tab-btn-" + k).querySelector("span").textContent = t({ form: "tForm", tenses: "tTenses", verbs: "tVerbs" }[k]);
       $(k).hidden = S.tab !== k;
       $("tab-btn-" + k).setAttribute("aria-selected", String(S.tab === k));
     });
@@ -132,67 +144,82 @@
 
   /* ---------- Форма (builder) ---------- */
   function renderForm() {
-    var B = S.B, v = VERBS[B.verb], tn = TBY[B.tense];
-    if (!tn.core) B.rare = true;
+    var B = S.B, v = VERBS[B.verb], tn = TBY[B.tense], grp = groupOf(B.tense);
     if (B.tense === "impv" && B.person !== 1 && B.person !== 4) B.person = 1;
+    var needG = !!G.PART_TENSES[B.tense] && B.person < 3;
     var r = G.build(B.tense, v, B.pf, B.person, B.gender, B.neg, S.lang);
-    var html = '<div class="card builder">';
 
-    // verb
-    html += '<div class="b-verb"><button class="vpick" data-pick><span class="pair">' + pairHTML(v) + '</span><span class="chev">▾</span></button><span class="vmean">' + esc(v.ru) + "</span></div>";
-    if (B.picking) {
-      html += '<div class="picker"><input id="bq" type="search" autocomplete="off" spellcheck="false" placeholder="' + esc(t("search")) + '" value="' + esc(B.q) + '"><div class="plist">' +
-        search(B.q).slice(0, 12).map(function (x) { return '<button class="prow" data-bverb="' + x.id + '"><span class="pair">' + pairHTML(x) + '</span><span class="vmean">' + esc(x.ru) + "</span></button>"; }).join("") + "</div></div>";
-    }
-
-    // tense chips
-    var list = CORE.concat(B.rare ? RARE : []);
-    html += '<div class="b-tenses">' + list.map(function (x) {
-      return '<button class="tchip' + (x.core ? "" : " rare") + '" data-btense="' + x.id + '" aria-pressed="' + (x.id === B.tense) + '">' + G.icon(x.id) + "<span>" + shortName(x) + "</span></button>";
-    }).join("") + '<button class="tchip more" data-brare>' + (B.rare ? "−" : "+" + RARE.length + " " + t("rare")) + "</button></div>";
-
-    // person + toggles
-    var persons = G.PERSONS.map(function (p, i) {
-      var dis = B.tense === "impv" && i !== 1 && i !== 4;
-      return '<button class="pchip" data-bperson="' + i + '" aria-pressed="' + (i === B.person) + '"' + (dis ? " disabled" : "") + ">" + p + "</button>";
-    }).join("");
-    var needG = G.PART_TENSES[B.tense] && B.person < 3;
-    html += '<div class="b-ctl"><div class="pchips">' + persons + "</div>" +
-      '<div class="toggles"><div class="seg2 asp"><button data-bpf="0" aria-pressed="' + !B.pf + '" class="i">' + t("impfS") + '</button><button data-bpf="1" aria-pressed="' + B.pf + '" class="p">' + t("pfS") + "</button></div>" +
-      (needG ? '<div class="seg2"><button data-bg="m" aria-pressed="' + (B.gender === "m") + '">' + t("m") + '</button><button data-bg="f" aria-pressed="' + (B.gender === "f") + '">' + t("f") + "</button></div>" : "") +
-      '<button class="negbtn" data-bneg aria-pressed="' + B.neg + '">' + t("neg") + "</button></div></div>";
-
-    // output
+    // result
     var pron = B.person === 2 ? (needG && B.gender === "f" ? "тя" : "той") : G.PERSONS[B.person];
+    var result;
     if (r.na) {
-      html += '<div class="b-out na"><span class="b-pron">' + pron + '</span><p class="b-na">' + esc(r.na) + "</p></div>";
+      result = '<div class="b-result"><span class="b-pron bg">' + pron + '</span><p class="b-na">' + esc(r.na) + "</p>" + meta(tn) + "</div>";
+      S.prev = null;
     } else {
+      var key = B.verb + "|" + B.tense + "|" + B.pf;
+      var texts = r.pieces.map(function (p) { return p.t; });
+      var changed = {}, fade = false;
+      if (S.anim && S.prev) {
+        if (S.prev.key !== key || S.anim === "fade") fade = true;
+        else texts.forEach(function (x, i) { if (S.prev.texts.length !== texts.length || S.prev.texts[i] !== x) changed[i] = 1; });
+      }
+      S.prev = { key: key, texts: texts };
       var sel = B.sel >= 0 && B.sel < r.pieces.length ? B.sel : -1;
       if (sel < 0) { r.pieces.forEach(function (p, i) { if (p.k === "end") sel = i; }); if (sel < 0) sel = r.pieces.length - 1; }
-      var word = "", prev = null;
+      var word = "", open = false;
       r.pieces.forEach(function (p, i) {
-        var glue = prev && prev.k === "stem" && p.k === "end";
-        word += (prev && !glue ? '<span class="sp"> </span>' : "") + '<button class="pc k-' + p.k + (B.pf ? " pf" : " impf") + '" data-piece="' + i + '" aria-pressed="' + (i === sel) + '">' + p.t + "</button>";
-        prev = p;
+        var next = r.pieces[i + 1];
+        if (p.k === "stem" && next && next.k === "end") { word += '<span class="w">'; open = true; }
+        word += '<button class="pc k-' + p.k + (B.pf ? " pf" : " impf") + (changed[i] ? " chg" : "") + '" data-piece="' + i + '" aria-pressed="' + (i === sel) + '">' + p.t + "</button>";
+        if (open && p.k === "end") { word += "</span>"; open = false; }
       });
-      html += '<div class="b-out"><span class="b-pron">' + pron + '</span><div class="b-word">' + word + '</div><p class="b-info">' + esc(r.pieces[sel].info) + "</p></div>";
+      result = '<div class="b-result"><span class="b-pron bg">' + pron + '</span><div class="b-word' + (fade ? " fade" : "") + '">' + word + '</div><p class="b-info">' + esc(r.pieces[sel].info) + "</p>" + meta(tn) + "</div>";
     }
+    S.anim = null;
 
-    // meta + all persons
-    html += '<div class="b-meta">' + G.icon(tn.id) + "<span><b>" + L(tn.name) + "</b> · " + (S.lang === "ru" ? "≈ " + G.RUEQ[tn.id] : L(tn.short)) + '</span><button class="link" data-totense="' + tn.id + '">' + t("aboutTense") + "</button></div>";
+    // verb picker
+    var verb = '<div class="vwrap">' +
+      '<button class="vpick" data-pick aria-expanded="' + B.picking + '"><span class="txt"><span class="pair">' + pairHTML(v) + '</span><span class="vmean">' + esc(v.ru) + '</span></span><span class="chev">▾</span></button>' +
+      (B.picking ? '<div class="picker"><input id="bq" class="search" type="search" autocomplete="off" spellcheck="false" placeholder="' + esc(t("search")) + '" value="' + esc(B.q) + '"><div class="plist">' +
+        search(B.q).slice(0, 15).map(function (x) { return '<button class="prow" data-bverb="' + x.id + '"><span class="pair">' + pairHTML(x) + '</span><span class="vmean">' + esc(x.ru) + "</span></button>"; }).join("") + "</div></div>" : "") +
+      "</div>";
+
+    // controls
+    var groups = '<div class="seg" role="group">' + GROUPS.map(function (g) {
+      return '<button data-bgroup="' + g.id + '" aria-pressed="' + (g === grp) + '">' + L(g.name) + "</button>";
+    }).join("") + "</div>";
+    var tlist = grp.t.length > 1 ? '<div class="tlist">' + grp.t.map(function (id) {
+      var x = TBY[id];
+      return '<button class="tbtn' + (x.core ? "" : " rare") + '" data-btense="' + id + '" aria-pressed="' + (id === B.tense) + '">' + G.icon(id) + "<span>" + shortName(x) + "</span></button>";
+    }).join("") + "</div>" : "";
+    var persons = '<div class="persons"><span class="label">' + t("sg") + '</span><span class="label">' + t("pl") + "</span>" +
+      GRID_ORDER.map(function (i) {
+        var dis = B.tense === "impv" && i !== 1 && i !== 4;
+        return '<button class="pbtn" data-bperson="' + i + '" aria-pressed="' + (i === B.person) + '"' + (dis ? " disabled" : "") + ">" + G.PERSONS[i] + "</button>";
+      }).join("") + "</div>";
+    var togs = '<div class="togs">' +
+      '<div class="seg asp"><button class="i" data-bpf="0" aria-pressed="' + !B.pf + '">' + t("impfS") + '</button><button class="p" data-bpf="1" aria-pressed="' + B.pf + '">' + t("pfS") + "</button></div>" +
+      '<div class="seg"><button data-bgen="m" aria-pressed="' + (B.gender === "m") + '"' + (needG ? "" : " disabled") + ">" + t("m") + '</button><button data-bgen="f" aria-pressed="' + (B.gender === "f") + '"' + (needG ? "" : " disabled") + ">" + t("f") + "</button></div>" +
+      '<button class="negbtn" data-bneg aria-pressed="' + B.neg + '">' + t("neg") + "</button></div>";
+    var ctl = '<div class="ctl">' + groups + tlist + persons + togs + meta(tn) + "</div>";
+
+    // all persons
     var rows = G.PERSONS.map(function (p, i) {
       var c = cellText(B.tense, v, B.pf, i, B.gender, B.neg);
       if (!c) return "";
       return '<button class="arow" data-bperson="' + i + '" aria-pressed="' + (i === B.person) + '"><span class="who">' + p + '</span><span class="fm">' + c + "</span></button>";
     }).join("");
-    html += '<div class="b-all"><span class="ctl-label">' + t("allPersons") + "</span>" + rows + "</div>";
-    html += "</div>";
-    if (v.ex && v.ex[0]) html += '<div class="card ex"><div class="card-h"><h3>' + t("examples") + "</h3>" + trToggle() + "</div>" + v.ex.map(function (e) { return ex(highlight(e[0], v), e[1]); }).join("") + "</div>";
-    $("form").innerHTML = html;
+    var all = '<div class="all"><span class="label">' + t("allPersons") + "</span>" + rows + "</div>";
+    var exs = examplesPanel(v);
+
+    $("form").innerHTML = '<div class="builder"><div class="b-col left">' + verb + ctl + exs + '</div><div class="b-col right">' + result + all + "</div></div>";
     if (B.picking) { var q = $("bq"); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
   }
+  function meta(tn) {
+    return '<div class="b-meta">' + G.icon(tn.id) + "<span><b>" + L(tn.name) + "</b>" + (S.lang === "ru" ? " · ≈ " + G.RUEQ[tn.id] : " · " + L(tn.short)) + '</span><button class="link" data-totense="' + tn.id + '">' + t("aboutTense") + "</button></div>";
+  }
 
-  /* ---------- Времена (cards) ---------- */
+  /* ---------- Времена ---------- */
   var CHOOSE = [
     ["present", { ru: "делаю, делаю всегда", bg: "правя, правя винаги" }],
     ["aorist", { ru: "сделал / делал — в известный момент", bg: "направих / правих – в определен момент" }],
@@ -203,60 +230,54 @@
     ["cond", { ru: "сделал бы · хотел бы", bg: "бих направил · бих искал" }],
     ["impv", { ru: "сделай! · не делай!", bg: "направи! · не прави!" }]
   ];
-
   function strip(tn) {
     var s = G.STRIP[tn.id];
-    var head = '<tr><th></th>' + G.PERSONS.map(function (p) { return "<th>" + p + "</th>"; }).join("") + "</tr>";
+    var head = "<tr><th></th>" + G.PERSONS.map(function (p) { return "<th>" + p + "</th>"; }).join("") + "</tr>";
     var rows = s.rows.map(function (r) {
-      return "<tr><td class=\"g\">" + (r[0] ? r[0] : "") + "</td>" + r[1].map(function (c) { return "<td>" + (c || '<span class="na">·</span>') + "</td>"; }).join("") + "</tr>";
+      return '<tr><td class="g">' + (r[0] || "") + "</td>" + r[1].map(function (c) { return "<td>" + (c || '<span class="muted">·</span>') + "</td>"; }).join("") + "</tr>";
     }).join("");
-    return '<div class="table-wrap"><table class="strip">' + head + rows + "</table></div>" + (s.after ? '<p class="after">' + L(s.after) + "</p>" : "");
+    return '<div class="strip-wrap"><table class="strip">' + head + rows + "</table></div>" + (s.after ? '<p class="after">' + L(s.after) + "</p>" : "");
   }
-
   function tenseCard(tn) {
     var open = !!S.open[tn.id], e = tn.examples[0];
     var h = '<article class="tcard" id="t-' + tn.id + '">' +
-      '<header class="tc-h">' + G.icon(tn.id) + '<div class="tc-names"><span class="tn">' + L(tn.name) + "</span>" +
-      '<span class="tc-sub">' + (S.lang === "ru" ? tn.name.bg + " · ≈ " + G.RUEQ[tn.id] : L(tn.short)) + "</span></div></header>" +
-      '<span class="formula">' + L(tn.formula) + "</span>" + strip(tn) + ex(e[0], e[1]) +
-      '<div class="row-btns"><button class="btn sm" data-tobuilder="' + tn.id + '">' + t("openBuilder") + ' →</button><button class="btn ghost sm" data-toggle="' + tn.id + '">' + (open ? t("less") : t("more")) + "</button></div>";
+      '<header class="tc-h">' + G.icon(tn.id) + '<span class="tn">' + L(tn.name) + "</span>" +
+      '<span class="tc-sub">' + (S.lang === "ru" ? '<span class="bg">' + tn.name.bg + "</span> · ≈ " + G.RUEQ[tn.id] : L(tn.short)) + "</span></header>" +
+      '<p class="formula">' + t("formula") + ": <b>" + L(tn.formula) + "</b></p>" + strip(tn) + quote(e[0], e[1]) +
+      '<div class="tc-links"><button class="link" data-tobuilder="' + tn.id + '">' + t("openBuilder") + '</button><button class="link" data-toggle="' + tn.id + '" aria-expanded="' + open + '">' + (open ? t("less") + " ▴" : t("more") + " ▾") + "</button></div>";
     if (open) {
       h += '<div class="tc-more">' +
-        '<div><h3>' + t("when") + '</h3><ul class="clean">' + L(tn.uses).map(function (u) { return "<li>" + u + "</li>"; }).join("") + "</ul></div>" +
-        '<div class="aspect-notes"><div class="an i"><span class="tag">' + t("impfS") + "</span><span>" + L(tn.aspect.i) + '</span></div><div class="an p"><span class="tag">' + t("pfS") + "</span><span>" + L(tn.aspect.p) + "</span></div></div>" +
-        '<div><h3>' + t("signals") + '</h3><div class="signals">' + tn.signals.map(function (s) { return '<span class="sig">' + s + "</span>"; }).join("") + "</div></div>" +
-        '<div><h3>' + t("tips") + '</h3><ul class="tips">' + L(tn.tips).map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ul></div>" +
-        (S.lang === "ru" && tn.ruCompare ? '<div class="compare"><h3>' + t("compare") + "</h3><p>" + tn.ruCompare + "</p></div>" : "") +
-        '<div class="ex">' + tn.examples.slice(1).map(function (x) { return ex(x[0], x[1]); }).join("") +
-        '<span class="ex-label">' + t("negL") + "</span>" + ex(tn.neg[0], tn.neg[1]) +
-        (tn.q ? '<span class="ex-label">' + t("qL") + "</span>" + ex(tn.q[0], tn.q[1]) : "") + "</div></div>";
+        '<div><p class="label">' + t("when") + '</p><ul class="clean">' + L(tn.uses).map(function (u) { return "<li>" + u + "</li>"; }).join("") + "</ul></div>" +
+        '<div class="asp"><div class="aspc i"><b>' + t("impfS") + "</b><span>" + L(tn.aspect.i) + '</span></div><div class="aspc p"><b>' + t("pfS") + "</b><span>" + L(tn.aspect.p) + "</span></div></div>" +
+        '<div><p class="label">' + t("signals") + '</p><div class="signals">' + tn.signals.map(function (s) { return '<span class="sig">' + s + "</span>"; }).join("") + "</div></div>" +
+        '<div><p class="label">' + t("tips") + '</p><ul class="tips">' + L(tn.tips).map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ul></div>" +
+        (S.lang === "ru" && tn.ruCompare ? '<div class="compare"><span class="label">' + t("compare") + "</span><p>" + tn.ruCompare + "</p></div>" : "") +
+        '<div class="ex">' + tn.examples.slice(1).map(function (x) { return quote(x[0], x[1]); }).join("") +
+        '<span class="label">' + t("negL") + "</span>" + quote(tn.neg[0], tn.neg[1]) +
+        (tn.q ? '<span class="label">' + t("qL") + "</span>" + quote(tn.q[0], tn.q[1]) : "") + "</div></div>";
     }
     return h + "</article>";
   }
-
   function renderTenses() {
     var ru = S.lang === "ru";
-    var choose = '<div class="card"><h3>' + t("choose") + '</h3><div class="choose">' + CHOOSE.map(function (c) {
+    var choose = '<div class="panel"><span class="label">' + t("choose") + '</span><div class="choose">' + CHOOSE.map(function (c) {
       var tn = TBY[c[0]];
-      return '<button class="crow" data-jump="' + tn.id + '"><span class="say">' + L(c[1]) + '</span><span class="arrow">→</span><span class="ctn">' + G.icon(tn.id) + shortName(tn) + "</span></button>";
+      return '<button class="crow" data-jump="' + tn.id + '"><span class="say">' + L(c[1]) + '</span><span class="ctn">' + G.icon(tn.id) + shortName(tn) + "</span></button>";
     }).join("") + "</div></div>";
-
-    var aspect = '<div class="card"><h3>' + t("aspectT") + '</h3><div class="asp2">' +
-      '<div class="an i col"><span class="tag">' + t("impfS") + "</span><span>" + (ru ? "процесс, привычка, длительность, запрет" : "процес, навик, продължителност, забрана") + '</span><span class="sigs">винаги · обикновено · често · всеки ден · докато</span></div>' +
-      '<div class="an p col"><span class="tag">' + t("pfS") + "</span><span>" + (ru ? "одно действие с результатом" : "едно действие с резултат") + '</span><span class="sigs">веднъж · този път · изведнъж · до утре · за час</span></div></div>' +
-      (ru ? '<p class="src">Отличие от русского: СВ без «ще» / «да» не значит будущее. «Возьму» = «ще взема».</p>' : '<p class="src">Свършеният вид в сегашно време стои само след „да“, „ще“, „ако“, „когато“.</p>') + "</div>";
-
-    var stems = '<details class="card stems"><summary><h3>' + t("stemsT") + "</h3></summary>" +
-      '<div class="table-wrap"><table class="plain"><tbody>' +
-        "<tr><td>" + (ru ? "Аорист" : "Аорист") + "</td><td>" + (ru ? "III: -м → -х (питам → питах). I и II — гласная перед -х разная:" : "III: -м → -х (питам → питах). При I и II гласната пред -х е различна:") + "<br>-ох: чета → четох, дойда → дойдох · -ах / -ях: кажа → казах, видя → видях · -их: правя → правих · -х: взема → взех, чуя → чух</td></tr>" +
-        "<tr><td>" + (ru ? "Имперфект" : "Имперфект") + "</td><td>" + (ru ? "I и II: под ударением -ях, без ударения -ех (четях, правех); после ж, ч, ш — -ах. III: -м → -х (питах)." : "I и II: под ударение -ях, без ударение -ех (четях, правех); след ж, ч, ш – -ах. III: -м → -х (питах).") + "</td></tr>" +
-        "<tr><td>" + (ru ? "Причастие" : "Причастие") + "</td><td>" + (ru ? "аорист без -х + -л: правих → правил, взех → взел; -ох → -ъл: донесох → донесъл. Мн. ч.: я → е (видял → видели)." : "аорист без -х + -л: правих → правил, взех → взел; -ох → -ъл: донесох → донесъл. Мн.ч.: я → е (видял → видели).") + "</td></tr>" +
-        "<tr><td>" + (ru ? "Спряжение" : "Спрежение") + "</td><td>" + (ru ? "по форме «ти»: -еш → I, -иш → II, -аш / -яш → III" : "по формата за „ти“: -еш → I, -иш → II, -аш / -яш → III") + "</td></tr>" +
-      "</tbody></table></div></details>";
-
-    $("tenses").innerHTML = '<div class="tgrid-top">' + choose + aspect + "</div>" +
+    var aspect = '<div class="panel"><span class="label">' + t("aspectT") + '</span><div class="asp">' +
+      '<div class="aspc i"><b>' + t("impfS") + "</b><span>" + (ru ? "процесс, привычка, длительность, запрет" : "процес, навик, продължителност, забрана") + '</span><span class="sigs">винаги · обикновено · често · всеки ден · докато</span></div>' +
+      '<div class="aspc p"><b>' + t("pfS") + "</b><span>" + (ru ? "одно действие с результатом" : "едно действие с резултат") + '</span><span class="sigs">веднъж · този път · изведнъж · до утре · за час</span></div></div>' +
+      '<p class="muted" style="font-size:var(--t-s)">' + (ru ? "Отличие от русского: СВ без «ще» / «да» не значит будущее. «Возьму» = «ще взема»." : "Свършеният вид в сегашно време стои само след „да“, „ще“, „ако“, „когато“.") + "</p></div>";
+    var stems = '<details class="panel stems"><summary><span class="label">' + t("stemsT") + "</span></summary>" +
+      '<table class="plain"><tbody>' +
+      "<tr><td>Аорист</td><td>" + (ru ? "III: -м → -х (питам → питах). I и II — гласная перед -х разная:" : "III: -м → -х (питам → питах). При I и II гласната пред -х е различна:") + ' <span class="bg">-ох: чета → четох · -ах / -ях: кажа → казах, видя → видях · -их: правя → правих · -х: взема → взех</span></td></tr>' +
+      "<tr><td>Имперфект</td><td>" + (ru ? "I и II: под ударением -ях, без ударения -ех; после ж, ч, ш — -ах. III: -м → -х." : "I и II: под ударение -ях, без ударение -ех; след ж, ч, ш – -ах. III: -м → -х.") + ' <span class="bg">четях · правех · питах</span></td></tr>' +
+      "<tr><td>" + (ru ? "Причастие" : "Причастие") + "</td><td>" + (ru ? "аорист без -х + -л; -ох → -ъл. Мн. ч.: я → е." : "аорист без -х + -л; -ох → -ъл. Мн.ч.: я → е.") + ' <span class="bg">правих → правил · донесох → донесъл · видял → видели</span></td></tr>' +
+      "<tr><td>" + (ru ? "Спряжение" : "Спрежение") + "</td><td>" + (ru ? "по форме «ти»:" : "по формата за „ти“:") + ' <span class="bg">-еш → I · -иш → II · -аш / -яш → III</span></td></tr>' +
+      "</tbody></table></details>";
+    $("tenses").innerHTML = '<div class="ttop">' + choose + aspect + "</div>" +
       '<div class="tcards">' + CORE.map(tenseCard).join("") + "</div>" +
-      '<details class="rare-wrap"' + (S.showRare ? " open" : "") + '><summary class="btn ghost sm">' + t("rareT") + " (" + RARE.length + ')</summary><div class="tcards">' + RARE.map(tenseCard).join("") + "</div></details>" +
+      '<details class="rare-wrap"' + (S.showRare ? " open" : "") + "><summary>" + t("rareT") + " (" + RARE.length + ')</summary><div class="tcards">' + RARE.map(tenseCard).join("") + "</div></details>" +
       stems;
   }
 
@@ -265,30 +286,29 @@
     var el = $("verbs");
     if (S.verb !== null) { el.innerHTML = verbPage(VERBS[S.verb]); return; }
     var list = search(S.query), keep = document.activeElement && document.activeElement.id === "q";
-    el.innerHTML = '<div class="search-row"><input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="' + esc(t("search")) + '" value="' + esc(S.query) + '"><span class="count">' + t("count")(list.length) + "</span></div>" +
+    el.innerHTML = '<div class="search-row"><input id="q" class="search" type="search" autocomplete="off" spellcheck="false" placeholder="' + esc(t("search")) + '" value="' + esc(S.query) + '"><span class="count">' + t("count")(list.length) + "</span></div>" +
       (list.length ? '<div class="vlist">' + list.map(function (v) {
         return '<button class="vrow" data-verb="' + v.id + '"><span class="pair">' + pairHTML(v) + '</span><span class="vmean">' + esc(v.ru) + '</span><span class="grp">' + v.impf.group + " · " + v.pf.group + (v.extra ? ' <em class="badge">' + t("model") + "</em>" : "") + "</span></button>";
-      }).join("") + "</div>" : '<p class="empty">' + t("none") + "</p>");
+      }).join("") + "</div>" : '<p class="muted">' + t("none") + "</p>");
     if (keep) { var q = $("q"); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
   }
-
   function verbPage(v) {
     var i = S.vperson, tenses = CORE.concat(S.vrare ? RARE : []);
-    var persons = G.PERSONS.map(function (p, k) { return '<button class="pchip" data-vperson="' + k + '" aria-pressed="' + (k === i) + '">' + p + "</button>"; }).join("");
+    var persons = '<div class="pseg">' + G.PERSONS.map(function (p, k) { return '<button data-vperson="' + k + '" aria-pressed="' + (k === i) + '">' + p.replace(" / тя", "") + "</button>"; }).join("") + "</div>";
     var rows = tenses.map(function (tn) {
-      var pi = tn.id === "impv" ? (i === 4 ? 4 : 1) : i;
+      var pi = tn.id === "impv" ? (i >= 3 ? 4 : 1) : i;
       var a = cellText(tn.id, v, false, pi), b = cellText(tn.id, v, true, pi);
-      return '<tr><th><button class="tlink" data-cell="' + tn.id + '|0|' + pi + '">' + G.icon(tn.id) + "<span>" + shortName(tn) + "</span></button></th>" +
+      return '<tr><th class="stick"><button class="tlink" data-cell="' + tn.id + "|0|" + pi + '">' + G.icon(tn.id) + "<span>" + shortName(tn) + "</span></button></th>" +
         '<td><button class="cell i" data-cell="' + tn.id + "|0|" + pi + '">' + (a || '<span class="na">—</span>') + "</button></td>" +
         '<td><button class="cell p" data-cell="' + tn.id + "|1|" + pi + '">' + (b || '<span class="na">—</span>') + "</button></td></tr>";
     }).join("");
     return '<button class="back" data-back>' + t("back") + "</button>" +
-      '<div class="vhead"><h2 class="pairbig">' + pairHTML(v) + '</h2><p class="vru">' + esc(v.ru) + '</p><div class="badges"><span class="badge i">' + t("impfS") + " · " + v.impf.group + " " + t("group") + '</span><span class="badge p">' + t("pfS") + " · " + v.pf.group + " " + t("group") + "</span></div>" +
+      '<div class="vhead"><h2 class="pairbig">' + pairHTML(v) + '</h2><p class="muted">' + esc(v.ru) + '</p><div class="badges"><span class="badge i">' + t("impfS") + " · " + v.impf.group + " " + t("group") + '</span><span class="badge p">' + t("pfS") + " · " + v.pf.group + " " + t("group") + "</span></div>" +
       (v.note ? '<p class="note">' + esc(L(v.note)) + "</p>" : "") + "</div>" +
-      '<div class="card"><div class="card-h"><h3>' + t("grid") + '</h3><div class="pchips">' + persons + "</div></div>" +
-      '<div class="table-wrap"><table class="vgrid"><thead><tr><th></th><th class="i">' + t("impfS") + " · " + v.impf.inf + '</th><th class="p">' + t("pfS") + " · " + v.pf.inf + "</th></tr></thead><tbody>" + rows + "</tbody></table></div>" +
-      '<button class="link" data-vrare>' + (S.vrare ? "−" : "+" + RARE.length + " " + t("rare")) + "</button></div>" +
-      '<div class="card ex"><div class="card-h"><h3>' + t("examples") + "</h3>" + trToggle() + "</div>" + v.ex.map(function (e) { return ex(highlight(e[0], v), e[1]); }).join("") + "</div>";
+      '<div class="panel"><div class="vgrid-head"><span class="label">' + t("grid") + "</span>" + persons + "</div>" +
+      '<div class="gwrap"><table class="vgrid"><colgroup><col class="c0"><col><col></colgroup><thead><tr><th class="stick"></th><th class="i">' + t("impfS") + " · " + v.impf.inf + '</th><th class="p">' + t("pfS") + " · " + v.pf.inf + "</th></tr></thead><tbody>" + rows + "</tbody></table></div>" +
+      '<button class="link" data-vrare>' + (S.vrare ? t("less") + " ▴" : t("rareT") + " (" + RARE.length + ") ▾") + "</button></div>" +
+      examplesPanel(v);
   }
 
   /* ---------- Routing ---------- */
@@ -313,26 +333,27 @@
     if (S.jump) { var el = $("t-" + S.jump); S.jump = null; if (el) el.scrollIntoView({ block: "start" }); }
   }
   function go(fn) { fn(); render(); window.scrollTo(0, 0); }
-  function setB(fn) { fn(S.B); S.B.sel = -1; saveB(); renderForm(); }
+  function setB(fn, anim) { fn(S.B); S.B.sel = -1; S.anim = anim || "chg"; saveB(); renderForm(); }
 
   /* ---------- Events ---------- */
   document.addEventListener("click", function (e) {
-    var el = e.target.closest("button, summary");
+    var el = e.target.closest("button");
     if (!el) return;
     var d = el.dataset;
+    if (el.id === "help") { S.legend = !S.legend; renderChrome(); return; }
     if (d.lang) { S.lang = d.lang; store.set("lang", S.lang); render(); return; }
     if (d.tab) { go(function () { if (d.tab === "verbs" && S.tab === "verbs") S.verb = null; S.tab = d.tab; }); return; }
     // builder
     if ("pick" in d) { S.B.picking = !S.B.picking; renderForm(); return; }
-    if (d.bverb) { setB(function (B) { B.verb = +d.bverb; B.picking = false; B.q = ""; }); return; }
-    if (d.btense) { setB(function (B) { B.tense = d.btense; }); return; }
-    if ("brare" in d) { setB(function (B) { B.rare = !B.rare; if (!B.rare && !TBY[B.tense].core) B.tense = "present"; }); return; }
+    if (d.bverb) { setB(function (B) { B.verb = +d.bverb; B.picking = false; B.q = ""; }, "fade"); return; }
+    if (d.bgroup) { setB(function (B) { var g = GROUPS.filter(function (x) { return x.id === d.bgroup; })[0]; if (g.t.indexOf(B.tense) < 0) B.tense = g.t[0]; }, "fade"); return; }
+    if (d.btense) { setB(function (B) { B.tense = d.btense; }, "fade"); return; }
     if (d.bperson) { setB(function (B) { B.person = +d.bperson; }); return; }
-    if (d.bpf) { setB(function (B) { B.pf = d.bpf === "1"; }); return; }
-    if (d.bg) { setB(function (B) { B.gender = d.bg; }); return; }
+    if (d.bpf) { setB(function (B) { B.pf = d.bpf === "1"; }, "fade"); return; }
+    if (d.bgen) { setB(function (B) { B.gender = d.bgen; }); return; }
     if ("bneg" in d) { setB(function (B) { B.neg = !B.neg; }); return; }
     if (d.piece) { S.B.sel = +d.piece; renderForm(); return; }
-    if (d.totense) { go(function () { S.tab = "tenses"; S.open[d.totense] = true; S.jump = d.totense; }); return; }
+    if (d.totense) { go(function () { S.tab = "tenses"; S.open[d.totense] = true; S.jump = d.totense; if (!TBY[d.totense].core) S.showRare = true; }); return; }
     // tenses
     if (d.tobuilder) { S.B.tense = d.tobuilder; S.B.sel = -1; saveB(); go(function () { S.tab = "form"; }); return; }
     if (d.toggle) { S.open[d.toggle] = !S.open[d.toggle]; renderTenses(); return; }
@@ -343,8 +364,8 @@
     if (d.vperson) { S.vperson = +d.vperson; renderVerbs(); return; }
     if ("vrare" in d) { S.vrare = !S.vrare; renderVerbs(); return; }
     if (d.cell) {
-      var c = d.cell.split("|"), vid = S.verb;
-      S.B.verb = vid; S.B.tense = c[0]; S.B.pf = c[1] === "1"; S.B.person = +c[2]; S.B.neg = false; S.B.sel = -1; saveB();
+      var c = d.cell.split("|");
+      S.B.verb = S.verb; S.B.tense = c[0]; S.B.pf = c[1] === "1"; S.B.person = +c[2]; S.B.neg = false; S.B.sel = -1; saveB();
       go(function () { S.tab = "form"; }); return;
     }
   });
