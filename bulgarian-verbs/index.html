@@ -1,12 +1,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Глаголи Verb Times</title>
+<title>Глаголи</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sofia+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Sofia+Sans+Extra+Condensed:wght@700;800&family=Sofia+Sans+Semi+Condensed:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
 <style>
-/* Layout: sticky tab bar over a single reading column; the tense view splits into notes | conjugation table on wide screens.
-   Colour encodes aspect everywhere: blue = imperfective (process), rose = perfective (completed). */
+/* Layout: header + tabs (top bar on desktop, bottom bar on phones) over one reading column.
+   Colour encodes aspect everywhere: blue = imperfective (НСВ), rose = perfective (СВ). */
 :root {
   --bg: #F6F5F9;
   --surface: #FFFFFF;
@@ -18,41 +18,44 @@
   --impf-soft: #E2EEF5;
   --pf: #B11F4B;
   --pf-soft: #F9E4EB;
-  --display: "Sofia Sans Extra Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
-  --body: "Sofia Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --cond: "Sofia Sans Semi Condensed", "Sofia Sans", system-ui, sans-serif;
+  --hl: #FFF0B8;
+  --font: "Proxima Nova", "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --r: 10px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #14131B; --surface: #1E1D28; --sunk: #191822; --ink: #ECEAF3; --muted: #A7A3B8; --line: #302E3D;
-    --impf: #7DBDE0; --impf-soft: #18303E; --pf: #F27FA1; --pf-soft: #3B1D2A;
+    --impf: #7DBDE0; --impf-soft: #18303E; --pf: #F27FA1; --pf-soft: #3B1D2A; --hl: #4A4120;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #14131B; --surface: #1E1D28; --sunk: #191822; --ink: #ECEAF3; --muted: #A7A3B8; --line: #302E3D;
-  --impf: #7DBDE0; --impf-soft: #18303E; --pf: #F27FA1; --pf-soft: #3B1D2A;
+  --impf: #7DBDE0; --impf-soft: #18303E; --pf: #F27FA1; --pf-soft: #3B1D2A; --hl: #4A4120;
   color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 html, body { background: var(--bg); }
-body { margin: 0; color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55; }
-button { font: inherit; color: inherit; }
+body { margin: 0; color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.55; }
+button, input, select { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--pf); outline-offset: 2px; border-radius: 4px; }
 b.i, .i-txt { color: var(--impf); }
 b.p, .p-txt { color: var(--pf); }
-
 .wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; }
+p { margin: 0; }
 
 /* Header */
-header.top { padding-block: 22px 6px; }
-.brand { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
-.brand h1 { margin: 0; font-family: var(--display); font-weight: 800; font-size: 46px; line-height: .95; letter-spacing: .01em; text-transform: uppercase; }
+header.top { padding-block: 18px 8px; }
+.top-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand h1 { margin: 0; font-weight: 700; font-size: 26px; line-height: 1.1; letter-spacing: -.01em; }
 .brand h1 span { color: var(--pf); }
-.brand p { margin: 0; color: var(--muted); font-size: 15px; }
-.legend { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; color: var(--muted); }
+.brand p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; background: var(--surface); flex: none; }
+.lang button { border: 0; background: none; padding: 4px 12px; border-radius: 999px; font-weight: 600; font-size: 13px; cursor: pointer; color: var(--muted); }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.legend { display: flex; gap: 6px 16px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; color: var(--muted); }
 .legend > span { display: inline-flex; align-items: center; gap: 6px; }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
 .dot.i { background: var(--impf); }
@@ -60,800 +63,216 @@ header.top { padding-block: 22px 6px; }
 
 nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
 nav.tabs .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
-nav.tabs .wrap::-webkit-scrollbar { display: none; }
-.tab { flex: none; border: 0; background: none; padding: 12px 12px 10px; font-family: var(--cond); font-weight: 600; font-size: 15px; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; }
+.tab { flex: none; border: 0; background: none; padding: 12px 12px 10px; font-weight: 600; font-size: 15px; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; }
 .tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--pf); }
-.tab .bg { font-weight: 500; opacity: .7; margin-left: 4px; }
-.tab.soon { cursor: default; opacity: .5; }
+.tab:disabled { cursor: default; opacity: .45; }
+@media (max-width: 640px) {
+  nav.tabs { position: fixed; top: auto; bottom: 0; left: 0; right: 0; border-bottom: 0; border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  nav.tabs .wrap { justify-content: space-around; padding-inline: 4px; }
+  .tab { flex: 1 1 0; font-size: 13px; padding: 12px 4px; border-bottom: 0; border-top: 3px solid transparent; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tab[aria-selected="true"] { border-top-color: var(--pf); }
+  #tab-btn-practice { display: none; }
+  main { padding-bottom: 90px !important; }
+}
 
-main { padding-block: 22px 60px; }
-section[role="tabpanel"] { display: grid; gap: 22px; }
-
-h2 { font-family: var(--display); font-weight: 800; font-size: 32px; line-height: 1; margin: 0; text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
-h3 { font-family: var(--cond); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 0 0 8px; }
+main { padding-block: 20px 60px; }
+section[role="tabpanel"] { display: grid; gap: 18px; }
+h2 { font-weight: 700; font-size: 26px; line-height: 1.2; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
+h3 { font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 0 0 8px; }
 .lead { margin: 6px 0 0; color: var(--muted); max-width: 65ch; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; min-width: 0; display: grid; gap: 12px; align-content: start; }
+.card-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.card-h h3 { margin: 0; }
+.ctl-label { font-size: 12.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.badge { display: inline-block; font-size: 12.5px; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--sunk); border: 1px solid var(--line); color: var(--muted); font-style: normal; }
+.badge.i { background: var(--impf-soft); color: var(--impf); border-color: transparent; }
+.badge.p { background: var(--pf-soft); color: var(--pf); border-color: transparent; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.btn { border: 1px solid var(--ink); background: var(--ink); color: var(--bg); border-radius: 8px; padding: 9px 14px; cursor: pointer; font-weight: 600; justify-self: start; }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.sm { padding: 5px 11px; font-size: 14px; }
+.link { border: 0; background: none; padding: 0; color: var(--pf); font-weight: 600; cursor: pointer; justify-self: start; }
+.row-btns { display: flex; gap: 8px; flex-wrap: wrap; }
 
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; min-width: 0; }
+/* Verbs list */
+.search-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+#q, #fq { flex: 1 1 260px; min-width: 0; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 12px 14px; font-size: 16px; }
+.count { color: var(--muted); font-size: 14px; }
+.vlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 8px; }
+.vlist.compact { grid-template-columns: minmax(0, 1fr); }
+.vrow { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 12px 14px; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; }
+.vrow:hover { border-color: var(--ink); }
+.vrow .pair { font-weight: 700; font-size: 16.5px; grid-column: 1; }
+.vrow .vmean { color: var(--muted); font-size: 14px; grid-column: 1; }
+.vrow .grp { grid-column: 2; grid-row: 1 / span 2; align-self: center; color: var(--muted); font-size: 12.5px; font-weight: 600; text-align: right; }
+.dash { color: var(--muted); }
+.empty { color: var(--muted); }
 
-/* Controls */
-.controls { display: grid; gap: 14px; }
-.ctl-label { font-family: var(--cond); font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-.verbs { display: flex; flex-wrap: wrap; gap: 6px; }
-.verb-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 14px; cursor: pointer; font-size: 15px; }
-.verb-btn small { color: var(--muted); margin-left: 4px; }
-.verb-btn[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--bg); }
-.verb-btn[aria-pressed="true"] small { color: inherit; opacity: .7; }
+/* Verb page */
+.back { border: 0; background: none; padding: 0; color: var(--muted); font-weight: 600; cursor: pointer; justify-self: start; }
+.vhead { display: grid; gap: 8px; }
+.pairbig { font-size: 30px; line-height: 1.2; }
+.vru { color: var(--muted); font-size: 17px; }
+.note { background: var(--hl); border-radius: 8px; padding: 8px 12px; font-size: 15px; }
+.tsecs { display: grid; gap: 8px; }
+.tsec { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+.tsec summary { cursor: pointer; list-style: none; padding: 12px 16px; display: flex; gap: 6px 16px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
+.tsec summary::-webkit-details-marker { display: none; }
+.tsec summary::before { content: "+"; font-weight: 700; color: var(--muted); width: 12px; }
+.tsec[open] summary::before { content: "–"; }
+.tsum { display: grid; flex: 1 1 220px; min-width: 0; }
+.tn { font-weight: 700; }
+.tn-bg { font-size: 13px; color: var(--muted); }
+.tshort { font-size: 13.5px; color: var(--muted); }
+.tprev { font-weight: 700; font-size: 15px; }
+.tbody { padding: 0 16px 16px; display: grid; gap: 12px; }
 
-.tense-groups { display: flex; gap: 10px 18px; flex-wrap: wrap; }
-.tg { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.tg-name { font-family: var(--cond); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); width: 100%; }
-.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 11px; cursor: pointer; font-size: 14.5px; }
-.chip[aria-pressed="true"] { border-color: var(--pf); background: var(--pf-soft); color: var(--ink); font-weight: 700; }
-
-/* Tense detail */
-.detail { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
-@media (max-width: 820px) { .detail { grid-template-columns: minmax(0, 1fr); } }
-.t-head { display: grid; gap: 6px; }
-.t-head .bgname { font-family: var(--display); font-weight: 800; font-size: 38px; line-height: 1; text-transform: uppercase; text-wrap: balance; }
-.t-head .enname { font-size: 18px; font-weight: 500; }
-.formula { display: inline-block; justify-self: start; font-family: var(--cond); font-weight: 600; font-size: 15px; background: var(--sunk); border: 1px solid var(--line); border-radius: 6px; padding: 3px 10px; }
-.notes { display: grid; gap: 18px; }
-ul.clean { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
-.aspect-notes { display: grid; gap: 8px; }
-.an { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 10px 12px; border-radius: 8px; }
-.an.i { background: var(--impf-soft); }
-.an.p { background: var(--pf-soft); }
-.an .tag { font-family: var(--cond); font-weight: 600; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
-.an.i .tag { color: var(--impf); }
-.an.p .tag { color: var(--pf); }
-.signals { display: flex; flex-wrap: wrap; gap: 6px; }
-.sig { background: var(--sunk); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 14px; }
-.tips { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
-.tips li { padding-left: 22px; position: relative; }
-.tips li::before { content: "!"; position: absolute; left: 0; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); color: var(--bg); font-size: 11px; font-weight: 700; display: grid; place-items: center; line-height: 1; }
-
+/* Tables */
 .table-wrap { overflow-x: auto; }
-table.conj { width: 100%; border-collapse: collapse; font-size: 16px; }
+table.conj { width: 100%; border-collapse: collapse; font-size: 16.5px; }
 table.conj th, table.conj td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-table.conj thead th { font-family: var(--cond); font-weight: 600; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+table.conj thead th { font-weight: 700; font-size: 13px; letter-spacing: .03em; }
 table.conj thead th.i { color: var(--impf); border-bottom: 2px solid var(--impf); }
 table.conj thead th.p { color: var(--pf); border-bottom: 2px solid var(--pf); }
 table.conj thead th.who { color: var(--muted); border-bottom: 2px solid var(--line); }
 table.conj td.who { color: var(--muted); white-space: nowrap; width: 1%; }
-table.conj td.f { font-weight: 700; }
+table.conj td.f { font-weight: 600; }
+table.conj td.hl { background: var(--hl); }
 .aux { font-weight: 400; color: var(--muted); }
 .sl { font-weight: 400; color: var(--muted); padding-inline: 2px; }
-td.rare, th .rare-note { opacity: .5; }
-th .rare-note { font-weight: 500; text-transform: none; letter-spacing: 0; margin-left: 4px; }
-.na { font-weight: 400; font-style: italic; color: var(--muted); }
-.table-note { font-size: 13.5px; color: var(--muted); margin: 8px 0 0; }
+td.rare { opacity: .55; }
+.rare-note { font-weight: 500; color: var(--muted); }
+.na { font-weight: 400; font-style: italic; color: var(--muted); font-size: 14px; }
+.table-note { font-size: 13.5px; color: var(--muted); }
 
-.ex { display: grid; gap: 10px; }
-.ex-item { display: grid; gap: 1px; padding-left: 12px; border-left: 3px solid var(--line); }
-.ex-item .bgt { font-size: 17px; }
-.ex-item .ent { color: var(--muted); font-size: 14.5px; }
-.ex-item.neg { border-left-color: var(--muted); }
-.ex-label { font-family: var(--cond); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.aspect-notes { display: grid; gap: 8px; }
+.an { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 9px 12px; border-radius: 8px; font-size: 15px; }
+.an.i { background: var(--impf-soft); }
+.an.p { background: var(--pf-soft); }
+.an .tag { font-weight: 700; font-size: 12.5px; }
+.an.i .tag { color: var(--impf); }
+.an.p .tag { color: var(--pf); }
 
-/* Glance table */
-table.glance { width: 100%; border-collapse: collapse; font-size: 15px; }
-table.glance th, table.glance td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-table.glance thead th { font-family: var(--cond); font-weight: 600; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
-table.glance tbody tr { cursor: pointer; }
-table.glance tbody tr:hover { background: var(--sunk); }
-table.glance tbody tr.cur { background: var(--pf-soft); }
-table.glance .gname { font-weight: 700; }
-table.glance .gname small { display: block; font-weight: 400; color: var(--muted); }
-table.glance td.gi { color: var(--impf); font-weight: 600; white-space: nowrap; }
-table.glance td.gp { color: var(--pf); font-weight: 600; white-space: nowrap; }
-table.glance td.gu { color: var(--muted); min-width: 180px; }
+/* Examples */
+.ex-item { display: grid; gap: 2px; padding-left: 12px; border-left: 3px solid var(--line); }
+.ex-item .bgt { font-size: 16.5px; }
+.ex-item .tr { color: var(--muted); font-size: 14.5px; }
+body.no-tr .ex-item .tr { display: none; }
+.ex-label { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.tr-toggle { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; color: var(--muted); cursor: pointer; }
 
-/* Choose */
-.flow { display: grid; gap: 14px; max-width: 760px; }
-.crumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; }
-.crumb { background: var(--sunk); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; color: var(--muted); }
-.q { font-family: var(--cond); font-weight: 600; font-size: 22px; line-height: 1.25; margin: 0 0 12px; }
-.opts { display: grid; gap: 8px; }
-.opt { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 12px 14px; cursor: pointer; display: grid; gap: 2px; }
-.opt:hover { border-color: var(--ink); }
-.opt strong { font-weight: 700; }
-.opt span { color: var(--muted); font-size: 14.5px; }
-.result .bgname { font-family: var(--display); font-weight: 800; font-size: 34px; text-transform: uppercase; line-height: 1; }
-.result { display: grid; gap: 10px; }
-.row-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-.btn { border: 1px solid var(--ink); background: var(--ink); color: var(--bg); border-radius: 8px; padding: 8px 14px; cursor: pointer; font-weight: 600; }
-.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
-
-/* Aspect & endings */
+/* Grammar */
+.segs { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; background: var(--surface); justify-self: start; max-width: 100%; overflow-x: auto; }
+.seg { border: 0; background: none; padding: 7px 16px; border-radius: 7px; font-weight: 600; cursor: pointer; color: var(--muted); white-space: nowrap; }
+.seg[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.timeline { display: grid; grid-template-columns: 1.5fr .8fr 1.4fr; border-top: 3px solid var(--line); position: relative; }
+.tl-col { padding: 10px 10px 0 0; display: grid; gap: 8px; align-content: start; position: relative; min-width: 0; }
+.tl-col::before { content: ""; position: absolute; top: -8px; left: 0; width: 13px; height: 13px; border-radius: 50%; background: var(--bg); border: 3px solid var(--line); }
+.tl-now::before { background: var(--pf); border-color: var(--pf); }
+.tl-label { font-size: 12.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); padding-left: 2px; padding-top: 4px; }
+.tl-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.moods { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+@media (max-width: 640px) {
+  .timeline { grid-template-columns: minmax(0, 1fr); border-top: 0; border-left: 3px solid var(--line); padding-left: 14px; gap: 10px; }
+  .tl-col { padding: 0; }
+  .tl-col::before { top: 6px; left: -23px; }
+}
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 11px; cursor: pointer; font-size: 14.5px; font-weight: 500; }
+.chip.adv { border-style: dashed; }
+.chip[aria-pressed="true"] { border-color: var(--pf); border-style: solid; background: var(--pf-soft); font-weight: 700; }
+.detail { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 860px) { .detail { grid-template-columns: minmax(0, 1fr); } }
+.stack { display: grid; gap: 18px; min-width: 0; }
+.t-head { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
+.t-head .tn { font-size: 22px; line-height: 1.25; }
+.t-head > .tn, .t-head > .tn-bg { flex-basis: 100%; }
+.t-head .badge { order: -1; }
+.formula { display: inline-block; justify-self: start; font-weight: 600; background: var(--sunk); border: 1px solid var(--line); border-radius: 6px; padding: 3px 10px; }
+.verbs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.verb-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 13px; cursor: pointer; font-size: 14.5px; }
+.verb-btn[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+#modelsel { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 10px; font-size: 14.5px; max-width: 100%; }
+.notes { gap: 18px; }
+ul.clean { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.signals { display: flex; flex-wrap: wrap; gap: 6px; }
+.sig { background: var(--sunk); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 14px; }
+.tips { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.tips li { padding-left: 24px; position: relative; }
+.tips li::before { content: "!"; position: absolute; left: 0; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); color: var(--bg); font-size: 11px; font-weight: 700; display: grid; place-items: center; line-height: 1; }
+.compare { background: var(--hl); border-radius: 8px; padding: 12px 14px; }
+.compare h3 { color: var(--ink); }
+.card.compare { border-color: transparent; }
 .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
 @media (max-width: 820px) { .two { grid-template-columns: minmax(0, 1fr); } }
 .aspect-i { border-top: 4px solid var(--impf); }
 .aspect-p { border-top: 4px solid var(--pf); }
 .aspect-i h3 { color: var(--impf); }
 .aspect-p h3 { color: var(--pf); }
-.big-idea { font-family: var(--cond); font-weight: 600; font-size: 20px; line-height: 1.3; margin: 0 0 8px; }
+.big-idea { font-weight: 600; font-size: 18px; line-height: 1.35; }
 table.plain { width: 100%; border-collapse: collapse; font-size: 15px; }
 table.plain th, table.plain td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-table.plain thead th { font-family: var(--cond); font-weight: 600; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+table.plain thead th { font-weight: 700; font-size: 13px; color: var(--muted); }
 table.plain thead th.i { color: var(--impf); }
 table.plain thead th.p { color: var(--pf); }
 table.plain td:first-child { font-weight: 600; }
 .end b { color: var(--pf); }
-.src { font-size: 13px; color: var(--muted); }
-.stack { display: grid; gap: 12px; }
-p { margin: 0; }
+.src { font-size: 13.5px; color: var(--muted); }
 .p-gap { display: grid; gap: 10px; }
+
+/* Which form */
+.fverb { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 16px; }
+.fverb .ctl-label { flex-basis: 100%; }
+.fverb .pair { font-weight: 700; font-size: 18px; }
+.fverb .vmean { color: var(--muted); font-size: 14px; flex: 1 1 auto; }
+.picker { gap: 10px; }
+.flow { display: grid; gap: 12px; max-width: 780px; }
+.crumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; }
+.crumb { background: var(--sunk); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; color: var(--muted); }
+.q { font-weight: 700; font-size: 20px; line-height: 1.3; }
+.opts { display: grid; gap: 8px; }
+.opt { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 12px 14px; cursor: pointer; display: grid; gap: 2px; }
+.opt:hover { border-color: var(--ink); }
+.opt span { color: var(--muted); font-size: 14.5px; }
+.res-name { display: grid; }
+.res-name .tn { font-size: 22px; }
+.why { display: grid; gap: 8px; }
 
 footer { color: var(--muted); font-size: 13px; padding-block: 0 40px; }
 @media (max-width: 520px) {
-  .brand h1 { font-size: 40px; }
-  .t-head .bgname { font-size: 32px; }
+  .pairbig { font-size: 24px; }
+  table.conj { font-size: 15.5px; }
   table.conj th, table.conj td { padding: 7px 6px; }
   .card { padding: 14px; }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .detail, .flow .card { animation: fade .18s ease-out; }
-  @keyframes fade { from { opacity: .4; } to { opacity: 1; } }
 }
 </style>
 
 <header class="top">
   <div class="wrap">
-    <div class="brand">
-      <h1 lang="bg">Глаго<span>ли</span></h1>
-      <p>Bulgarian verb times: forms, endings and when to use each one</p>
+    <div class="top-row">
+      <div class="brand"><h1>Глаго<span>ли</span></h1><p id="sub"></p></div>
+      <div class="lang" id="lang" role="group" aria-label="Language"></div>
     </div>
-    <div class="legend">
-      <span><i class="dot i"></i>imperfective <span lang="bg">(несвършен вид)</span>: process, habit</span>
-      <span><i class="dot p"></i>perfective <span lang="bg">(свършен вид)</span>: one finished action</span>
-    </div>
+    <div class="legend" id="leg"></div>
   </div>
 </header>
 
 <nav class="tabs" aria-label="Sections">
   <div class="wrap" role="tablist">
-    <button class="tab" role="tab" id="tab-btn-tenses" data-tab="tenses">Tenses<span class="bg" lang="bg">времена</span></button>
-    <button class="tab" role="tab" id="tab-btn-choose" data-tab="choose">Which tense?</button>
-    <button class="tab" role="tab" id="tab-btn-aspect" data-tab="aspect">Which aspect?<span class="bg" lang="bg">вид</span></button>
-    <button class="tab" role="tab" id="tab-btn-endings" data-tab="endings">Endings<span class="bg" lang="bg">окончания</span></button>
-    <button class="tab soon" disabled title="Coming next">Verb pairs · soon</button>
+    <button class="tab" role="tab" id="tab-btn-verbs" data-tab="verbs"></button>
+    <button class="tab" role="tab" id="tab-btn-form" data-tab="form"></button>
+    <button class="tab" role="tab" id="tab-btn-grammar" data-tab="grammar"></button>
+    <button class="tab" id="tab-btn-practice" disabled></button>
   </div>
 </nav>
 
 <main class="wrap">
-  <section role="tabpanel" id="tenses" aria-labelledby="tab-btn-tenses"></section>
-  <section role="tabpanel" id="choose" aria-labelledby="tab-btn-choose" hidden></section>
-  <section role="tabpanel" id="aspect" aria-labelledby="tab-btn-aspect" hidden></section>
-  <section role="tabpanel" id="endings" aria-labelledby="tab-btn-endings" hidden></section>
+  <section role="tabpanel" id="verbs" aria-labelledby="tab-btn-verbs"></section>
+  <section role="tabpanel" id="form" aria-labelledby="tab-btn-form" hidden></section>
+  <section role="tabpanel" id="grammar" aria-labelledby="tab-btn-grammar" hidden></section>
 </main>
 
-<footer class="wrap">Personal study app. Tables show standard literary forms. Irregular verbs differ, so check the Endings tab.</footer>
+<footer class="wrap">100 пар · Study in BG</footer>
 
-<script>
-(function () {
-  "use strict";
-
-  /* ---------- Model verbs ---------- */
-  var PERSONS = ["аз", "ти", "той / тя", "ние", "вие", "те"];
-  var AUX = ["съм", "си", "е", "сме", "сте", "са"];
-  var BYAH = ["бях", "беше", "беше", "бяхме", "бяхте", "бяха"];
-  var SHTYAH = ["щях", "щеше", "щеше", "щяхме", "щяхте", "щяха"];
-  var BIH = ["бих", "би", "би", "бихме", "бихте", "биха"];
-
-  function prefixed(p, v) {
-    function m(a) { return a.map(function (f) { return p + f; }); }
-    return {
-      inf: p + v.inf, pres: m(v.pres), aor: m(v.aor), imp: m(v.imp),
-      part: { m: p + v.part.m, f: p + v.part.f, n: p + v.part.n, pl: p + v.part.pl },
-      impv: m(v.impv)
-    };
-  }
-
-  var cheta = {
-    inf: "чета", pres: ["чета", "четеш", "чете", "четем", "четете", "четат"],
-    aor: ["четох", "чете", "чете", "четохме", "четохте", "четоха"],
-    imp: ["четях", "четеше", "четеше", "четяхме", "четяхте", "четяха"],
-    part: { m: "чел", f: "чела", n: "чело", pl: "чели" }, impv: ["чети", "четете"]
-  };
-  var pravya = {
-    inf: "правя", pres: ["правя", "правиш", "прави", "правим", "правите", "правят"],
-    aor: ["правих", "прави", "прави", "правихме", "правихте", "правиха"],
-    imp: ["правех", "правеше", "правеше", "правехме", "правехте", "правеха"],
-    part: { m: "правил", f: "правила", n: "правило", pl: "правили" }, impv: ["прави", "правете"]
-  };
-  var pitam = {
-    inf: "питам", pres: ["питам", "питаш", "пита", "питаме", "питате", "питат"],
-    aor: ["питах", "пита", "пита", "питахме", "питахте", "питаха"],
-    imp: ["питах", "питаше", "питаше", "питахме", "питахте", "питаха"],
-    part: { m: "питал", f: "питала", n: "питало", pl: "питали" }, impv: ["питай", "питайте"]
-  };
-  var vzemam = {
-    inf: "вземам", pres: ["вземам", "вземаш", "взема", "вземаме", "вземате", "вземат"],
-    aor: ["вземах", "взема", "взема", "вземахме", "вземахте", "вземаха"],
-    imp: ["вземах", "вземаше", "вземаше", "вземахме", "вземахте", "вземаха"],
-    part: { m: "вземал", f: "вземала", n: "вземало", pl: "вземали" }, impv: ["вземай", "вземайте"]
-  };
-  var vzema = {
-    inf: "взема", pres: ["взема", "вземеш", "вземе", "вземем", "вземете", "вземат"],
-    aor: ["взех", "взе", "взе", "взехме", "взехте", "взеха"],
-    imp: ["вземех", "вземеше", "вземеше", "вземехме", "вземехте", "вземеха"],
-    part: { m: "взел", f: "взела", n: "взело", pl: "взели" }, impv: ["вземи", "вземете"]
-  };
-
-  var VERBS = [
-    { id: "cheta", en: "read", impf: cheta, pf: prefixed("про", cheta), gi: "I", gp: "I",
-      note: "Prefix pair: про- makes it perfective. Both verbs are group I (-еш)." },
-    { id: "pravya", en: "do, make", impf: pravya, pf: prefixed("на", pravya), gi: "II", gp: "II",
-      note: "Prefix pair: на- makes it perfective. Both verbs are group II (-иш)." },
-    { id: "pitam", en: "ask", impf: pitam, pf: prefixed("по", pitam), gi: "III", gp: "III",
-      note: "Prefix pair: по- makes it perfective. Both verbs are group III (-аш)." },
-    { id: "vzemam", en: "take", impf: vzemam, pf: vzema, gi: "III", gp: "I",
-      note: "Suffix pair from your list: вземам (group III) / да взема, -еш (group I). Watch out: той взема (he takes) looks like аз взема (I take, perfective)." }
-  ];
-
-  /* ---------- Tenses ---------- */
-  function aux(s) { return '<span class="aux">' + s + '</span>'; }
-  function part(v, i) { return i < 3 ? v.part.m + '<span class="sl">/</span>' + v.part.f : v.part.pl; }
-
-  var TENSES = [
-    {
-      id: "present", group: "Present", en: "Present", bg: "Сегашно време",
-      formula: "stem + present ending", short: "now, habits, facts",
-      cells: function (v, pf) { return v.pres.map(function (f) { return pf ? aux("(да)") + " " + f : f; }); },
-      pfNote: "only after да, ще, ако…",
-      uses: [
-        "Something happening right now. Bulgarian has no separate “-ing” form: <i lang=\"bg\">чета</i> = I read / I am reading.",
-        "Habits and repeated actions.",
-        "General facts.",
-        "Planned near future, like English: <i lang=\"bg\">Утре заминавам.</i> (I'm leaving tomorrow.)"
-      ],
-      aspect: {
-        i: "The normal present tense.",
-        p: "Never on its own. Use it only after <i lang=\"bg\">да, ще, ако, когато, щом, преди да</i>: <i lang=\"bg\">Искам да прочета…</i>"
-      },
-      signals: ["сега", "всеки ден", "обикновено", "винаги", "често", "рядко", "никога"],
-      examples: [
-        ["Какво правиш? – <b class=\"i\">Чета</b> книга.", "What are you doing? – I'm reading a book."],
-        ["Обикновено <b class=\"i\">вземам</b> автобус.", "I usually take the bus."],
-        ["Искам да <b class=\"p\">прочета</b> тази книга до неделя.", "I want to read (finish) this book by Sunday."]
-      ],
-      neg: ["Не <b class=\"i\">чета</b> вестници.", "I don't read newspapers."],
-      q: ["<b class=\"i\">Четеш</b> ли на български?", "Do you read in Bulgarian?"],
-      tips: [
-        "The <i lang=\"bg\">ти</i>-form tells you the group: <i lang=\"bg\">-еш</i> → I, <i lang=\"bg\">-иш</i> → II, <i lang=\"bg\">-аш / -яш</i> → III. Your PDF list shows exactly this ending.",
-        "<i lang=\"bg\">ли</i> goes right after the word you ask about: <i lang=\"bg\">Четеш ли?</i>"
-      ]
-    },
-    {
-      id: "aorist", group: "Past", en: "Aorist (simple past)", bg: "Минало свършено време",
-      formula: "past stem + -х", short: "a finished event at a known time",
-      cells: function (v) { return v.aor; },
-      uses: [
-        "A completed action at a definite point in the past.",
-        "A chain of events in a story: <i lang=\"bg\">Влязох, седнах и поръчах.</i> (I came in, sat down and ordered.)",
-        "This is the main past tense for telling what happened."
-      ],
-      aspect: {
-        i: "The activity happened or lasted for a while, without stressing the result: <i lang=\"bg\">Четох два часа.</i>",
-        p: "The usual choice. The action was finished: <i lang=\"bg\">Прочетох книгата.</i>"
-      },
-      signals: ["вчера", "миналата седмица", "през 2020 г.", "тогава", "изведнъж", "после", "накрая"],
-      examples: [
-        ["Вчера <b class=\"p\">прочетох</b> цялата книга.", "Yesterday I read the whole book."],
-        ["<b class=\"i\">Четох</b> два часа и <b class=\"p\">заспах</b>.", "I read for two hours and fell asleep."],
-        ["<b class=\"p\">Попитах</b> учителката, но тя не знаеше.", "I asked the teacher, but she didn't know."]
-      ],
-      neg: ["Не <b class=\"p\">прочетох</b> писмото.", "I didn't read the letter."],
-      q: ["<b class=\"p\">Прочете</b> ли книгата?", "Did you read the book?"],
-      tips: [
-        "The <i lang=\"bg\">ти</i> and <i lang=\"bg\">той / тя</i> forms are the same: <i lang=\"bg\">ти прочете, той прочете</i>.",
-        "Group I stress: present <i lang=\"bg\">чете́</i> (stress at the end) vs aorist <i lang=\"bg\">че́те</i> (stress at the start).",
-        "Many aorists change the stem: <i lang=\"bg\">пиша → писах, дам → дадох, взема → взех, дойда → дойдох</i>."
-      ]
-    },
-    {
-      id: "imperfect", group: "Past", en: "Imperfect (past continuous)", bg: "Минало несвършено време",
-      formula: "stem + -ях / -ех / -ах", short: "background, was doing, used to",
-      cells: function (v) { return v.imp; },
-      pfRare: true, pfNote: "rare",
-      uses: [
-        "An ongoing action in the past: “was doing”.",
-        "Background and description in a story: <i lang=\"bg\">Навън валеше.</i>",
-        "Past habits: “used to do”."
-      ],
-      aspect: {
-        i: "The usual choice: process, background, habit.",
-        p: "Rare. Only in “whenever” clauses or after <i lang=\"bg\">да / ако</i>: <i lang=\"bg\">Когато дойдеше, винаги носеше подарък.</i> (Whenever he came, he always brought a present.)"
-      },
-      signals: ["докато", "когато бях малък / малка", "всяка вечер", "по цял ден", "често", "винаги"],
-      examples: [
-        ["<b class=\"i\">Четях</b>, когато ти се обади.", "I was reading when you called."],
-        ["Когато бях малка, <b class=\"i\">четях</b> всяка вечер.", "When I was little, I read every evening."],
-        ["Навън <b class=\"i\">валеше</b> дъжд.", "It was raining outside."]
-      ],
-      neg: ["Не <b class=\"i\">четях</b> много като дете.", "I didn't read much as a child."],
-      q: ["Какво <b class=\"i\">правеше</b> вчера в шест?", "What were you doing yesterday at six?"],
-      tips: [
-        "The <i lang=\"bg\">ти</i> and <i lang=\"bg\">той / тя</i> forms end in <i lang=\"bg\">-ше</i>. That is the quickest way to tell it from the aorist.",
-        "Group III: the <i lang=\"bg\">аз</i>-form is the same as the aorist (<i lang=\"bg\">питах</i>). The context or the <i lang=\"bg\">-ше</i> forms show which one it is.",
-        "Pair it with the aorist: imperfect for the background, aorist for the event that interrupts it."
-      ]
-    },
-    {
-      id: "perfect", group: "Past", en: "Present perfect", bg: "Минало неопределено време",
-      formula: "съм + -л participle", short: "experience, result now, time unimportant",
-      cells: function (v) { return AUX.map(function (a, i) { return aux(a) + " " + part(v, i); }); },
-      uses: [
-        "Life experience: “have you ever…?”",
-        "A past action whose result matters now.",
-        "When the exact time is not important or not known.",
-        "Facts you know about but didn't see happen yourself."
-      ],
-      aspect: {
-        i: "Experience or activity: <i lang=\"bg\">Чел съм тази книга.</i>",
-        p: "A result: <i lang=\"bg\">Някой е направил кафе.</i>"
-      },
-      signals: ["вече", "досега", "никога", "някога", "още не", "два пъти"],
-      examples: [
-        ["<b class=\"i\">Чел съм</b> тази книга два пъти.", "I have read this book twice."],
-        ["<b class=\"i\">Била ли си</b> в Пловдив?", "Have you ever been to Plovdiv? (to a woman)"],
-        ["Някой <b class=\"p\">е направил</b> кафе.", "Someone has made coffee."]
-      ],
-      neg: ["Още не <b class=\"p\">съм прочел</b> писмото.", "I haven't read the letter yet."],
-      q: ["<b class=\"i\">Чел ли си</b> „Под игото“?", "Have you read “Under the Yoke”?"],
-      tips: [
-        "<i lang=\"bg\">съм, си, е…</i> never start a sentence. Say <i lang=\"bg\">Чел съм</i>, not <i lang=\"bg\">Съм чел</i>. With a subject: <i lang=\"bg\">Аз съм чел.</i>",
-        "The participle agrees with the subject: <i lang=\"bg\">чел</i> (m), <i lang=\"bg\">чела</i> (f), <i lang=\"bg\">чело</i> (n), <i lang=\"bg\">чели</i> (pl).",
-        "In questions <i lang=\"bg\">ли</i> goes after the participle: <i lang=\"bg\">Чел ли си?</i>",
-        "With a definite time like <i lang=\"bg\">вчера</i>, use the aorist instead."
-      ]
-    },
-    {
-      id: "pluperfect", group: "Past", en: "Past perfect", bg: "Минало предварително време",
-      formula: "бях + -л participle", short: "before another past event",
-      cells: function (v) { return BYAH.map(function (a, i) { return aux(a) + " " + part(v, i); }); },
-      uses: [
-        "An action finished before another past action or moment: “had done”.",
-        "Use it only when the order of two past events matters. Otherwise the aorist is enough."
-      ],
-      aspect: {
-        i: "Less common: <i lang=\"bg\">Бях чел за това.</i> (I had read about it.)",
-        p: "The usual choice: <i lang=\"bg\">Филмът беше започнал.</i>"
-      },
-      signals: ["вече", "преди това", "дотогава", "още не"],
-      examples: [
-        ["Когато пристигнахме, филмът вече <b class=\"p\">беше започнал</b>.", "When we arrived, the film had already started."],
-        ["Не <b class=\"i\">бях чела</b> книгата преди филма.", "I hadn't read the book before the film. (woman speaking)"],
-        ["Той <b class=\"p\">беше забравил</b> ключовете вкъщи.", "He had forgotten the keys at home."]
-      ],
-      neg: ["Не <b class=\"p\">бях прочел</b> условието.", "I hadn't read the instructions."],
-      q: ["<b class=\"i\">Беше ли чел</b> книгата преди това?", "Had you read the book before that?"],
-      tips: [
-        "In books you also see <i lang=\"bg\">бе</i> instead of <i lang=\"bg\">беше</i>: <i lang=\"bg\">бе започнал</i>.",
-        "The participle agrees with the subject, as in the present perfect."
-      ]
-    },
-    {
-      id: "future", group: "Future", en: "Future", bg: "Бъдеще време",
-      formula: "ще + present", short: "will do",
-      cells: function (v) { return v.pres.map(function (f) { return aux("ще") + " " + f; }); },
-      uses: [
-        "Any future action.",
-        "Both aspects are common here, so the aspect carries the meaning."
-      ],
-      aspect: {
-        i: "A process or a regular action: <i lang=\"bg\">През лятото ще чета всеки ден.</i>",
-        p: "One complete action: <i lang=\"bg\">Утре ще прочета последната глава.</i>"
-      },
-      signals: ["утре", "следващата седмица", "скоро", "по-късно", "догодина"],
-      examples: [
-        ["Утре <b class=\"p\">ще прочета</b> последната глава.", "Tomorrow I'll read the last chapter."],
-        ["През лятото <b class=\"i\">ще чета</b> всеки ден.", "In summer I'll read every day."],
-        ["Днес бързам и <b class=\"p\">ще взема</b> такси.", "Today I'm in a hurry, so I'll take a taxi."]
-      ],
-      neg: ["<b class=\"i\">Няма да питам</b> повече.", "I won't ask again."],
-      q: ["<b class=\"p\">Ще дойдеш ли</b> довечера?", "Will you come tonight?"],
-      tips: [
-        "<i lang=\"bg\">ще</i> never changes: <i lang=\"bg\">ще чета, ще четеш, ще четат</i>.",
-        "The negative is <i lang=\"bg\">няма да</i> + present. Don't say <i lang=\"bg\">не ще</i>.",
-        "In questions <i lang=\"bg\">ли</i> comes after the verb: <i lang=\"bg\">Ще дойдеш ли?</i>"
-      ]
-    },
-    {
-      id: "fip", group: "Future", en: "Future in the past", bg: "Бъдеще време в миналото",
-      formula: "щях да + present", short: "was going to, would have",
-      cells: function (v) { return SHTYAH.map(function (a, i) { return aux(a + " да") + " " + v.pres[i]; }); },
-      uses: [
-        "A plan seen from the past: “was going to”.",
-        "An unreal past result: “would have done” (with <i lang=\"bg\">ако</i> + a past form)."
-      ],
-      aspect: {
-        i: "A process: <i lang=\"bg\">Щях да чета цяла вечер, но гостите дойдоха.</i>",
-        p: "The usual choice: <i lang=\"bg\">Щях да ти се обадя, но забравих.</i>"
-      },
-      signals: ["…, но", "ако знаех", "иначе"],
-      examples: [
-        ["<b class=\"p\">Щях да ти се обадя</b>, но забравих.", "I was going to call you, but I forgot."],
-        ["Ако знаех, <b class=\"p\">щях да дойда</b>.", "If I had known, I would have come."],
-        ["<b class=\"i\">Щяхме да ходим</b> на море, но заваля.", "We were going to go to the seaside, but it started raining."]
-      ],
-      neg: ["<b class=\"p\">Нямаше да дойда</b>, ако не ме беше поканил.", "I wouldn't have come if you hadn't invited me."],
-      q: ["<b class=\"p\">Щеше ли да дойдеш</b>?", "Were you going to come? / Would you have come?"],
-      tips: [
-        "<i lang=\"bg\">щях</i> changes like a past verb (<i lang=\"bg\">щях, щеше, щяхме…</i>). The verb after <i lang=\"bg\">да</i> is a normal present form.",
-        "Reported speech does not need it. Bulgarian keeps the original tense: <i lang=\"bg\">Каза, че ще дойде.</i> (He said he would come.)",
-        "The negative is <i lang=\"bg\">нямаше да</i> + present."
-      ]
-    },
-    {
-      id: "fp", group: "Future", en: "Future perfect", bg: "Бъдеще предварително време",
-      formula: "ще съм + -л participle", short: "will have done by…",
-      cells: function (v) { return AUX.map(function (a, i) { return aux("ще " + a) + " " + part(v, i); }); },
-      impfRare: true,
-      uses: [
-        "An action that will be finished before a moment in the future."
-      ],
-      aspect: {
-        i: "Rare.",
-        p: "The usual choice: <i lang=\"bg\">До петък ще съм прочел книгата.</i>"
-      },
-      signals: ["до петък", "дотогава", "когато се върнеш", "вече"],
-      examples: [
-        ["До петък <b class=\"p\">ще съм прочел</b> книгата.", "By Friday I will have read the book."],
-        ["Когато се върнеш, <b class=\"p\">ще сме направили</b> вечерята.", "When you come back, we will have made dinner."]
-      ],
-      neg: ["До утре <b class=\"p\">няма да съм свършил</b>.", "I won't have finished by tomorrow."],
-      tips: [
-        "You can also say <i lang=\"bg\">ще бъда</i> instead of <i lang=\"bg\">ще съм</i>: <i lang=\"bg\">ще бъда прочел</i>.",
-        "In everyday speech people often use the simple future instead: <i lang=\"bg\">До петък ще прочета книгата.</i>"
-      ]
-    },
-    {
-      id: "fpp", group: "Future", en: "Future perfect in the past", bg: "Бъдеще предварително време в миналото",
-      formula: "щях да съм + -л participle", short: "would have done by then",
-      cells: function (v) { return SHTYAH.map(function (a, i) { return aux(a + " да " + AUX[i]) + " " + part(v, i); }); },
-      impfRare: true,
-      uses: [
-        "The rarest tense. Mostly an unreal past: “would have done by a certain moment”.",
-        "Learn to recognise it. <i lang=\"bg\">щях да</i> + present usually works too."
-      ],
-      aspect: { i: "Very rare.", p: "The usual choice." },
-      signals: ["досега", "дотогава", "ако не беше…"],
-      examples: [
-        ["Ако влакът не беше закъснял, досега <b class=\"p\">щяхме да сме пристигнали</b>.", "If the train hadn't been late, we would have arrived by now."]
-      ],
-      neg: ["Без твоята помощ <b class=\"p\">нямаше да съм свършила</b> навреме.", "Without your help I wouldn't have finished on time. (woman speaking)"],
-      tips: ["Uses the same parts as the future in the past, plus <i lang=\"bg\">съм</i> and the participle."]
-    },
-    {
-      id: "cond", group: "Moods", en: "Conditional", bg: "Условно наклонение",
-      formula: "бих + -л participle", short: "would, polite requests",
-      cells: function (v) { return BIH.map(function (a, i) { return aux(a) + " " + part(v, i); }); },
-      uses: [
-        "Polite requests and wishes: “I would like…”",
-        "Advice: “In your place I would…”",
-        "Hypothetical situations."
-      ],
-      aspect: {
-        i: "General or ongoing: <i lang=\"bg\">Бих чел повече, ако имах време.</i>",
-        p: "One action: <i lang=\"bg\">Би ли ми помогнал?</i>"
-      },
-      signals: ["на твое място", "ако", "с удоволствие"],
-      examples: [
-        ["<b class=\"i\">Бих искала</b> едно кафе, моля.", "I'd like a coffee, please. (woman speaking)"],
-        ["<b class=\"p\">Би ли ми помогнал</b>?", "Would you help me?"],
-        ["На твое място <b class=\"p\">бих попитал</b> учителя.", "In your place I would ask the teacher."]
-      ],
-      neg: ["Не <b class=\"p\">бих казал</b> това.", "I wouldn't say that."],
-      q: ["<b class=\"p\">Бихте ли повторили</b>?", "Could you repeat that, please? (polite)"],
-      tips: [
-        "The participle agrees: <i lang=\"bg\">бих искал</i> (m), <i lang=\"bg\">бих искала</i> (f).",
-        "For a real condition use <i lang=\"bg\">ако</i> + present and <i lang=\"bg\">ще</i>: <i lang=\"bg\">Ако имам време, ще дойда.</i>",
-        "Unreal past: <i lang=\"bg\">Ако знаех, щях да дойда</i> or <i lang=\"bg\">бих дошъл</i>."
-      ]
-    },
-    {
-      id: "impv", group: "Moods", en: "Imperative", bg: "Повелително наклонение",
-      formula: "stem + -и / -ете or -й / -йте", short: "commands, requests",
-      persons: ["ти", "вие", "не! (ти)"],
-      cells: function (v, pf) {
-        return pf
-          ? [v.impv[0], v.impv[1], '<span class="na">use the imperfective</span>']
-          : [v.impv[0], v.impv[1], aux("не") + " " + v.impv[0]];
-      },
-      uses: [
-        "Commands, requests, instructions. Only <i lang=\"bg\">ти</i> and <i lang=\"bg\">вие</i> have their own forms.",
-        "For “let's” use <i lang=\"bg\">нека / да</i>: <i lang=\"bg\">Нека да опитаме!</i> <i lang=\"bg\">Да вървим!</i>"
-      ],
-      aspect: {
-        i: "Ongoing or repeated: <i lang=\"bg\">Чети всеки ден!</i> Negative commands are almost always imperfective: <i lang=\"bg\">Не вземай!</i>",
-        p: "One concrete action: <i lang=\"bg\">Прочети това!</i>"
-      },
-      signals: ["моля", "хайде", "не"],
-      examples: [
-        ["<b class=\"p\">Прочети</b> това, моля.", "Read this, please."],
-        ["<b class=\"p\">Направете</b> упражнението вкъщи.", "Do the exercise at home."],
-        ["Не <b class=\"i\">питай</b>!", "Don't ask!"]
-      ],
-      neg: ["Не <b class=\"i\">вземай</b> пари назаем.", "Don't borrow money."],
-      tips: [
-        "Positive: <i lang=\"bg\">Вземи!</i> Negative: <i lang=\"bg\">Не вземай!</i> (switch to the imperfective).",
-        "Common irregular forms: <i lang=\"bg\">ела / елате</i> (come), <i lang=\"bg\">виж / вижте</i> (look), <i lang=\"bg\">дай / дайте</i> (give), <i lang=\"bg\">яж / яжте</i> (eat), <i lang=\"bg\">влез / влезте</i> (come in), <i lang=\"bg\">излез / излезте</i> (go out)."
-      ]
-    }
-  ];
-  var BY_ID = {};
-  TENSES.forEach(function (t) { BY_ID[t.id] = t; });
-
-  /* ---------- State ---------- */
-  var store = {
-    get: function (k) { try { return localStorage.getItem("glagoli:" + k); } catch (e) { return null; } },
-    set: function (k, v) { try { localStorage.setItem("glagoli:" + k, v); } catch (e) { /* ignore */ } }
-  };
-  var state = {
-    tab: "tenses",
-    tense: BY_ID[store.get("tense")] ? store.get("tense") : "present",
-    verb: VERBS.some(function (v) { return v.id === store.get("verb"); }) ? store.get("verb") : "cheta"
-  };
-  function verb() { return VERBS.filter(function (v) { return v.id === state.verb; })[0]; }
-
-  /* ---------- Tenses tab ---------- */
-  function exHTML(e, cls) {
-    return '<div class="ex-item' + (cls ? " " + cls : "") + '"><span class="bgt" lang="bg">' + e[0] + '</span><span class="ent">' + e[1] + '</span></div>';
-  }
-
-  function renderTenses() {
-    var el = document.getElementById("tenses");
-    var t = BY_ID[state.tense], v = verb();
-    var persons = t.persons || PERSONS;
-    var ci = t.cells(v.impf, false), cp = t.cells(v.pf, true);
-
-    var groups = ["Present", "Past", "Future", "Moods"];
-    var chips = groups.map(function (g) {
-      var items = TENSES.filter(function (x) { return x.group === g; }).map(function (x) {
-        return '<button class="chip" data-tense="' + x.id + '" aria-pressed="' + (x.id === t.id) + '">' + x.en.replace(/ \(.*\)/, "") + '</button>';
-      }).join("");
-      return '<div class="tg"><span class="tg-name">' + g + '</span>' + items + '</div>';
-    }).join("");
-
-    var verbBtns = VERBS.map(function (x) {
-      return '<button class="verb-btn" data-verb="' + x.id + '" aria-pressed="' + (x.id === v.id) + '"><span lang="bg">' + x.impf.inf + ' / ' + x.pf.inf + '</span><small>' + x.en + '</small></button>';
-    }).join("");
-
-    var rows = persons.map(function (p, i) {
-      return '<tr><td class="who" lang="bg">' + p + '</td><td class="f' + (t.impfRare ? " rare" : "") + '" lang="bg">' + ci[i] +
-        '</td><td class="f' + (t.pfRare ? " rare" : "") + '" lang="bg">' + cp[i] + '</td></tr>';
-    }).join("");
-
-    var glance = TENSES.map(function (x) {
-      var i0 = x.cells(v.impf, false)[0], p0 = x.cells(v.pf, true)[0];
-      return '<tr data-tense="' + x.id + '"' + (x.id === t.id ? ' class="cur"' : "") + '><td class="gname">' + x.en + '<small lang="bg">' + x.bg + '</small></td>' +
-        '<td>' + x.formula + '</td><td class="gi" lang="bg">' + i0 + '</td><td class="gp" lang="bg">' + p0 + '</td><td class="gu">' + x.short + '</td></tr>';
-    }).join("");
-
-    el.innerHTML =
-      '<div><h2>Tenses</h2><p class="lead">Pick a tense, then a verb pair. Every table shows the imperfective and perfective verb side by side, so you can see how the aspect changes the form.</p></div>' +
-      '<div class="controls">' +
-        '<div><div class="ctl-label">Tense</div><div class="tense-groups">' + chips + '</div></div>' +
-        '<div><div class="ctl-label">Model verb pair</div><div class="verbs">' + verbBtns + '</div></div>' +
-      '</div>' +
-      '<article class="detail">' +
-        '<div class="card notes">' +
-          '<div class="t-head"><span class="bgname" lang="bg">' + t.bg + '</span><span class="enname">' + t.en + '</span><span class="formula" lang="bg">' + t.formula + '</span></div>' +
-          '<div><h3>When to use it</h3><ul class="clean">' + t.uses.map(function (u) { return "<li>" + u + "</li>"; }).join("") + '</ul></div>' +
-          '<div><h3>Which aspect here?</h3><div class="aspect-notes">' +
-            '<div class="an i"><span class="tag">Impf.</span><span>' + t.aspect.i + '</span></div>' +
-            '<div class="an p"><span class="tag">Perf.</span><span>' + t.aspect.p + '</span></div>' +
-          '</div></div>' +
-          '<div><h3>Signal words</h3><div class="signals">' + t.signals.map(function (s) { return '<span class="sig" lang="bg">' + s + '</span>'; }).join("") + '</div></div>' +
-          '<div><h3>Watch out</h3><ul class="tips">' + t.tips.map(function (s) { return "<li>" + s + "</li>"; }).join("") + '</ul></div>' +
-        '</div>' +
-        '<div class="stack">' +
-          '<div class="card"><h3>Forms</h3><div class="table-wrap"><table class="conj"><thead><tr><th class="who">Person</th>' +
-            '<th class="i">Imperfective' + (t.impfRare ? '<span class="rare-note">rare</span>' : "") + '</th>' +
-            '<th class="p">Perfective' + (t.pfNote ? '<span class="rare-note">' + t.pfNote + '</span>' : "") + '</th></tr></thead>' +
-            '<tbody>' + rows + '</tbody></table></div>' +
-            '<p class="table-note">' + v.note + (t.cells === BY_ID.perfect.cells || /participle/.test(t.formula) ? ' Participle: <span lang="bg">' + v.impf.part.m + ", " + v.impf.part.f + ", " + v.impf.part.n + ", " + v.impf.part.pl + '</span> (m, f, n, pl).' : "") + '</p>' +
-          '</div>' +
-          '<div class="card ex"><h3>Examples</h3>' + t.examples.map(function (e) { return exHTML(e); }).join("") +
-            '<span class="ex-label">Negative</span>' + exHTML(t.neg, "neg") +
-            (t.q ? '<span class="ex-label">Question</span>' + exHTML(t.q, "neg") : "") +
-          '</div>' +
-        '</div>' +
-      '</article>' +
-      '<div class="card"><h3>All tenses at a glance · <span lang="bg">' + v.impf.inf + ' / ' + v.pf.inf + '</span></h3>' +
-        '<div class="table-wrap"><table class="glance"><thead><tr><th>Tense</th><th>Formula</th><th>Impf. (аз)</th><th>Perf. (аз)</th><th>Use</th></tr></thead><tbody>' + glance + '</tbody></table></div></div>';
-  }
-
-  /* ---------- Which tense? ---------- */
-  var FLOW = {
-    start: { q: "When does the action happen?", opts: [
-      { t: "Now, regularly, or it's always true", s: "I read, I'm reading, I read every day", to: "=present" },
-      { t: "In the past", s: "I read, I was reading, I have read, I had read", to: "past" },
-      { t: "In the future", s: "I will read, I will have read", to: "future" },
-      { t: "It's hypothetical or polite", s: "I would…, would you…?, I would have…", to: "hypo" }
-    ] },
-    past: { q: "What are you saying about the past action?", opts: [
-      { t: "It happened and finished at a known time", s: "Yesterday I read the book. Then I went out.", to: "=aorist" },
-      { t: "It was going on, or it was a habit", s: "I was reading when… / I used to read every evening.", to: "=imperfect" },
-      { t: "Experience or result that matters now; the time doesn't matter", s: "Have you ever been…? I have read it twice.", to: "=perfect" },
-      { t: "It happened before another past event", s: "When we arrived, the film had already started.", to: "=pluperfect" }
-    ] },
-    future: { q: "What kind of future?", opts: [
-      { t: "Simply “will do”", s: "Tomorrow I'll read the chapter.", to: "=future" },
-      { t: "It will be finished before a future moment", s: "By Friday I will have read it.", to: "=fp" },
-      { t: "A future plan seen from the past", s: "I was going to call you, but…", to: "=fip" }
-    ] },
-    hypo: { q: "Which one?", opts: [
-      { t: "A polite request, wish or advice", s: "I would like… / Would you help me? / I would ask…", to: "=cond" },
-      { t: "An unreal past result", s: "If I had known, I would have come.", to: "=fip" },
-      { t: "Unreal, and finished by a certain moment", s: "We would have arrived by now.", to: "=fpp" },
-      { t: "A command or request to someone", s: "Read this! Don't ask!", to: "=impv" }
-    ] }
-  };
-  var path = [];
-
-  function renderChoose() {
-    var el = document.getElementById("choose");
-    var last = path[path.length - 1];
-    var crumbs = path.length ? '<div class="crumbs">' + path.map(function (p) { return '<span class="crumb">' + p.label + '</span>'; }).join("") + '</div>' : "";
-    var body;
-    if (last && last.to.charAt(0) === "=") {
-      var t = BY_ID[last.to.slice(1)];
-      body = '<div class="card result">' +
-        '<h3>Use this tense</h3>' +
-        '<span class="bgname" lang="bg">' + t.bg + '</span>' +
-        '<span class="enname">' + t.en + ' · <span class="formula" lang="bg">' + t.formula + '</span></span>' +
-        exHTML(t.examples[0]) +
-        '<div class="aspect-notes"><div class="an i"><span class="tag">Impf.</span><span>' + t.aspect.i + '</span></div>' +
-        '<div class="an p"><span class="tag">Perf.</span><span>' + t.aspect.p + '</span></div></div>' +
-        '<div class="row-btns"><button class="btn" data-open="' + t.id + '">See all forms</button><button class="btn ghost" data-restart>Start again</button></div>' +
-        '</div>';
-    } else {
-      var node = FLOW[last ? last.to : "start"];
-      body = '<div class="card"><p class="q">' + node.q + '</p><div class="opts">' +
-        node.opts.map(function (o, i) { return '<button class="opt" data-opt="' + i + '"><strong>' + o.t + '</strong><span>' + o.s + '</span></button>'; }).join("") +
-        '</div>' + (path.length ? '<div class="row-btns" style="margin-top:12px"><button class="btn ghost" data-back>Back</button></div>' : "") + '</div>';
-    }
-    el.innerHTML = '<div><h2>Which tense?</h2><p class="lead">Answer two short questions and get the tense, its formula and an example. Then decide the aspect.</p></div>' +
-      '<div class="flow">' + crumbs + body + '</div>';
-    el._node = last && last.to.charAt(0) !== "=" ? last.to : (last ? null : "start");
-  }
-
-  /* ---------- Aspect ---------- */
-  function renderAspect() {
-    document.getElementById("aspect").innerHTML =
-      '<div><h2>Which aspect?</h2><p class="lead">Most Bulgarian verbs come in pairs. In your list the first verb is imperfective and the one with <i lang="bg">да</i> is perfective: <i lang="bg">вземам – да взема, -еш</i>. Choose by asking one question: am I talking about the process, or about one finished action?</p></div>' +
-      '<div class="two">' +
-        '<div class="card aspect-i"><h3>Imperfective · несвършен вид</h3><p class="big-idea">The action as a process: ongoing, repeated, habitual, or just “the activity”.</p>' +
-          '<ul class="clean"><li>What is happening now: <i lang="bg">Чета.</i></li><li>Habits: <i lang="bg">Всеки ден вземам автобус.</i></li><li>Duration: <i lang="bg">Четох два часа.</i></li><li>Negative commands: <i lang="bg">Не вземай!</i></li></ul></div>' +
-        '<div class="card aspect-p"><h3>Perfective · свършен вид</h3><p class="big-idea">One complete action with a result or an end point.</p>' +
-          '<ul class="clean"><li>A single finished event: <i lang="bg">Прочетох книгата.</i></li><li>One-time future: <i lang="bg">Днес ще взема такси.</i></li><li>Within a time: <i lang="bg">Прочетох я за час.</i></li><li>After <i lang="bg">да / ще / ако / когато</i> in the present.</li></ul></div>' +
-      '</div>' +
-      '<div class="card"><h3>Aspect in each tense</h3><div class="table-wrap"><table class="plain"><thead><tr><th>Tense</th><th class="i">Imperfective</th><th class="p">Perfective</th></tr></thead><tbody>' +
-        '<tr><td>Present</td><td>The normal present</td><td>Never alone. Only after <i lang="bg">да, ще, ако, когато, щом</i></td></tr>' +
-        '<tr><td>Aorist</td><td>The activity happened or lasted</td><td>The usual choice: finished, with a result</td></tr>' +
-        '<tr><td>Imperfect</td><td>The usual choice: background, habit</td><td>Rare: “whenever” clauses</td></tr>' +
-        '<tr><td>Future (<i lang="bg">ще</i>)</td><td>Process, regular action</td><td>One complete action</td></tr>' +
-        '<tr><td>Perfect / past perfect</td><td>Experience, activity</td><td>Result</td></tr>' +
-        '<tr><td>Imperative</td><td>Repeated actions; all negative commands</td><td>One concrete action (positive)</td></tr>' +
-      '</tbody></table></div></div>' +
-      '<div class="two">' +
-        '<div class="card"><h3>Signal words</h3><div class="p-gap">' +
-          '<p><span class="i-txt"><b>Imperfective:</b></span> <span lang="bg">винаги, обикновено, често, рядко, никога, всеки ден, всяка седмица, по цял ден, докато, понякога</span></p>' +
-          '<p><span class="p-txt"><b>Perfective:</b></span> <span lang="bg">веднъж, този път, изведнъж, най-накрая, до утре, за пет минути, още сега</span></p>' +
-          '<p class="src">Time span: <i lang="bg">Четох час</i> (impf., I read for an hour) vs <i lang="bg">Прочетох я за час</i> (perf., I read it within an hour).</p>' +
-        '</div></div>' +
-        '<div class="card"><h3>How pairs are formed</h3><div class="p-gap">' +
-          '<p><b>Suffix.</b> The imperfective is longer: <span lang="bg">вдигна → вдигам, върна → връщам, заключа → заключвам, целуна → целувам</span></p>' +
-          '<p><b>Prefix.</b> The perfective gets a prefix: <span lang="bg">чета → прочета, правя → направя, питам → попитам, пиша → напиша</span></p>' +
-          '<p><b>Different stem.</b> <span lang="bg">влизам → вляза, давам → дам, виждам → видя</span></p>' +
-          '<p class="src">Tip: the imperfective partner is very often group III (ends in <i lang="bg">-м</i>). The perfective is often group I or II (<i lang="bg">-еш / -иш</i>).</p>' +
-        '</div></div>' +
-      '</div>' +
-      '<div class="card ex"><h3>From your list</h3>' +
-        exHTML(["Обикновено <b class=\"i\">вземам</b> автобус, но днес бързам и ще <b class=\"p\">взема</b> такси.", "I usually take the bus, but today I'm in a hurry, so I'll take a taxi."]) +
-        exHTML(["<b class=\"i\">Виждам се</b> с приятелите си всеки петък. Тази седмица ще <b class=\"p\">се видя</b> с тях и в събота.", "I see my friends every Friday. This week I'll see them on Saturday as well."]) +
-        exHTML(["– Ще <b class=\"p\">добавиш</b> ли нещо към кафето? – Не, никога не <b class=\"i\">добавям</b> нищо.", "– Will you add something to the coffee? – No, I never add anything."]) +
-        exHTML(["Рядко <b class=\"i\">закусвам</b> вкъщи, защото винаги бързам. Този път ще <b class=\"p\">закуся</b> яйца на очи.", "I rarely have breakfast at home because I'm always in a hurry. This time I'll have fried eggs."]) +
-        '<p class="src">Signal words decide it: <i lang="bg">обикновено, всеки, никога, рядко</i> → imperfective; <i lang="bg">днес, тази седмица, този път</i> → perfective.</p>' +
-      '</div>';
-  }
-
-  /* ---------- Endings ---------- */
-  function renderEndings() {
-    document.getElementById("endings").innerHTML =
-      '<div><h2>Endings</h2><p class="lead">Bulgarian verbs have three conjugation groups. You can tell the group from the <i lang="bg">ти</i>-form, which is why your list writes <i lang="bg">да взема, -еш</i> and <i lang="bg">да видя, -иш</i>.</p></div>' +
-      '<div class="card"><h3>Present tense by group</h3><div class="table-wrap"><table class="plain end" lang="bg"><thead><tr><th>Person</th><th>I · -еш</th><th>II · -иш</th><th>III · -аш / -яш</th></tr></thead><tbody>' +
-        '<tr><td>аз</td><td>чет<b>а</b></td><td>прав<b>я</b></td><td>пита<b>м</b></td></tr>' +
-        '<tr><td>ти</td><td>чет<b>еш</b></td><td>прав<b>иш</b></td><td>пита<b>ш</b></td></tr>' +
-        '<tr><td>той / тя</td><td>чет<b>е</b></td><td>прав<b>и</b></td><td>пита</td></tr>' +
-        '<tr><td>ние</td><td>чет<b>ем</b></td><td>прав<b>им</b></td><td>пита<b>ме</b></td></tr>' +
-        '<tr><td>вие</td><td>чет<b>ете</b></td><td>прав<b>ите</b></td><td>пита<b>те</b></td></tr>' +
-        '<tr><td>те</td><td>чет<b>ат</b></td><td>прав<b>ят</b></td><td>пита<b>т</b></td></tr>' +
-      '</tbody></table></div>' +
-      '<p class="table-note">Group III always ends in <span lang="bg">-м</span> in the аз-form (<span lang="bg">питам, вземам, добавям</span>). Exceptions in group I: <span lang="bg">дам (дадеш), ям (ядеш)</span>, plus <span lang="bg">съм</span>. More examples: I <span lang="bg">пиша, пия, донеса</span>; II <span lang="bg">видя, мисля, мълча</span>.</p></div>' +
-      '<div class="two">' +
-        '<div class="card"><h3>Past endings (all groups)</h3><div class="table-wrap"><table class="plain end" lang="bg"><thead><tr><th>Person</th><th>Aorist</th><th>Imperfect</th></tr></thead><tbody>' +
-          '<tr><td>аз</td><td>прочето<b>х</b></td><td>четя<b>х</b></td></tr>' +
-          '<tr><td>ти</td><td>прочете</td><td>чете<b>ше</b></td></tr>' +
-          '<tr><td>той / тя</td><td>прочете</td><td>чете<b>ше</b></td></tr>' +
-          '<tr><td>ние</td><td>прочето<b>хме</b></td><td>четя<b>хме</b></td></tr>' +
-          '<tr><td>вие</td><td>прочето<b>хте</b></td><td>четя<b>хте</b></td></tr>' +
-          '<tr><td>те</td><td>прочето<b>ха</b></td><td>четя<b>ха</b></td></tr>' +
-        '</tbody></table></div><p class="table-note">The <span lang="bg">-ше</span> in the ти / той forms is the clearest sign of the imperfect.</p></div>' +
-        '<div class="card"><h3>Aorist: the vowel before -х</h3><div class="table-wrap"><table class="plain" lang="bg"><tbody>' +
-          '<tr><td>-ох</td><td>чета → четох, донеса → донесох, дойда → дойдох, дам → дадох</td></tr>' +
-          '<tr><td>-ах / -ях</td><td>пиша → писах, питам → питах, видя → видях, успея → успях</td></tr>' +
-          '<tr><td>-их</td><td>правя → правих, говоря → говорих, забравя → забравих</td></tr>' +
-          '<tr><td>-х</td><td>взема → взех, пия → пих, чуя → чух</td></tr>' +
-        '</tbody></table></div><p class="table-note">Group III is easy: replace <span lang="bg">-м</span> with <span lang="bg">-х</span>. Learn groups I and II verb by verb.</p></div>' +
-      '</div>' +
-      '<div class="two">' +
-        '<div class="card"><h3>Imperfect: -ях, -ех or -ах?</h3><div class="p-gap">' +
-          '<p><b>Groups I and II:</b> drop <span lang="bg">-еш / -иш</span>. If the stress falls on the ending, use <span lang="bg">-ях</span>; if not, use <span lang="bg">-ех</span>. This is a rule of thumb with exceptions.</p>' +
-          '<p lang="bg">чета → четях · вървя → вървях · пиша → пишех · правя → правех</p>' +
-          '<p><b>After ж, ч, ш</b> a stressed <span lang="bg">-ях</span> becomes <span lang="bg">-ах</span>: <span lang="bg">мълча → мълчах, лежа → лежах</span>.</p>' +
-          '<p><b>Group III:</b> <span lang="bg">-м → -х</span>, and the ти / той forms take <span lang="bg">-ше</span>: <span lang="bg">питам → питах, питаше</span>.</p>' +
-        '</div></div>' +
-        '<div class="card"><h3>The -л participle</h3><div class="p-gap">' +
-          '<p>Used in the perfect, past perfect, future perfect and conditional. Take the aorist, drop <span lang="bg">-х</span> and add <span lang="bg">-л</span>.</p>' +
-          '<p lang="bg">правих → правил · питах → питал · писах → писал · взех → взел</p>' +
-          '<p>Aorists in <span lang="bg">-ох</span> usually end in <span lang="bg">-ъл</span>: <span lang="bg">донесох → донесъл, дойдох → дошъл</span>. Short ones: <span lang="bg">четох → чел, дадох → дал</span>.</p>' +
-          '<p>Endings: <span lang="bg">-л</span> (m), <span lang="bg">-ла</span> (f), <span lang="bg">-ло</span> (n), <span lang="bg">-ли</span> (pl). Watch for <span lang="bg">я → е</span> in the plural: <span lang="bg">видял → видели</span>.</p>' +
-        '</div></div>' +
-      '</div>' +
-      '<div class="card"><h3>Imperative</h3><div class="table-wrap"><table class="plain" lang="bg"><thead><tr><th>Type</th><th>ти</th><th>вие</th><th>Examples</th></tr></thead><tbody>' +
-        '<tr><td>Groups I & II, consonant stem</td><td>-и</td><td>-ете</td><td>чети / четете, прави / правете, кажи / кажете</td></tr>' +
-        '<tr><td>Group III and vowel stems</td><td>-й</td><td>-йте</td><td>питай / питайте, пий / пийте, чуй / чуйте</td></tr>' +
-        '<tr><td>Irregular</td><td colspan="3">ела / елате, виж / вижте, дай / дайте, яж / яжте, влез / влезте, излез / излезте</td></tr>' +
-      '</tbody></table></div></div>';
-  }
-
-  /* ---------- Tabs & events ---------- */
-  var TABS = ["tenses", "choose", "aspect", "endings"];
-  function setTab(id, push) {
-    if (TABS.indexOf(id) < 0) id = "tenses";
-    state.tab = id;
-    TABS.forEach(function (t) {
-      document.getElementById(t).hidden = t !== id;
-      document.getElementById("tab-btn-" + t).setAttribute("aria-selected", String(t === id));
-    });
-    if (push) { try { history.replaceState(null, "", "#" + id); } catch (e) { /* ignore */ } }
-  }
-
-  document.querySelector("nav.tabs").addEventListener("click", function (e) {
-    var b = e.target.closest("[data-tab]");
-    if (b) { setTab(b.getAttribute("data-tab"), true); window.scrollTo(0, 0); }
-  });
-
-  document.getElementById("tenses").addEventListener("click", function (e) {
-    var t = e.target.closest("[data-tense]"), v = e.target.closest("[data-verb]");
-    if (t) { state.tense = t.getAttribute("data-tense"); store.set("tense", state.tense); renderTenses(); if (t.tagName === "TR") document.getElementById("tenses").scrollIntoView({ block: "start" }); }
-    if (v) { state.verb = v.getAttribute("data-verb"); store.set("verb", state.verb); renderTenses(); }
-  });
-
-  document.getElementById("choose").addEventListener("click", function (e) {
-    var el = document.getElementById("choose");
-    var o = e.target.closest("[data-opt]");
-    if (o) {
-      var node = FLOW[el._node || "start"];
-      var opt = node.opts[+o.getAttribute("data-opt")];
-      path.push({ label: opt.t, to: opt.to });
-      renderChoose();
-      return;
-    }
-    if (e.target.closest("[data-back]")) { path.pop(); renderChoose(); return; }
-    if (e.target.closest("[data-restart]")) { path = []; renderChoose(); return; }
-    var open = e.target.closest("[data-open]");
-    if (open) {
-      state.tense = open.getAttribute("data-open"); store.set("tense", state.tense);
-      renderTenses(); setTab("tenses", true); window.scrollTo(0, 0);
-    }
-  });
-
-  renderTenses(); renderChoose(); renderAspect(); renderEndings();
-  setTab((location.hash || "").slice(1), false);
-  window.addEventListener("hashchange", function () { setTab(location.hash.slice(1), false); });
-})();
-</script>
+<script src="verbs.js"></script>
+<script src="grammar.js"></script>
+<script src="app.js"></script>
