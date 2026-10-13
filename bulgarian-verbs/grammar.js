@@ -379,8 +379,172 @@
     }
   ];
 
+  /* ---------- Builder: one form split into explained pieces ---------- */
+  var PRES_END = {
+    I: [["а", "я", "м"], ["еш"], ["е"], ["ем"], ["ете"], ["ат", "ят"]],
+    II: [["а", "я"], ["иш"], ["и"], ["им"], ["ите"], ["ат", "ят"]],
+    III: [["м"], ["ш"], [""], ["ме"], ["те"], ["т"]]
+  };
+  var IMP_END = [["х"], ["ше"], ["ше"], ["хме"], ["хте"], ["ха"]];
+  function split(form, ends) {
+    var e = ends.slice().sort(function (a, c) { return c.length - a.length; }).filter(function (x) { return x && form.slice(-x.length) === x && form.length > x.length; })[0] || "";
+    return [form.slice(0, form.length - e.length), e];
+  }
+  var PN = { ru: ["«аз»", "«ти»", "«той / тя»", "«ние»", "«вие»", "«те»"], bg: ["„аз“", "„ти“", "„той / тя“", "„ние“", "„вие“", "„те“"] };
+  var GR = function (g, lang) { return lang === "ru" ? g + " спряжение" : g + " спрежение"; };
+
+  function info(kind, ctx, lang) {
+    var ru = lang === "ru", p = PN[lang][ctx.i];
+    switch (kind) {
+      case "end-present": return ctx.e ? (ru ? "-" + ctx.e + ": окончание для " + p + ", " + GR(ctx.g, lang) + "." : "-" + ctx.e + ": окончание за " + p + ", " + GR(ctx.g, lang) + ".")
+        : (ru ? "Без окончания: в III спряжении «той / тя» = основа." : "Без окончание: в III спрежение „той / тя“ = основата.");
+      case "end-aorist": return ctx.i === 1 || ctx.i === 2
+        ? (ru ? "В аористе у «ти» и «той / тя» нет окончания (у глаголов на -ох: -е)." : "В аориста „ти“ и „той / тя“ нямат окончание (при глаголите на -ох: -е).")
+        : (ru ? "-" + ctx.e + ": окончание аориста для " + p + ". Одинаково для всех глаголов." : "-" + ctx.e + ": окончание на аориста за " + p + ". Еднакво за всички глаголи.");
+      case "end-imperfect": return ru ? "-" + ctx.e + ": окончание имперфекта для " + p + ". -ше у «ти / той» — главный признак." : "-" + ctx.e + ": окончание на имперфекта за " + p + ". -ше при „ти / той“ е главният белег.";
+      case "end-impv": return ctx.e ? (ru ? "-" + ctx.e + ": повелительное для " + p + ". -и / -ете после согласной, -й / -йте после гласной." : "-" + ctx.e + ": повелително за " + p + ". -и / -ете след съгласна, -й / -йте след гласна.")
+        : (ru ? "Неправильная форма — просто запомнить." : "Неправилна форма – запомнете я.");
+      case "end-part": return ru ? "Причастие на -л: -л (м), -ла (ж), -ли (мн). Согласуется с подлежащим." : "Причастие на -л: -л (м.р.), -ла (ж.р.), -ли (мн.ч.). Съгласува се с подлога.";
+      case "stem-aorist": return ru ? "Основа аориста. Может отличаться от настоящего: взема → взех, пиша → писах." : "Основа на аориста. Може да се различава от сегашната: взема → взех, пиша → писах.";
+      case "stem-part": return ru ? "Основа причастия = аорист без -х: прочетох → прочел, взех → взел." : "Основата на причастието = аорист без -х: прочетох → прочел, взех → взел.";
+      case "stem": return ru ? "Основа глагола." : "Основа на глагола.";
+      case "ще": return ru ? "«ще» — частица будущего. Никогда не меняется." : "„ще“ – частица за бъдеще време. Не се променя.";
+      case "да": return ru ? "СВ в настоящем времени стоит только после «да» (ще, ако, когато)." : "Свършен вид в сегашно време стои само след „да“ (ще, ако, когато).";
+      case "aux": return ru ? "«" + ctx.w + "» — форма глагола «съм» для " + p + "." : "„" + ctx.w + "“ – форма на „съм“ за " + p + ".";
+      case "бях": return ru ? "«" + ctx.w + "» — «съм» в прошедшем для " + p + "." : "„" + ctx.w + "“ – „съм“ в минало време за " + p + ".";
+      case "щях": return ru ? "«" + ctx.w + "» — прошедшее от «ща» (хотеть) для " + p + ", затем «да»." : "„" + ctx.w + "“ – минало време на „ща“ за " + p + ", после „да“.";
+      case "бих": return ru ? "«" + ctx.w + "» = «бы». Меняется по лицам: бих, би, бихме, бихте, биха." : "„" + ctx.w + "“ – меня се по лица: бих, би, бихме, бихте, биха.";
+      case "не": return ru ? "Отрицание. Частицы (се, съм…) идут сразу после «не»." : "Отрицание. Кратките думи (се, съм…) идват веднага след „не“.";
+      case "няма да": return ru ? "Отрицание будущего: «няма да» вместо «ще»." : "Отрицание за бъдеще: „няма да“ вместо „ще“.";
+      case "нямаше да": return ru ? "Отрицание: «нямаше да» вместо «щях да»." : "Отрицание: „нямаше да“ вместо „щях да“.";
+      case "se": return ru ? "«" + ctx.w + "» — возвратная частица. После глагола, но перед ним после не / ще / да." : "„" + ctx.w + "“ – възвратна частица. След глагола, но пред него след не / ще / да.";
+    }
+    return "";
+  }
+
+  var PART_TENSES = { perfect: 1, pluperfect: 1, fp: 1, fpp: 1, cond: 1 };
+
+  /* Returns { pieces: [{t, k, info}], na: reason } for one cell of the builder. */
+  function build(tid, v, pf, i, gender, neg, lang) {
+    var f = pf ? v.pf : v.impf, se = v.se, out = [], g = f.group;
+    function P(t, k, inf) { out.push({ t: t, k: k, info: inf }); }
+    function pt(w, kind) { P(w, "pt", info(kind, { i: i, w: w }, lang)); }
+    function seP() { if (se) P(se, "se", info("se", { w: se }, lang)); }
+    function word(form, ends, endKind, stemKind) {
+      var s = split(form, ends);
+      P(s[0], "stem", info(stemKind || "stem", { i: i }, lang));
+      if (s[1]) P(s[1], "end", info(endKind, { i: i, e: s[1], g: g }, lang));
+      else if (endKind === "end-present" || endKind === "end-aorist" || endKind === "end-impv") out[out.length - 1].info += " " + info(endKind, { i: i, e: "", g: g }, lang);
+    }
+    function participle() {
+      var w = i < 3 ? (gender === "f" ? f.part.f : f.part.m) : f.part.pl;
+      word(w, ["ъл", "ла", "ли", "л"], "end-part", "stem-part");
+    }
+    function auxPiece(arr, kind) {
+      if (se && i === 2 && kind === "aux") { seP(); pt("е", "aux"); return; }
+      pt(arr[i], kind); seP();
+    }
+    var presWord = function () { word(f.pres[i], PRES_END[g][i], "end-present"); };
+
+    switch (tid) {
+      case "present":
+        if (pf) { pt("да", "да"); if (neg) pt("не", "не"); seP(); presWord(); }
+        else if (neg) { pt("не", "не"); seP(); presWord(); }
+        else { presWord(); seP(); }
+        break;
+      case "aorist":
+        var a2 = (i === 1 || i === 2) ? (f.aor[0].slice(-2) === "ох" ? ["е"] : [""]) : [["х"], 0, 0, ["хме"], ["хте"], ["ха"]][i];
+        if (neg) { pt("не", "не"); seP(); }
+        word(f.aor[i], a2, "end-aorist", "stem-aorist");
+        if (!neg) seP();
+        break;
+      case "imperfect":
+        if (pf || !f.imp) return { na: lang === "ru" ? "Имперфект СВ почти не используется — берите НСВ." : "Имперфект от свършен вид почти не се използва – вземете НСВ." };
+        if (neg) { pt("не", "не"); seP(); }
+        word(f.imp[i], IMP_END[i], "end-imperfect");
+        if (!neg) seP();
+        break;
+      case "perfect":
+        if (neg) pt("не", "не");
+        auxPiece(AUX, "aux"); participle(); break;
+      case "pluperfect":
+        if (neg) { pt("не", "не"); seP(); pt(BYAH[i], "бях"); }
+        else { pt(BYAH[i], "бях"); seP(); }
+        participle(); break;
+      case "future":
+        neg ? pt("няма да", "няма да") : pt("ще", "ще"); seP(); presWord(); break;
+      case "fip":
+        if (neg) pt("нямаше да", "нямаше да"); else pt(SHTYAH[i] + " да", "щях");
+        seP(); presWord(); break;
+      case "fp":
+        neg ? pt("няма да", "няма да") : pt("ще", "ще"); auxPiece(AUX, "aux"); participle(); break;
+      case "fpp":
+        if (neg) pt("нямаше да", "нямаше да"); else pt(SHTYAH[i] + " да", "щях");
+        auxPiece(AUX, "aux"); participle(); break;
+      case "cond":
+        if (neg) pt("не", "не");
+        pt(BIH[i], "бих"); seP(); participle(); break;
+      case "impv":
+        if (i !== 1 && i !== 4) return { na: lang === "ru" ? "Повелительное есть только для «ти» и «вие»." : "Повелително има само за „ти“ и „вие“." };
+        var banned = "не " + (se ? se + " " : "") + v.impf.impv[i === 1 ? 0 : 1];
+        if (neg && pf) return { na: lang === "ru" ? "Запрет — только НСВ: «" + banned + "»." : "Забрана – само с НСВ: „" + banned + "“." };
+        var iw = f.impv[i === 1 ? 0 : 1];
+        if (neg) { pt("не", "не"); seP(); }
+        word(iw, i === 1 ? ["и", "й"] : ["ете", "йте"], "end-impv");
+        if (!neg) seP();
+        break;
+    }
+    return { pieces: out };
+  }
+  function joinPieces(r) {
+    // stem + ending are written together; everything else separated by spaces
+    var s = "", prev = null;
+    r.pieces.forEach(function (p) { s += (prev && !(prev.k === "stem" && p.k === "end") ? " " : "") + p.t; prev = p; });
+    return s;
+  }
+
+  /* Cheat-sheet extras per tense: Russian equivalent, ending strip, timeline icon. */
+  var RUEQ = {
+    present: "делаю / делаю всегда", aorist: "сделал, делал (в известный момент)", imperfect: "делал, когда… / раньше делал",
+    perfect: "уже делал, бывал (опыт, результат)", pluperfect: "уже сделал до того", future: "сделаю / буду делать",
+    fip: "собирался сделать; сделал бы", fp: "уже сделаю к моменту", fpp: "уже сделал бы", cond: "сделал бы, хотел бы", impv: "сделай! / не делай!"
+  };
+  var STRIP = {
+    present: { rows: [["I", ["-а / -я", "-еш", "-е", "-ем", "-ете", "-ат / -ят"]], ["II", ["-я / -а", "-иш", "-и", "-им", "-ите", "-ят / -ат"]], ["III", ["-м", "-ш", "–", "-ме", "-те", "-т"]]] },
+    aorist: { rows: [["", ["-х", "– *", "– *", "-хме", "-хте", "-ха"]]], after: { ru: "* у глаголов на -ох: -е (прочете)", bg: "* при глаголите на -ох: -е (прочете)" } },
+    imperfect: { rows: [["", ["-х", "-ше", "-ше", "-хме", "-хте", "-ха"]]], after: { ru: "основа на -я / -е / -а: четях, правех, питах", bg: "основа на -я / -е / -а: четях, правех, питах" } },
+    perfect: { rows: [["", AUX]], after: { ru: "+ причастие: -л / -ла / -ли", bg: "+ причастие: -л / -ла / -ли" } },
+    pluperfect: { rows: [["", BYAH]], after: { ru: "+ причастие: -л / -ла / -ли", bg: "+ причастие: -л / -ла / -ли" } },
+    future: { rows: [["", ["ще", "ще", "ще", "ще", "ще", "ще"]]], after: { ru: "+ настоящее время", bg: "+ сегашно време" } },
+    fip: { rows: [["", SHTYAH]], after: { ru: "+ да + настоящее время", bg: "+ да + сегашно време" } },
+    fp: { rows: [["", AUX.map(function (a) { return "ще " + a; })]], after: { ru: "+ причастие", bg: "+ причастие" } },
+    fpp: { rows: [["", AUX.map(function (a, i) { return SHTYAH[i] + " да " + a; })]], after: { ru: "+ причастие", bg: "+ причастие" } },
+    cond: { rows: [["", BIH]], after: { ru: "+ причастие: -л / -ла / -ли", bg: "+ причастие: -л / -ла / -ли" } },
+    impv: { rows: [["", ["", "-и / -й", "", "", "-ете / -йте", ""]]], after: { ru: "запрет: не + НСВ (не вземай)", bg: "забрана: не + НСВ (не вземай)" } }
+  };
+  /* Tiny timeline glyphs: a line, a "now" tick at x=30, and marks for the event. */
+  var ICON_MARKS = {
+    present: '<circle cx="30" cy="8" r="4.5" class="m"/>',
+    aorist: '<circle cx="13" cy="8" r="4" class="m"/>',
+    imperfect: '<rect x="5" y="5" width="18" height="6" rx="3" class="m"/>',
+    perfect: '<circle cx="11" cy="8" r="3.5" class="m"/><path d="M15 8h11" class="a"/><path d="M23 5l3 3-3 3" class="a"/>',
+    pluperfect: '<circle cx="7" cy="8" r="3.5" class="m"/><circle cx="19" cy="8" r="3" class="o"/>',
+    future: '<circle cx="47" cy="8" r="4" class="m"/>',
+    fip: '<circle cx="12" cy="8" r="3" class="o"/><path d="M15 8h20" class="a d"/><circle cx="38" cy="8" r="3.5" class="m"/>',
+    fp: '<circle cx="40" cy="8" r="3.5" class="m"/><path d="M48 3v10" class="a"/>',
+    fpp: '<circle cx="9" cy="8" r="3" class="o"/><circle cx="20" cy="8" r="3.5" class="m d"/><path d="M26 3v10" class="a"/>',
+    cond: '<circle cx="30" cy="8" r="4.5" class="m d"/>',
+    impv: '<path d="M30 2v7" class="a w"/><circle cx="30" cy="13" r="1.6" class="m"/>'
+  };
+  function icon(tid) {
+    var line = tid === "impv" ? "" : '<path d="M2 8h52" class="l"/><path d="M30 3v10" class="n"/>';
+    return '<svg class="ticon" viewBox="0 0 56 16" aria-hidden="true">' + line + ICON_MARKS[tid] + "</svg>";
+  }
+
   window.BG = {
-    VERBS: VERBS, TENSES: TENSES, PERSONS: PERSONS,
-    cells: cells, wordSet: wordSet, aux: aux
+    VERBS: VERBS, TENSES: TENSES, PERSONS: PERSONS, AUX: AUX,
+    cells: cells, wordSet: wordSet, aux: aux,
+    build: build, joinPieces: joinPieces, PART_TENSES: PART_TENSES,
+    RUEQ: RUEQ, STRIP: STRIP, icon: icon
   };
 })();
