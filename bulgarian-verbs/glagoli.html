@@ -1,0 +1,1574 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Глаголи</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: header + tabs (top bar on desktop, bottom bar on phones) over one reading column.
+   Colour encodes aspect everywhere: blue = imperfective (НСВ), rose = perfective (СВ). */
+:root {
+  --bg: #F6F5F9;
+  --surface: #FFFFFF;
+  --sunk: #EEECF3;
+  --ink: #1C1A29;
+  --muted: #5E5A70;
+  --line: #DFDCE7;
+  --impf: #1D5F84;
+  --impf-soft: #E2EEF5;
+  --pf: #B11F4B;
+  --pf-soft: #F9E4EB;
+  --hl: #FFF0B8;
+  --font: "Proxima Nova", "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #14131B; --surface: #1E1D28; --sunk: #191822; --ink: #ECEAF3; --muted: #A7A3B8; --line: #302E3D;
+    --impf: #7DBDE0; --impf-soft: #18303E; --pf: #F27FA1; --pf-soft: #3B1D2A; --hl: #4A4120;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #14131B; --surface: #1E1D28; --sunk: #191822; --ink: #ECEAF3; --muted: #A7A3B8; --line: #302E3D;
+  --impf: #7DBDE0; --impf-soft: #18303E; --pf: #F27FA1; --pf-soft: #3B1D2A; --hl: #4A4120;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { background: var(--bg); }
+body { margin: 0; color: var(--ink); font-family: var(--font); font-size: 16px; line-height: 1.55; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--pf); outline-offset: 2px; border-radius: 4px; }
+b.i, .i-txt { color: var(--impf); }
+b.p, .p-txt { color: var(--pf); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; }
+p { margin: 0; }
+
+/* Header */
+header.top { padding-block: 18px 8px; }
+.top-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.brand h1 { margin: 0; font-weight: 700; font-size: 26px; line-height: 1.1; letter-spacing: -.01em; }
+.brand h1 span { color: var(--pf); }
+.brand p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; background: var(--surface); flex: none; }
+.lang button { border: 0; background: none; padding: 4px 12px; border-radius: 999px; font-weight: 600; font-size: 13px; cursor: pointer; color: var(--muted); }
+.lang button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.legend { display: flex; gap: 6px 16px; flex-wrap: wrap; margin-top: 10px; font-size: 13px; color: var(--muted); }
+.legend > span { display: inline-flex; align-items: center; gap: 6px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.dot.i { background: var(--impf); }
+.dot.p { background: var(--pf); }
+
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+nav.tabs .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.tab { flex: none; border: 0; background: none; padding: 12px 12px 10px; font-weight: 600; font-size: 15px; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--pf); }
+.tab:disabled { cursor: default; opacity: .45; }
+@media (max-width: 640px) {
+  nav.tabs { position: fixed; top: auto; bottom: 0; left: 0; right: 0; border-bottom: 0; border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  nav.tabs .wrap { justify-content: space-around; padding-inline: 4px; }
+  .tab { flex: 1 1 0; font-size: 13px; padding: 12px 4px; border-bottom: 0; border-top: 3px solid transparent; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tab[aria-selected="true"] { border-top-color: var(--pf); }
+  main { padding-bottom: 90px !important; }
+}
+
+main { padding-block: 20px 60px; }
+section[role="tabpanel"] { display: grid; gap: 18px; }
+h2 { font-weight: 700; font-size: 26px; line-height: 1.2; margin: 0; letter-spacing: -.01em; text-wrap: balance; }
+h3 { font-size: 12.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 0 0 8px; }
+.lead { margin: 6px 0 0; color: var(--muted); max-width: 65ch; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; min-width: 0; display: grid; gap: 12px; align-content: start; }
+.card-h { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.card-h h3 { margin: 0; }
+.ctl-label { font-size: 12.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.badge { display: inline-block; font-size: 12.5px; font-weight: 600; padding: 2px 9px; border-radius: 999px; background: var(--sunk); border: 1px solid var(--line); color: var(--muted); font-style: normal; }
+.badge.i { background: var(--impf-soft); color: var(--impf); border-color: transparent; }
+.badge.p { background: var(--pf-soft); color: var(--pf); border-color: transparent; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.btn { border: 1px solid var(--ink); background: var(--ink); color: var(--bg); border-radius: 8px; padding: 9px 14px; cursor: pointer; font-weight: 600; justify-self: start; }
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn.sm { padding: 5px 11px; font-size: 14px; }
+.link { border: 0; background: none; padding: 0; color: var(--pf); font-weight: 600; cursor: pointer; justify-self: start; }
+.row-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Verbs list */
+.search-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+#q, #fq { flex: 1 1 260px; min-width: 0; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 12px 14px; font-size: 16px; }
+.count { color: var(--muted); font-size: 14px; }
+.vlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 8px; }
+.vlist.compact { grid-template-columns: minmax(0, 1fr); }
+.vrow { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 12px 14px; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; }
+.vrow:hover { border-color: var(--ink); }
+.vrow .pair { font-weight: 700; font-size: 16.5px; grid-column: 1; }
+.vrow .vmean { color: var(--muted); font-size: 14px; grid-column: 1; }
+.vrow .grp { grid-column: 2; grid-row: 1 / span 2; align-self: center; color: var(--muted); font-size: 12.5px; font-weight: 600; text-align: right; }
+.dash { color: var(--muted); }
+.empty { color: var(--muted); }
+
+/* Verb page */
+.back { border: 0; background: none; padding: 0; color: var(--muted); font-weight: 600; cursor: pointer; justify-self: start; }
+.vhead { display: grid; gap: 8px; }
+.pairbig { font-size: 30px; line-height: 1.2; }
+.vru { color: var(--muted); font-size: 17px; }
+.note { background: var(--hl); border-radius: 8px; padding: 8px 12px; font-size: 15px; }
+.tsecs { display: grid; gap: 8px; }
+.tsec { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); }
+.tsec summary { cursor: pointer; list-style: none; padding: 12px 16px; display: flex; gap: 6px 16px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
+.tsec summary::-webkit-details-marker { display: none; }
+.tsec summary::before { content: "+"; font-weight: 700; color: var(--muted); width: 12px; }
+.tsec[open] summary::before { content: "–"; }
+.tsum { display: grid; flex: 1 1 220px; min-width: 0; }
+.tn { font-weight: 700; }
+.tn-bg { font-size: 13px; color: var(--muted); }
+.tshort { font-size: 13.5px; color: var(--muted); }
+.tprev { font-weight: 700; font-size: 15px; }
+.tbody { padding: 0 16px 16px; display: grid; gap: 12px; }
+
+/* Tables */
+.table-wrap { overflow-x: auto; }
+table.conj { width: 100%; border-collapse: collapse; font-size: 16.5px; }
+table.conj th, table.conj td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.conj thead th { font-weight: 700; font-size: 13px; letter-spacing: .03em; }
+table.conj thead th.i { color: var(--impf); border-bottom: 2px solid var(--impf); }
+table.conj thead th.p { color: var(--pf); border-bottom: 2px solid var(--pf); }
+table.conj thead th.who { color: var(--muted); border-bottom: 2px solid var(--line); }
+table.conj td.who { color: var(--muted); white-space: nowrap; width: 1%; }
+table.conj td.f { font-weight: 600; }
+table.conj td.hl { background: var(--hl); }
+.aux { font-weight: 400; color: var(--muted); }
+.sl { font-weight: 400; color: var(--muted); padding-inline: 2px; }
+td.rare { opacity: .55; }
+.rare-note { font-weight: 500; color: var(--muted); }
+.na { font-weight: 400; font-style: italic; color: var(--muted); font-size: 14px; }
+.table-note { font-size: 13.5px; color: var(--muted); }
+
+.aspect-notes { display: grid; gap: 8px; }
+.an { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: baseline; padding: 9px 12px; border-radius: 8px; font-size: 15px; }
+.an.i { background: var(--impf-soft); }
+.an.p { background: var(--pf-soft); }
+.an .tag { font-weight: 700; font-size: 12.5px; }
+.an.i .tag { color: var(--impf); }
+.an.p .tag { color: var(--pf); }
+
+/* Examples */
+.ex-item { display: grid; gap: 2px; padding-left: 12px; border-left: 3px solid var(--line); }
+.ex-item .bgt { font-size: 16.5px; }
+.ex-item .tr { color: var(--muted); font-size: 14.5px; }
+body.no-tr .ex-item .tr { display: none; }
+.ex-label { font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.tr-toggle { display: inline-flex; gap: 6px; align-items: center; font-size: 14px; color: var(--muted); cursor: pointer; }
+
+/* Grammar */
+.segs { display: inline-flex; border: 1px solid var(--line); border-radius: 10px; padding: 3px; background: var(--surface); justify-self: start; max-width: 100%; overflow-x: auto; }
+.seg { border: 0; background: none; padding: 7px 16px; border-radius: 7px; font-weight: 600; cursor: pointer; color: var(--muted); white-space: nowrap; }
+.seg[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.timeline { display: grid; grid-template-columns: 1.5fr .8fr 1.4fr; border-top: 3px solid var(--line); position: relative; }
+.tl-col { padding: 10px 10px 0 0; display: grid; gap: 8px; align-content: start; position: relative; min-width: 0; }
+.tl-col::before { content: ""; position: absolute; top: -8px; left: 0; width: 13px; height: 13px; border-radius: 50%; background: var(--bg); border: 3px solid var(--line); }
+.tl-now::before { background: var(--pf); border-color: var(--pf); }
+.tl-label { font-size: 12.5px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); padding-left: 2px; padding-top: 4px; }
+.tl-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.moods { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; }
+@media (max-width: 640px) {
+  .timeline { grid-template-columns: minmax(0, 1fr); border-top: 0; border-left: 3px solid var(--line); padding-left: 14px; gap: 10px; }
+  .tl-col { padding: 0; }
+  .tl-col::before { top: 6px; left: -23px; }
+}
+.chip { border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 11px; cursor: pointer; font-size: 14.5px; font-weight: 500; }
+.chip.adv { border-style: dashed; }
+.chip[aria-pressed="true"] { border-color: var(--pf); border-style: solid; background: var(--pf-soft); font-weight: 700; }
+.detail { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 860px) { .detail { grid-template-columns: minmax(0, 1fr); } }
+.stack { display: grid; gap: 18px; min-width: 0; }
+.t-head { display: flex; gap: 10px; align-items: baseline; justify-content: space-between; flex-wrap: wrap; }
+.t-head .tn { font-size: 22px; line-height: 1.25; }
+.t-head > .tn, .t-head > .tn-bg { flex-basis: 100%; }
+.t-head .badge { order: -1; }
+.formula { display: inline-block; justify-self: start; font-weight: 600; background: var(--sunk); border: 1px solid var(--line); border-radius: 6px; padding: 3px 10px; }
+.verbs { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.verb-btn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 13px; cursor: pointer; font-size: 14.5px; }
+.verb-btn[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+#modelsel { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 10px; font-size: 14.5px; max-width: 100%; }
+.notes { gap: 18px; }
+ul.clean { margin: 0; padding-left: 18px; display: grid; gap: 4px; }
+.signals { display: flex; flex-wrap: wrap; gap: 6px; }
+.sig { background: var(--sunk); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 14px; }
+.tips { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.tips li { padding-left: 24px; position: relative; }
+.tips li::before { content: "!"; position: absolute; left: 0; top: 3px; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); color: var(--bg); font-size: 11px; font-weight: 700; display: grid; place-items: center; line-height: 1; }
+.compare { background: var(--hl); border-radius: 8px; padding: 12px 14px; }
+.compare h3 { color: var(--ink); }
+.card.compare { border-color: transparent; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+@media (max-width: 820px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.aspect-i { border-top: 4px solid var(--impf); }
+.aspect-p { border-top: 4px solid var(--pf); }
+.aspect-i h3 { color: var(--impf); }
+.aspect-p h3 { color: var(--pf); }
+.big-idea { font-weight: 600; font-size: 18px; line-height: 1.35; }
+table.plain { width: 100%; border-collapse: collapse; font-size: 15px; }
+table.plain th, table.plain td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.plain thead th { font-weight: 700; font-size: 13px; color: var(--muted); }
+table.plain thead th.i { color: var(--impf); }
+table.plain thead th.p { color: var(--pf); }
+table.plain td:first-child { font-weight: 600; }
+.end b { color: var(--pf); }
+.src { font-size: 13.5px; color: var(--muted); }
+.p-gap { display: grid; gap: 10px; }
+
+/* Which form */
+.fverb { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 16px; }
+.fverb .ctl-label { flex-basis: 100%; }
+.fverb .pair { font-weight: 700; font-size: 18px; }
+.fverb .vmean { color: var(--muted); font-size: 14px; flex: 1 1 auto; }
+.picker { gap: 10px; }
+.flow { display: grid; gap: 12px; max-width: 780px; }
+.crumbs { display: flex; flex-wrap: wrap; gap: 6px; font-size: 14px; }
+.crumb { background: var(--sunk); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; color: var(--muted); }
+.q { font-weight: 700; font-size: 20px; line-height: 1.3; }
+.opts { display: grid; gap: 8px; }
+.opt { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 12px 14px; cursor: pointer; display: grid; gap: 2px; }
+.opt:hover { border-color: var(--ink); }
+.opt span { color: var(--muted); font-size: 14.5px; }
+.res-name { display: grid; }
+.res-name .tn { font-size: 22px; }
+.why { display: grid; gap: 8px; }
+
+/* Builder */
+.builder { gap: 16px; }
+.b-verb { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.vpick { border: 1px solid var(--line); background: var(--sunk); border-radius: 10px; padding: 8px 12px; cursor: pointer; display: inline-flex; gap: 10px; align-items: baseline; max-width: 100%; }
+.vpick .pair { font-weight: 700; font-size: 18px; }
+.chev { color: var(--muted); font-size: 13px; }
+.vmean { color: var(--muted); font-size: 14px; }
+.picker { display: grid; gap: 8px; }
+#bq { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 10px 12px; font-size: 16px; width: 100%; }
+.plist { display: grid; gap: 4px; max-height: 300px; overflow-y: auto; }
+.prow { text-align: left; border: 0; border-bottom: 1px solid var(--line); background: none; padding: 8px 4px; cursor: pointer; display: grid; }
+.prow .pair { font-weight: 700; }
+.prow:hover { background: var(--sunk); }
+.b-tenses { display: flex; flex-wrap: wrap; gap: 6px; }
+.tchip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; padding: 6px 10px 6px 6px; cursor: pointer; font-size: 14px; font-weight: 600; }
+.tchip.rare { border-style: dashed; }
+.tchip.more { color: var(--muted); padding-left: 10px; font-weight: 500; }
+.tchip[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+.b-ctl { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
+.pchips { display: flex; flex-wrap: wrap; gap: 4px; }
+.pchip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 12px; cursor: pointer; font-size: 14.5px; font-weight: 600; }
+.pchip[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--bg); }
+.pchip:disabled { opacity: .35; cursor: default; }
+.toggles { display: flex; gap: 8px; flex-wrap: wrap; }
+.seg2 { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; background: var(--surface); }
+.seg2 button { border: 0; background: none; border-radius: 999px; padding: 4px 12px; cursor: pointer; font-weight: 700; font-size: 14px; color: var(--muted); }
+.seg2 button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.seg2.asp button.i[aria-pressed="true"] { background: var(--impf); color: #fff; }
+.seg2.asp button.p[aria-pressed="true"] { background: var(--pf); color: #fff; }
+.negbtn { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 14px; cursor: pointer; font-weight: 700; font-size: 14px; color: var(--muted); }
+.negbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.b-out { background: var(--sunk); border-radius: 12px; padding: 18px 16px 14px; display: grid; gap: 8px; justify-items: center; text-align: center; }
+.b-pron { color: var(--muted); font-size: 15px; font-weight: 600; }
+.b-word { display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; font-size: 34px; line-height: 1.25; font-weight: 700; }
+.b-word .sp { width: .3em; }
+.pc { border: 0; background: none; padding: 0 1px; cursor: pointer; font: inherit; border-bottom: 3px solid transparent; border-radius: 0; }
+.pc.k-pt, .pc.k-se { color: var(--muted); font-weight: 500; }
+.pc.k-stem.impf, .pc.k-end.impf { color: var(--impf); }
+.pc.k-stem.pf, .pc.k-end.pf { color: var(--pf); }
+.pc.k-end { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.pc[aria-pressed="true"] { background: var(--hl); border-radius: 6px; }
+.b-info { font-size: 15px; max-width: 46ch; min-height: 2.6em; }
+.b-na { font-size: 16px; color: var(--muted); max-width: 40ch; }
+.b-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: 14.5px; }
+.b-meta .link { margin-left: auto; }
+.b-all { display: grid; gap: 2px; }
+.b-all .ctl-label { margin-bottom: 4px; }
+.arow { display: grid; grid-template-columns: 5.5em minmax(0, 1fr); gap: 8px; text-align: left; border: 0; background: none; padding: 6px 8px; border-radius: 6px; cursor: pointer; font-size: 16px; }
+.arow:hover { background: var(--sunk); }
+.arow[aria-pressed="true"] { background: var(--sunk); font-weight: 700; }
+.arow .who { color: var(--muted); }
+.endc { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+
+/* Tense icons */
+.ticon { width: 42px; height: 12px; flex: none; color: inherit; }
+.ticon .l { stroke: currentColor; stroke-width: 1.5; opacity: .35; fill: none; }
+.ticon .n { stroke: var(--pf); stroke-width: 2; fill: none; }
+.ticon .m { fill: currentColor; }
+.ticon .o { fill: none; stroke: currentColor; stroke-width: 1.5; }
+.ticon .a { stroke: currentColor; stroke-width: 1.6; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.ticon .d { stroke-dasharray: 2 2; }
+.ticon circle.d { fill: none; stroke: currentColor; stroke-width: 1.6; }
+.ticon .w { stroke-width: 2.6; }
+
+/* Tense cards */
+.tgrid-top { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 820px) { .tgrid-top { grid-template-columns: minmax(0, 1fr); } }
+.choose { display: grid; gap: 2px; }
+.crow { display: grid; grid-template-columns: minmax(0, 1fr) auto 10.5em; gap: 8px; align-items: center; text-align: left; border: 0; border-bottom: 1px solid var(--line); background: none; padding: 8px 2px; cursor: pointer; }
+.crow:hover { background: var(--sunk); }
+.crow .arrow { color: var(--muted); }
+.crow .ctn { display: inline-flex; gap: 6px; align-items: center; font-weight: 700; justify-self: start; }
+.asp2 { display: grid; gap: 8px; }
+.an.col { grid-template-columns: auto minmax(0, 1fr); }
+.an .sigs { grid-column: 2; font-size: 13.5px; color: var(--muted); }
+.tcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 14px; align-items: start; }
+.tcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; min-width: 0; scroll-margin-top: 60px; }
+.tc-h { display: flex; gap: 10px; align-items: flex-start; }
+.tc-h .ticon { width: 56px; height: 16px; margin-top: 4px; }
+.tc-names { display: grid; }
+.tc-names .tn { font-size: 18px; line-height: 1.25; }
+.tc-sub { font-size: 13.5px; color: var(--muted); }
+table.strip { border-collapse: collapse; font-size: 14px; width: 100%; }
+table.strip th { font-weight: 600; color: var(--muted); font-size: 12px; padding: 2px 4px; text-align: left; }
+table.strip td { padding: 4px; border-top: 1px solid var(--line); font-weight: 700; color: var(--pf); white-space: nowrap; }
+table.strip td.g { color: var(--muted); font-weight: 600; font-size: 12px; }
+.after { font-size: 13.5px; color: var(--muted); }
+.tc-more { display: grid; gap: 14px; border-top: 1px solid var(--line); padding-top: 12px; }
+.rare-wrap > summary { list-style: none; display: inline-block; }
+.rare-wrap > summary::-webkit-details-marker { display: none; }
+.rare-wrap[open] > summary { margin-bottom: 14px; }
+.stems summary { cursor: pointer; list-style: none; }
+.stems summary::-webkit-details-marker { display: none; }
+.stems summary h3 { margin: 0; }
+.stems summary h3::after { content: " +"; }
+.stems[open] summary h3::after { content: " –"; }
+
+/* Verb grid */
+table.vgrid { width: 100%; border-collapse: collapse; }
+table.vgrid th, table.vgrid td { border-bottom: 1px solid var(--line); padding: 2px; text-align: left; vertical-align: middle; }
+table.vgrid thead th { font-size: 13px; font-weight: 700; padding: 6px; }
+table.vgrid thead th.i { color: var(--impf); }
+table.vgrid thead th.p { color: var(--pf); }
+.tlink { display: inline-flex; gap: 6px; align-items: center; border: 0; background: none; cursor: pointer; font-size: 13.5px; font-weight: 600; color: var(--muted); padding: 6px 4px; text-align: left; }
+.cell { border: 0; background: none; cursor: pointer; padding: 8px 6px; border-radius: 6px; font-size: 16px; font-weight: 600; text-align: left; width: 100%; }
+.cell:hover { background: var(--sunk); }
+.cell.i { color: var(--impf); }
+.cell.p { color: var(--pf); }
+
+footer { color: var(--muted); font-size: 13px; padding-block: 0 40px; }
+@media (max-width: 520px) {
+  .pairbig { font-size: 24px; }
+  table.conj { font-size: 15.5px; }
+  table.conj th, table.conj td { padding: 7px 6px; }
+  .card { padding: 14px; }
+}
+</style>
+
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="top-row">
+      <div class="brand"><h1>Глаго<span>ли</span></h1><p id="sub"></p></div>
+      <div class="lang" id="lang" role="group" aria-label="Language"></div>
+    </div>
+    <div class="legend" id="leg"></div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Sections">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" id="tab-btn-form" data-tab="form"></button>
+    <button class="tab" role="tab" id="tab-btn-tenses" data-tab="tenses"></button>
+    <button class="tab" role="tab" id="tab-btn-verbs" data-tab="verbs"></button>
+  </div>
+</nav>
+
+<main class="wrap">
+  <section role="tabpanel" id="form" aria-labelledby="tab-btn-form"></section>
+  <section role="tabpanel" id="tenses" aria-labelledby="tab-btn-tenses" hidden></section>
+  <section role="tabpanel" id="verbs" aria-labelledby="tab-btn-verbs" hidden></section>
+</main>
+
+<footer class="wrap">100 пар · Study in BG</footer>
+
+<script>
+/* Verb pairs from "100 common aspectual pairs in Bulgarian" (Study in BG), plus three model verbs.
+   Spec format:
+     group III verb  → just the аз-form: "вдигам"
+     group I / II    → "аз|ти|aorist аз|-л participle (m)[|imperfect аз]"
+   Everything else is derived in grammar.js. `x` holds the irregular forms the rules can't produce. */
+window.VERB_DATA = [
+  ["вдигам", "вдигна|вдигнеш|вдигнах|вдигнал", "поднимать / поднять (трубку)", [
+    ["– Ще вдигнеш ли телефона? – Не, никога не вдигам, когато видя непознат номер.", "– Ты возьмёшь трубку? – Нет, я никогда не беру трубку, когда вижу незнакомый номер."]]],
+  ["вземам", "взема|вземеш|взех|взел", "брать / взять", [
+    ["Обикновено вземам автобус, но днес бързам и ще взема такси.", "Обычно я езжу на автобусе, но сегодня тороплюсь и возьму такси."]]],
+  ["виждам", "видя|видиш|видях|видял", "видеть / увидеть", [
+    ["Не виждаш ли, че навън вали дъжд? Ще видим дали мога да ти помогна.", "Разве ты не видишь, что на улице идёт дождь? Посмотрим, смогу ли я тебе помочь."]],
+    { xp: { impv: ["виж", "вижте"] } }],
+  ["виждам", "видя|видиш|видях|видял", "встречаться / встретиться (с кем-то)", [
+    ["Виждам се с приятелите си всеки петък. Тази седмица ще се видя с тях и в събота.", "Я встречаюсь с друзьями каждую пятницу. На этой неделе я увижусь с ними и в субботу."]],
+    { se: "се", tail: "с", xp: { impv: ["виж", "вижте"] } }],
+  ["влизам", "вляза|влезеш|влязох|влязъл", "входить / войти", [
+    ["Не, няма да влизам, защото бързам. Искам да вляза в магазина за 5 минути.", "Нет, я не буду заходить, потому что тороплюсь. Хочу зайти в магазин на 5 минут."]],
+    { xp: { impv: ["влез", "влезте"] } }],
+  ["връщам", "върна|върнеш|върнах|върнал", "возвращать / вернуть (что-то)", [
+    ["Кога ще ми върнеш книгата? Ти винаги вземаш нещо назаем, а после не връщаш.", "Когда ты вернёшь мне книгу? Ты всегда берёшь что-то взаймы, а потом не возвращаешь."]]],
+  ["връщам", "върна|върнеш|върнах|върнал", "возвращаться / вернуться", [
+    ["Антон вече се връща вкъщи, а децата му ще се върнат по-късно, защото са на концерт.", "Антон уже возвращается домой, а его дети вернутся позже, потому что они на концерте."]],
+    { se: "се" }],
+  ["давам", "дам|дадеш|дадох|дал", "давать / дать", [
+    ["– Ще ми дадеш ли 50 лв назаем? – Вместо 50 лв ти давам съвет да не вземаш пари назаем.", "– Дашь мне 50 левов взаймы? – Вместо 50 левов даю тебе совет не брать деньги в долг."]],
+    { xp: { impv: ["дай", "дайте"] } }],
+  ["добавям", "добавя|добавиш|добавих|добавил", "добавлять / добавить", [
+    ["– Ще добавиш ли нещо към кафето? – Не, никога не добавям нищо.", "– Добавишь что-нибудь в кофе? – Нет, я никогда ничего не добавляю."]]],
+  ["донасям", "донеса|донесеш|донесох|донесъл", "приносить / принести", [
+    ["Като се връща от командировка, баща ми винаги донася сувенири. И този път ще донесе нещо за спомен.", "Когда отец возвращается из командировки, он всегда привозит сувениры. И в этот раз привезёт что-нибудь на память."]]],
+  ["забравям", "забравя|забравиш|забравих|забравил", "забывать / забыть", [
+    ["Рядко забравям имената на хората, с които се запознавам. Ако не запишеш телефонния номер, рискуваш да го забравиш.", "Я редко забываю имена людей, с которыми знакомлюсь. Если не запишешь номер телефона, рискуешь его забыть."]]],
+  ["завивам", "завия|завиеш|завих|завил", "поворачивать / повернуть", [
+    ["Гледай къде завиваш! Тази улица е еднопосочна. Ако завием надясно по първата улица, ще стигнем до офиса по-бързо.", "Смотри, куда поворачиваешь! Эта улица с односторонним движением. Если повернём направо на первой улице, доберёмся до офиса быстрее."]]],
+  ["закусвам", "закуся|закусиш|закусих|закусил", "завтракать / позавтракать", [
+    ["Рядко закусвам вкъщи, защото винаги бързам. Този път ще закуся яйца на очи и препечена филийка, защото имам време.", "Я редко завтракаю дома, потому что всегда тороплюсь. В этот раз съем на завтрак яичницу и тост, потому что есть время."]]],
+  ["заключвам", "заключа|заключиш|заключих|заключил", "запирать / запереть", [
+    ["Моля последният, който излиза, да заключи вратата! Няма смисъл да заключваш, след малко ще дойдат останалите.", "Прошу последнего, кто выходит, запереть дверь! Нет смысла запирать, скоро придут остальные."]]],
+  ["закъснявам", "закъснея|закъснееш|закъснях|закъснял", "опаздывать / опоздать", [
+    ["Иван никога не идва навреме, винаги закъснява. Ще закъснея с 30 минути, не ме чакайте.", "Иван никогда не приходит вовремя, всегда опаздывает. Я опоздаю на 30 минут, не ждите меня."]]],
+  ["заминавам", "замина|заминеш|заминах|заминал", "уезжать / уехать", [
+    ["Рано сутринта заминавам за Лондон. Ще заминат веднага щом получат документите си.", "Рано утром я уезжаю в Лондон. Они уедут, как только получат свои документы."]]],
+  ["запознавам", "запозная|запознаеш|запознах|запознал", "знакомить / познакомить", [
+    ["Елате, искам да Ви запозная с шефа си! Иван запознава приятелите си с братовчед си.", "Идёмте, хочу познакомить Вас со своим начальником! Иван знакомит своих друзей с двоюродным братом."]]],
+  ["запознавам", "запозная|запознаеш|запознах|запознал", "знакомиться / познакомиться", [
+    ["Най-често се запознавам с нови хора в офиса. Петър трябва да се запознае с правилата на компанията.", "Чаще всего я знакомлюсь с новыми людьми в офисе. Петру нужно ознакомиться с правилами компании."]],
+    { se: "се" }],
+  ["започвам", "започна|започнеш|започнах|започнал", "начинать / начать", [
+    ["Обикновено започвам работа в 9:00 ч., но утре ще започна по-късно, тъй като ще ходя на зъболекар.", "Обычно я начинаю работу в 9:00, но завтра начну позже, так как пойду к зубному."]]],
+  ["затварям", "затворя|затвориш|затворих|затворил", "закрывать / закрыть", [
+    ["Винаги затварям прозорците, когато излизам. Може ли да затвориш вратата, за да не ми пречиш?", "Я всегда закрываю окна, когда ухожу. Можешь закрыть дверь, чтобы мне не мешать?"]]],
+  ["идвам", "дойда|дойдеш|дойдох|дошъл", "приходить / прийти", [
+    ["Колко дълго трябва да те чакам? Идваш ли или не? Болен съм, няма да дойда на партито.", "Сколько мне тебя ждать? Ты идёшь или нет? Я болен, я не приду на вечеринку."]],
+    { xp: { impv: ["ела", "елате"] } }],
+  ["избирам", "избера|избереш|избрах|избрал", "выбирать / выбрать", [
+    ["Не мога да избера лесно, и двата модела ми харесват. В книжарницата сме, избираме книги за подарък.", "Мне трудно выбрать, мне нравятся обе модели. Мы в книжном, выбираем книги в подарок."]]],
+  ["излизам", "изляза|излезеш|излязох|излязъл", "выходить / выйти", [
+    ["Тази вечер предпочитам да изляза с приятели, вместо да си стоя вкъщи. Георги излиза навън, за да посрещне куриера.", "Сегодня вечером я лучше схожу куда-нибудь с друзьями, чем буду сидеть дома. Георгий выходит на улицу встретить курьера."]],
+    { xp: { impv: ["излез", "излезте"] } }],
+  ["измислям", "измисля|измислиш|измислих|измислил", "придумывать / придумать", [
+    ["Не се тревожи, ще измислим нещо! Никога няма да каже, че вината е негова, винаги измисля оправдания.", "Не волнуйся, мы что-нибудь придумаем! Он никогда не признает, что виноват, всегда придумывает оправдания."]]],
+  ["изненадвам", "изненадам", "удивлять / удивить, сделать сюрприз", [
+    ["Много ме изненадват думите ви. Мисля да изненадам приятелката си, като ѝ подаря кола.", "Меня очень удивляют ваши слова. Думаю сделать сюрприз своей девушке и подарить ей машину."]]],
+  ["изпращам", "изпратя|изпратиш|изпратих|изпратил", "отправлять / отправить", [
+    ["Всеки ден изпращам писма на клиентите ни. Не мога да ти изпратя офертата, тъй като още не е готова.", "Каждый день я отправляю письма нашим клиентам. Не могу отправить тебе предложение, оно ещё не готово."]]],
+  ["казвам", "кажа|кажеш|казах|казал", "говорить / сказать", [
+    ["Моля те да не казваш на Георги за случката. Деца, ще ми кажете ли защо сте толкова разстроени?", "Прошу тебя не говорить Георгию о случившемся. Дети, скажете мне, почему вы так расстроены?"]]],
+  ["качвам", "кача|качиш|качих|качил", "поднимать наверх, загружать / поднять, загрузить", [
+    ["Ще кача куфарите в апартамента и ще сляза. Никога не качвам снимки на децата си в интернет.", "Подниму чемоданы в квартиру и спущусь. Я никогда не выкладываю фото своих детей в интернет."]]],
+  ["качвам", "кача|качиш|качих|качил", "подниматься, садиться (в транспорт) / подняться, сесть", [
+    ["Ще се кача за малко в апартамента и ще сляза. Пътниците се качват във влака.", "Поднимусь ненадолго в квартиру и спущусь. Пассажиры садятся в поезд."]],
+    { se: "се" }],
+  ["купувам", "купя|купиш|купих|купил", "покупать / купить", [
+    ["Как може да купувате чипс за детето си? Ще ти купя нещо, но няма да казвам какво, защото е изненада.", "Как можно покупать ребёнку чипсы? Я тебе кое-что куплю, но не скажу что — это сюрприз."]]],
+  ["лягам", "легна|легнеш|легнах|легнал", "ложиться / лечь", [
+    ["Лекарят моли пациента да легне по гръб. След като се прибере, просто ляга на дивана и гледа телевизия цяла вечер.", "Врач просит пациента лечь на спину. Придя домой, он просто ложится на диван и весь вечер смотрит телевизор."]]],
+  ["лягам", "легна|легнеш|легнах|легнал", "ложиться спать / лечь спать", [
+    ["Не искам да си лягам още, филмът е много интересен. Ако не си легнеш навреме, няма да се наспиш.", "Я пока не хочу ложиться, фильм очень интересный. Если не ляжешь вовремя, не выспишься."]],
+    { se: "си" }],
+  ["минавам", "мина|минеш|минах|минал", "проходить / пройти", [
+    ["Най-добре е да минете през парка за по-кратко. Когато минавам край витрините, винаги спирам и гледам.", "Лучше пройти через парк, так короче. Когда я прохожу мимо витрин, всегда останавливаюсь и смотрю."]]],
+  ["моля|молиш|молих|молил|молех", "помоля|помолиш|помолих|помолил", "просить / попросить", [
+    ["Моля Ви, не ме прекъсвайте! Може ли да Ви помоля да затворите прозореца?", "Прошу Вас, не перебивайте меня! Можно попросить Вас закрыть окно?"]]],
+  ["намирам", "намеря|намериш|намерих|намерил", "находить / найти", [
+    ["Откъде винаги намираш толкова стилни обеци? Не се безпокойте, ще намеря време за Вашия случай.", "Где ты всегда находишь такие стильные серьги? Не беспокойтесь, я найду время для Вашего случая."]]],
+  ["наемам", "наема|наемеш|наех|наел", "снимать, нанимать / снять, нанять", [
+    ["Когато наемам нов апартамент, винаги питам кои са собствениците. Трябва да наемем още двама души, за да приключим с ремонта по-бързо.", "Когда я снимаю новую квартиру, всегда спрашиваю, кто владельцы. Нужно нанять ещё двух человек, чтобы быстрее закончить ремонт."]]],
+  ["обаждам", "обадя|обадиш|обадих|обадил", "звонить / позвонить", [
+    ["Здравейте! Обаждат Ви се от банката. Искаме да Ви предложим нови финансови услуги.", "Здравствуйте! Вам звонят из банка. Мы хотим предложить Вам новые финансовые услуги."],
+    ["Може ли да ти се обадя по-късно? Сега не е удобно да говоря.", "Можно я тебе перезвоню позже? Сейчас мне неудобно говорить."]],
+    { se: "се" }],
+  ["обещавам", "обещая|обещаеш|обещах|обещал", "обещать / пообещать", [
+    ["Обещавам да не закъснявам този път. Ще ми обещаеш ли, че ще дойдеш?", "Обещаю в этот раз не опаздывать. Пообещаешь мне, что придёшь?"]]],
+  ["обличам", "облека|облечеш|облякох|облякъл", "одевать (одеваться, надевать) / одеть (одеться, надеть)", [
+    ["Майката облича детето, защото то е още малко. Сега ще го облече с хубави дрехи.", "Мама одевает ребёнка, потому что он ещё маленький. Сейчас она оденет его в красивую одежду."],
+    ["Аз обичам да се обличам спортно, но този път ще се облека елегантно.", "Я люблю одеваться в спортивном стиле, но в этот раз оденусь элегантно."],
+    ["Обикновено си обличам тениска, но днес мисля да си облека блуза.", "Обычно я надеваю футболку, но сегодня думаю надеть блузку."]],
+    { opt: "се/си", xp: { aor23: "облече" } }],
+  ["обувам", "обуя|обуеш|обух|обул", "обувать (обуваться, надевать — обувь, брюки) / обуть (обуться, надеть)", [
+    ["Бащата обува детето си. Този път ще му обуе стилни ботушки.", "Отец обувает ребёнка. В этот раз он обует ему стильные ботиночки."],
+    ["Иван е в коридора и се обува. Той обича да се обува с маратонки.", "Иван в коридоре, обувается. Он любит ходить в кроссовках."],
+    ["Често си обувам обувки на висок ток, но утре ще ходим на планина и ще обуя друг тип обувки.", "Я часто ношу туфли на высоком каблуке, но завтра мы идём в горы, и я надену другую обувь."]],
+    { opt: "се/си" }],
+  ["обяснявам", "обясня|обясниш|обясних|обяснил", "объяснять / объяснить", [
+    ["Аз Ви обяснявам, но Вие не ме слушате. Ще ти обясня по пътя, да тръгваме!", "Я Вам объясняю, а Вы меня не слушаете. Объясню тебе по дороге, пойдём!"]]],
+  ["оставам", "остана|останеш|останах|останал", "оставаться / остаться", [
+    ["Този уикенд оставам в София. Твърде изморен съм да пътувам някъде или да правя каквото и да е. Ще останеш ли с мен тази вечер?", "В эти выходные я остаюсь в Софии. Я слишком устал, чтобы куда-то ехать или что-то делать. Останешься со мной сегодня вечером?"]]],
+  ["оставям", "оставя|оставиш|оставих|оставил", "оставлять / оставить", [
+    ["– Остави ни за малко, моля! – Добре, оставям ви, ще се върна по-късно.", "– Оставь нас ненадолго, пожалуйста! – Хорошо, оставляю вас, вернусь позже."]]],
+  ["отварям", "отворя|отвориш|отворих|отворил", "открывать / открыть", [
+    ["Моля, отвори вратата, някой звъни! Не, няма да отварям, защото не чакам никого.", "Пожалуйста, открой дверь, кто-то звонит! Нет, не буду открывать, я никого не жду."]]],
+  ["отговарям", "отговоря|отговориш|отговорих|отговорил", "отвечать / ответить", [
+    ["Отговори на въпроса ми! Защо трябва да отговарям, когато ме питат глупости?", "Ответь на мой вопрос! Почему я должен отвечать, когда меня спрашивают глупости?"]]],
+  ["отивам", "отида|отидеш|отидох|отишъл", "идти, ехать (куда-то) / пойти, поехать", [
+    ["– След работа отивам на мач. Ще дойдеш ли с мен? – Не, трябва да отида на зъболекар, спешно е.", "– После работы я иду на матч. Пойдёшь со мной? – Нет, мне нужно к зубному, это срочно."]]],
+  ["отключвам", "отключа|отключиш|отключих|отключил", "отпирать, разблокировать / отпереть, разблокировать", [
+    ["Как да отключим колата си без ключ? Обикновено отключвам телефона си с пръстов отпечатък.", "Как нам открыть машину без ключа? Обычно я разблокирую телефон отпечатком пальца."]]],
+  ["опитвам", "опитам", "пробовать, пытаться / попробовать, попытаться", [
+    ["Опитайте се да запомните новите думи! Рядко опитвам нови ястия, избирам това, в което съм сигурен.", "Постарайтесь запомнить новые слова! Я редко пробую новые блюда, выбираю то, в чём уверен."]],
+    { opt: "се" }],
+  ["падам", "падна|паднеш|паднах|паднал", "падать / упасть", [
+    ["Парите не падат от небето. Внимавай да не паднеш!", "Деньги с неба не падают. Смотри не упади!"]]],
+  ["плащам", "платя|платиш|платих|платил", "платить / заплатить", [
+    ["Може ли да платя с карта? Предпочитам да плащам в брой.", "Можно заплатить картой? Я предпочитаю платить наличными."]]],
+  ["повтарям", "повторя|повториш|повторих|повторил", "повторять / повторить", [
+    ["Не ме карай да повтарям сто пъти! Извинете, може ли да повторите, не Ви разбрах?", "Не заставляй меня повторять сто раз! Извините, можете повторить? Я Вас не понял."]]],
+  ["подарявам", "подаря|подариш|подарих|подарил", "дарить / подарить", [
+    ["Реши ли какво ще ми подариш за рождения ден? Рядко подарявам скъпи неща на децата си.", "Ты решил, что подаришь мне на день рождения? Я редко дарю детям дорогие вещи."]]],
+  ["пожелавам", "пожелая|пожелаеш|пожелах|пожелал", "желать / пожелать", [
+    ["Пожелавам ти бързо възстановяване! Ще му пожелая да намери по-добра работа час по-скоро.", "Желаю тебе скорейшего выздоровления! Пожелаю ему как можно скорее найти работу получше."]]],
+  ["поздравявам", "поздравя|поздравиш|поздравих|поздравил", "приветствовать, поздравлять / поприветствовать, поздравить", [
+    ["Винаги поздравявам съседите си с „Добър ден“. Ще го поздравя за рождения му ден, когато го видя.", "Я всегда приветствую соседей словами «Добрый день». Поздравлю его с днём рождения, когда увижу."]]],
+  ["показвам", "покажа|покажеш|показах|показал", "показывать / показать", [
+    ["Новият ни бизнес показва добри резултати. Ще ми покажеш ли какво криеш зад гърба?", "Наш новый бизнес показывает хорошие результаты. Покажешь, что ты прячешь за спиной?"]]],
+  ["получавам", "получа|получиш|получих|получил", "получать / получить", [
+    ["Ето защо не получаваш това, което искаш! До края на седмицата трябва да получим заплатата.", "Вот почему ты не получаешь того, чего хочешь! До конца недели мы должны получить зарплату."]]],
+  ["помагам", "помогна|помогнеш|помогнах|помогнал", "помогать / помочь", [
+    ["Помагам на възрастните си родители, като им изпращам пари всеки месец. Може ли да ми помогнете да кача този тежък куфар?", "Я помогаю пожилым родителям, отправляя им деньги каждый месяц. Не поможете мне поднять этот тяжёлый чемодан?"]]],
+  ["поправям", "поправя|поправиш|поправих|поправил", "исправлять, поправлять / исправить, поправить", [
+    ["Учителят поправя студентите след края на упражнението. Ще си поправя прическата и идвам.", "Преподаватель исправляет студентов после упражнения. Поправлю причёску и иду."]]],
+  ["поръчвам", "поръчам", "заказывать / заказать", [
+    ["По интернет поръчвам основно козметика. За вечеря ще поръчаме индийска храна.", "В интернете я заказываю в основном косметику. На ужин закажем индийскую еду."]]],
+  ["посещавам", "посетя|посетиш|посетих|посетил", "посещать / посетить", [
+    ["Обичаш ли да посещаваш галерии и музеи? Мисля да посетя изложбата още утре.", "Ты любишь ходить по галереям и музеям? Думаю сходить на выставку уже завтра."]]],
+  ["посрещам", "посрещна|посрещнеш|посрещнах|посрещнал", "встречать / встретить", [
+    ["Къде и с кого предпочитате да посрещате Нова година? Ще ме посрещнеш ли на летището? Пристигам с много багаж.", "Где и с кем вы предпочитаете встречать Новый год? Встретишь меня в аэропорту? Я прилетаю с большим багажом."]]],
+  ["почивам", "почина|починеш|починах|починал", "отдыхать / отдохнуть", [
+    ["Утре почивам, не съм на работа. Който си почива добре, работи добре.", "Завтра я отдыхаю, я не на работе. Кто хорошо отдыхает, тот хорошо работает."],
+    ["Ще си почина малко на дивана, а после ще дойда да ти помогна с домашното.", "Немного отдохну на диване, а потом приду помочь тебе с домашним заданием."]],
+    { opt: "си", note: { ru: "Осторожно: «той почина» без «си» значит «он умер». «Отдохнул» — «почина си».", bg: "Внимание: „той почина“ без „си“ означава „умря“. За почивка: „почина си“." } }],
+  ["превеждам", "преведа|преведеш|преведох|превел", "переводить / перевести", [
+    ["Много добре превеждаш на френски, къде си учил? Може ли да ми преведеш кратък текст?", "Ты очень хорошо переводишь на французский, где ты учился? Можешь перевести мне короткий текст?"]]],
+  ["предлагам", "предложа|предложиш|предложих|предложил", "предлагать / предложить", [
+    ["Предлагам ви да се срещнем утре на кафе. Какво ще ни предложиш този път?", "Предлагаю вам встретиться завтра за кофе. Что ты предложишь нам в этот раз?"]]],
+  ["предполагам", "предположа|предположиш|предположих|предположил", "предполагать / предположить", [
+    ["Предполагам, че и този път Иван ще остане вкъщи. Кой може да предположи, че София и България са място на големи холивудски продукции?", "Полагаю, что и в этот раз Иван останется дома. Кто бы мог подумать, что в Софии и Болгарии снимают крупные голливудские фильмы?"]]],
+  ["предпочитам", "предпочета|предпочетеш|предпочетох|предпочел", "предпочитать / предпочесть", [
+    ["Предпочитам да работя сам, а не в екип. Апартамент в голям град или къща на село – какво ще предпочетете?", "Я предпочитаю работать один, а не в команде. Квартира в большом городе или дом в деревне — что вы выберете?"]]],
+  ["представям", "представя|представиш|представих|представил", "представлять / представить (себе)", [
+    ["Представям Ви новия ръководител на екипа ни. Можеш ли да си представиш, че утре ще свиря с кумирите ми?", "Представляю Вам нового руководителя нашей команды. Можешь себе представить — завтра я буду играть со своими кумирами!"]],
+    { opt: "си" }],
+  ["прекарвам", "прекарам", "проводить / провести (время)", [
+    ["С кого обичате да прекарвате свободното си време? Ще прекараме почивните дни някъде извън града.", "С кем вы любите проводить свободное время? Мы проведём выходные где-нибудь за городом."]]],
+  ["пресичам", "пресека|пресечеш|пресякох|пресякъл", "переходить (улицу) / перейти", [
+    ["Детето знае, че не бива да пресича на червено. Когато пресечеш улицата, ще завиеш надясно.", "Ребёнок знает, что нельзя переходить на красный. Когда перейдёшь улицу, повернёшь направо."]],
+    { xp: { aor23: "пресече" } }],
+  ["прибирам", "прибера|прибереш|прибрах|прибрал", "возвращаться домой / вернуться домой", [
+    ["След работа не се прибирам вкъщи веднага, но утре ще се прибера по-рано, защото баща ми празнува рожден ден.", "После работы я не сразу иду домой, но завтра вернусь пораньше, потому что у папы день рождения."]],
+    { se: "се" }],
+  ["приготвям", "приготвя|приготвиш|приготвих|приготвил", "готовить / приготовить", [
+    ["Мъжът ми се приготвя за излизане, а аз съм в кухнята и мисля да му приготвя сандвичи.", "Мой муж собирается выходить, а я на кухне и думаю приготовить ему бутерброды."]]],
+  ["приемам", "приема|приемеш|приех|приел", "принимать / принять", [
+    ["Лекарят приема само по двама пациенти на час. Ще приемеш ли поканата ми?", "Врач принимает только по два пациента в час. Ты примешь моё приглашение?"]]],
+  ["пристигам", "пристигна|пристигнеш|пристигнах|пристигнал", "прибывать, приезжать / прибыть, приехать", [
+    ["Кога пристигат роднините ти? Те ще пристигнат след 2 дни.", "Когда приезжают твои родственники? Они приедут через 2 дня."]]],
+  ["проверявам", "проверя|провериш|проверих|проверил", "проверять / проверить", [
+    ["Ще провериш ли кой звъни на вратата? Проверяваш ли фактите, преди да им се довериш?", "Проверишь, кто звонит в дверь? Ты проверяешь факты, прежде чем им довериться?"]]],
+  ["продавам", "продам|продадеш|продадох|продал", "продавать / продать", [
+    ["На кого ще продадеш стоката на такава висока цена? В София хората активно купуват и продават апартаменти.", "Кому ты продашь товар по такой высокой цене? В Софии люди активно покупают и продают квартиры."]],
+    { xp: { impv: ["продай", "продайте"] } }],
+  ["продължавам", "продължа|продължиш|продължих|продължил", "продолжать / продолжить", [
+    ["Изморени сме, ще продължим утре сутрин. Продължавам да правя грешки, но не се отказвам.", "Мы устали, продолжим завтра утром. Я продолжаю делать ошибки, но не сдаюсь."]]],
+  ["променям", "променя|промениш|промених|променил", "менять(ся) / изменить(ся)", [
+    ["Не вярвам Андрей да се промени. Той променя решенията си всеки ден.", "Не верю, что Андрей изменится. Он каждый день меняет свои решения."]],
+    { opt: "се" }],
+  ["разбирам", "разбера|разбереш|разбрах|разбрал", "понимать / понять", [
+    ["Ако ми обясниш, може би ще те разбера. Имам страхотни съседи, разбираме се от половин дума.", "Если объяснишь, может быть, я тебя пойму. У меня замечательные соседи, мы понимаем друг друга с полуслова."]]],
+  ["разказвам", "разкажа|разкажеш|разказах|разказал", "рассказывать / рассказать", [
+    ["Децата обичат да им разказвам приказки преди сън. Ще ми разкажеш ли какво се е случило?", "Дети любят, когда я рассказываю им сказки перед сном. Расскажешь мне, что случилось?"]]],
+  ["разхождам", "разходя|разходиш|разходих|разходил", "выгуливать, гулять / выгулять, прогуляться", [
+    ["Разхождам кучето си два пъти дневно. Искате ли да се разходим след работа?", "Я выгуливаю собаку два раза в день. Хотите прогуляться после работы?"]],
+    { opt: "се" }],
+  ["решавам", "реша|решиш|реших|решил", "решать / решить", [
+    ["Не мога да реша дали искам да си остана вкъщи или да изляза. В нашето семейство всичко решава баба.", "Не могу решить, остаться дома или выйти. В нашей семье всё решает бабушка."]]],
+  ["свършвам", "свърша|свършиш|свърших|свършил", "заканчивать / закончить", [
+    ["В колко часа свършвате работа обикновено? Като свършиш, те моля да ми се обадиш.", "Во сколько вы обычно заканчиваете работу? Когда закончишь, пожалуйста, позвони мне."]]],
+  ["скачам", "скоча|скочиш|скочих|скочил", "прыгать / прыгнуть", [
+    ["Като дете много обичах да скачам на въже. Ще скочиш ли във вода от 10-метрова кула?", "В детстве я очень любил(а) прыгать через скакалку. Прыгнешь в воду с 10-метровой вышки?"]]],
+  ["слагам", "сложа|сложиш|сложих|сложил", "класть, ставить / положить, поставить", [
+    ["Моля да не слагаш повече сол във водата. Днес е студено и децата ще си сложат шапките.", "Пожалуйста, не клади больше соли в воду. Сегодня холодно, и дети наденут шапки."]]],
+  ["слизам", "сляза|слезеш|слязох|слязъл", "спускаться, выходить (из транспорта) / спуститься, выйти", [
+    ["Извинете, слизате ли на тази спирка? Ще сляза да посрещна куриера.", "Извините, вы выходите на этой остановке? Я спущусь встретить курьера."]],
+    { xp: { impv: ["слез", "слезте"] } }],
+  ["сменям", "сменя|смениш|смених|сменил", "менять / сменить, поменять", [
+    ["До края на месеца трябва да сменя летните гуми на колата ми. Когато нещо не ѝ харесва, тя сменя темата.", "До конца месяца мне нужно поменять летнюю резину. Когда ей что-то не нравится, она меняет тему."]]],
+  ["спестявам", "спестя|спестиш|спестих|спестил", "экономить, копить / сэкономить, накопить", [
+    ["Всеки месец успявам да спестявам по 200 лв. Ще си спестиш много време, ако последваш съвета ми.", "Каждый месяц мне удаётся откладывать по 200 левов. Сэкономишь себе много времени, если последуешь моему совету."]]],
+  ["спирам", "спра|спреш|спрях|спрял", "останавливать(ся), прекращать / остановить(ся), прекратить", [
+    ["Може ли да спрете пред магазина? Здравната каса спира да плаща за лекарството, което вземам.", "Не могли бы вы остановиться у магазина? Больничная касса перестаёт оплачивать лекарство, которое я принимаю."]]],
+  ["споделям", "споделя|споделиш|споделих|споделил", "делиться / поделиться", [
+    ["Моля, споделете кой е най-страшният момент от живота Ви? Рядко споделям лични неща в интернет.", "Пожалуйста, поделитесь, какой самый страшный момент в Вашей жизни? Я редко делюсь личным в интернете."]]],
+  ["срещам", "срещна|срещнеш|срещнах|срещнал", "встречать (случайно) / встретить", [
+    ["Често срещам известни хора в центъра на града. Никога не съм мислил, че някога ще срещна подобна уникална личност.", "Я часто встречаю известных людей в центре города. Никогда не думал, что встречу такую уникальную личность."]]],
+  ["срещам", "срещна|срещнеш|срещнах|срещнал", "встречаться / встретиться", [
+    ["Млад баща съм и вече се срещам със старите ми приятели по-рядко. Искате ли да се срещнем този уикенд?", "Я молодой отец и теперь реже встречаюсь со старыми друзьями. Хотите встретиться в эти выходные?"]],
+    { se: "се" }],
+  ["ставам", "стана|станеш|станах|станал", "вставать, становиться / встать, стать", [
+    ["Часът е 9, време е да ставате. Какъв искаш да станеш, като пораснеш?", "Уже 9 часов, пора вставать. Кем ты хочешь стать, когда вырастешь?"]]],
+  ["стигам", "стигна|стигнеш|стигнах|стигнал", "добираться, хватать / добраться, хватить", [
+    ["Извинете, как да стигнем до НДК? Парите този месец не ми стигат за нищо.", "Извините, как добраться до НДК? В этом месяце мне ни на что не хватает денег."]]],
+  ["събирам", "събера|събереш|събрах|събрал", "собирать(ся) / собрать(ся)", [
+    ["За рождения ми ден ще събера всички мои приятели в градината ми. От време на време се събираме с приятели да гледаме футболни мачове.", "На день рождения я соберу всех друзей у себя в саду. Время от времени мы собираемся с друзьями посмотреть футбол."]],
+    { opt: "се" }],
+  ["събуждам", "събудя|събудиш|събудих|събудил", "будить, просыпаться / разбудить, проснуться", [
+    ["Всяка сутрин се събуждам в 6:30 ч. и след това отивам да събудя децата. Когато Иван се събуди, му кажи да ми звънне.", "Каждое утро я просыпаюсь в 6:30, а потом иду будить детей. Когда Иван проснётся, скажи ему, чтобы позвонил мне."]],
+    { opt: "се" }],
+  ["събличам", "съблека|съблечеш|съблякох|съблякъл", "раздевать(ся), снимать / раздеть(ся), снять", [
+    ["Когато се връщаме от разходка, събличам децата в коридора. Ще си съблека якето, защото е прекалено горещо.", "Когда мы возвращаемся с прогулки, я раздеваю детей в коридоре. Сниму куртку — слишком жарко."]],
+    { opt: "се/си", xp: { aor23: "съблече" } }],
+  ["съобщавам", "съобщя|съобщиш|съобщих|съобщил", "сообщать / сообщить", [
+    ["Искам да ви съобщя, че от другата седмица излизам в почивка. Какво съобщават в новините?", "Хочу сообщить вам, что со следующей недели ухожу в отпуск. Что сообщают в новостях?"]]],
+  ["сядам", "седна|седнеш|седнах|седнал", "садиться / сесть", [
+    ["Не сядай на пейката, тя е прясно боядисана. Ще седна за малко да си поема дъх.", "Не садись на скамейку, она свежевыкрашена. Присяду ненадолго перевести дух."]]],
+  ["тръгвам", "тръгна|тръгнеш|тръгнах|тръгнал", "отправляться, уходить / отправиться, уйти", [
+    ["Да тръгваме вече, закъсняваме за срещата! Като тръгна на работа, ще трябва да намерим детегледачка.", "Пойдём уже, опаздываем на встречу! Когда я выйду на работу, нужно будет найти няню."]]],
+  ["умирам", "умра|умреш|умрях|умрял", "умирать / умереть", [
+    ["Умирам от страх, когато трябва да говоря пред публика. Театърът не само няма да умре, а ще продължи да съществува и ще бъде търсен.", "Я умираю от страха, когда нужно выступать перед публикой. Театр не только не умрёт, но и продолжит существовать и будет востребован."]]],
+  ["уморявам", "уморя|умориш|уморих|уморил", "утомлять, уставать / утомить, устать", [
+    ["Чувствам се слаба и се уморявам по-бързо. Спри да разказваш вицове, ще ме умориш от смях.", "Я чувствую слабость и быстрее устаю. Перестань рассказывать анекдоты, уморишь меня со смеху."]],
+    { opt: "се" }],
+  ["успявам", "успея|успееш|успях|успял", "успевать, удаваться / успеть, суметь", [
+    ["Ще успеете ли да ми помогнете до края на седмицата? Чудя се как Виктор успява да работи и да следва едновременно.", "Успеете помочь мне до конца недели? Удивляюсь, как Виктору удаётся одновременно работать и учиться."]]],
+  ["харесвам", "харесам", "нравиться / понравиться", [
+    ["Няма да ми хареса, ако разбера, че приятелите ми говорят зад гърба ми. Харесвам всичко, което правиш.", "Мне не понравится, если я узнаю, что друзья говорят за моей спиной. Мне нравится всё, что ты делаешь."]],
+    { note: { ru: "Две конструкции: «харесвам те» = «ты мне нравишься» и «ти ми харесваш» — то же самое, как по-русски.", bg: "Две конструкции: „харесвам те“ и „ти ми харесваш“ означават едно и също." } }],
+  ["целувам", "целуна|целунеш|целунах|целунал", "целовать / поцеловать", [
+    ["Срам ме е да се целувам на обществено място. Отивам да целуна децата за лека нощ.", "Мне стыдно целоваться на людях. Пойду поцелую детей на ночь."]]],
+  ["чувам", "чуя|чуеш|чух|чул", "слышать / услышать", [
+    ["Чувате ли този странен шум отвън? Не мога да чуя какво ми шепнеш.", "Вы слышите этот странный шум снаружи? Не могу расслышать, что ты мне шепчешь."]]],
+
+  /* Model verbs used in the grammar pages (not in the PDF list) */
+  ["чета|четеш|четох|чел|четях", "прочета|прочетеш|прочетох|прочел", "читать / прочитать", [
+    ["Какво правиш? – Чета книга. Искам да я прочета до неделя.", "Что ты делаешь? – Читаю книгу. Хочу прочитать её до воскресенья."]], { extra: true }],
+  ["правя|правиш|правих|правил|правех", "направя|направиш|направих|направил", "делать / сделать", [
+    ["Какво правиш довечера? Ще направя вечеря за гости.", "Что делаешь сегодня вечером? Приготовлю ужин для гостей."]], { extra: true }],
+  ["питам", "попитам", "спрашивать / спросить", [
+    ["Винаги питам, когато не разбирам. Ще попитам учителката.", "Я всегда спрашиваю, когда не понимаю. Спрошу учительницу."]], { extra: true }]
+];
+
+</script>
+<script>
+/* Conjugation engine + bilingual (RU / BG) grammar content. */
+(function () {
+  "use strict";
+
+  var VOWELS = "аеиоуъюяю";
+  var AUX = ["съм", "си", "е", "сме", "сте", "са"];
+  var BYAH = ["бях", "беше", "беше", "бяхме", "бяхте", "бяха"];
+  var SHTYAH = ["щях", "щеше", "щеше", "щяхме", "щяхте", "щяха"];
+  var BIH = ["бих", "би", "би", "бихме", "бихте", "биха"];
+  var PERSONS = ["аз", "ти", "той / тя", "ние", "вие", "те"];
+
+  function lastYaToE(s) { var i = s.lastIndexOf("я"); return i < 0 ? s : s.slice(0, i) + "е" + s.slice(i + 1); }
+
+  function partForms(m) {
+    if (m.slice(-2) === "ъл") {
+      var s = m.slice(0, -2);
+      return { m: m, f: s + "ла", n: s + "ло", pl: lastYaToE(s) + "ли" };
+    }
+    var pl = m + "и";
+    if (m.slice(-2) === "ял" && VOWELS.indexOf(m.charAt(m.length - 3)) < 0) pl = m.slice(0, -2) + "ели";
+    return { m: m, f: m + "а", n: m + "о", pl: pl };
+  }
+
+  /* Build every simple form of one verb from its spec (see verbs.js). */
+  function conjugate(spec, x) {
+    x = x || {};
+    var p = spec.split("|");
+    if (p.length === 1) {
+      var a = p[0], b = a.slice(0, -1);
+      return {
+        inf: a, group: "III",
+        pres: [a, b + "ш", b, b + "ме", b + "те", b + "т"],
+        aor: [b + "х", b, b, b + "хме", b + "хте", b + "ха"],
+        imp: [b + "х", b + "ше", b + "ше", b + "хме", b + "хте", b + "ха"],
+        part: partForms(b + "л"),
+        impv: x.impv || [b + "й", b + "йте"]
+      };
+    }
+    var s1 = p[0], s2 = p[1], a1 = p[2], pm = p[3], i1 = p[4];
+    var g = s2.slice(-2) === "иш" ? "II" : "I";
+    var st = s2.slice(0, -2), v = g === "II" ? "и" : "е";
+    var pl3 = (g === "I" && s1.slice(-1) === "м") ? st + "ат" : s1 + "т";
+    var a23 = x.aor23 || (a1.slice(-2) === "ох" ? lastYaToE(a1.slice(0, -2)) + "е" : a1.slice(0, -1));
+    var imp = null;
+    if (i1) { var i23 = i1.slice(0, -2) + "еше"; imp = [i1, i23, i23, i1 + "ме", i1 + "те", i1 + "а"]; }
+    var vowelStem = VOWELS.indexOf(st.slice(-1)) >= 0;
+    return {
+      inf: s1, group: g,
+      pres: [s1, s2, st + v, st + v + "м", st + v + "те", pl3],
+      aor: [a1, a23, a23, a1 + "ме", a1 + "те", a1 + "а"],
+      imp: imp,
+      part: partForms(pm),
+      impv: x.impv || (vowelStem ? [st + "й", st + "йте"] : [st + "и", st + "ете"])
+    };
+  }
+
+  var VERBS = window.VERB_DATA.map(function (r, idx) {
+    var o = r[4] || {};
+    return {
+      id: idx, impf: conjugate(r[0], o.xi), pf: conjugate(r[1], o.xp),
+      se: o.se || "", opt: o.opt || "", tail: o.tail || "",
+      ru: r[2], ex: r[3], note: o.note || null, extra: !!o.extra
+    };
+  });
+
+  /* ---------- Tense cells ---------- */
+  function aux(s) { return '<span class="aux">' + s + "</span>"; }
+  function part(f, i) { return i < 3 ? f.part.m + '<span class="sl">/</span>' + f.part.f : f.part.pl; }
+  function withSe(word, se) { return se ? word + " " + aux(se) : word; }
+
+  var CELLS = {
+    present: function (f, pf, se) { return f.pres.map(function (w) { return pf ? aux("да" + (se ? " " + se : "")) + " " + w : withSe(w, se); }); },
+    aorist: function (f, pf, se) { return f.aor.map(function (w) { return withSe(w, se); }); },
+    imperfect: function (f, pf, se) { return pf || !f.imp ? null : f.imp.map(function (w) { return withSe(w, se); }); },
+    perfect: function (f, pf, se) { return AUX.map(function (a, i) { return aux(se && i === 2 ? se + " е" : a + (se ? " " + se : "")) + " " + part(f, i); }); },
+    pluperfect: function (f, pf, se) { return BYAH.map(function (a, i) { return aux(a + (se ? " " + se : "")) + " " + part(f, i); }); },
+    future: function (f, pf, se) { return f.pres.map(function (w) { return aux("ще" + (se ? " " + se : "")) + " " + w; }); },
+    fip: function (f, pf, se) { return SHTYAH.map(function (a, i) { return aux(a + " да" + (se ? " " + se : "")) + " " + f.pres[i]; }); },
+    fp: function (f, pf, se) { return AUX.map(function (a, i) { return aux("ще " + (se && i === 2 ? se + " е" : a + (se ? " " + se : ""))) + " " + part(f, i); }); },
+    fpp: function (f, pf, se) { return SHTYAH.map(function (a, i) { return aux(a + " да " + (se && i === 2 ? se + " е" : AUX[i] + (se ? " " + se : ""))) + " " + part(f, i); }); },
+    cond: function (f, pf, se) { return BIH.map(function (a, i) { return aux(a + (se ? " " + se : "")) + " " + part(f, i); }); },
+    impv: function (f, pf, se) {
+      if (pf) return [withSe(f.impv[0], se), withSe(f.impv[1], se), null];
+      return [withSe(f.impv[0], se), withSe(f.impv[1], se), aux("не" + (se ? " " + se : "")) + " " + f.impv[0]];
+    }
+  };
+  function cells(tenseId, verb, pf) { return CELLS[tenseId](pf ? verb.pf : verb.impf, pf, verb.se); }
+
+  /* All single-word forms, for highlighting the verb inside example sentences. */
+  function wordSet(f) {
+    var s = {};
+    [f.pres, f.aor, f.imp || [], f.impv, [f.part.m, f.part.f, f.part.n, f.part.pl]].forEach(function (a) { a.forEach(function (w) { s[w] = 1; }); });
+    return s;
+  }
+
+  /* ---------- Tenses (RU / BG) ---------- */
+  var b = function (cls, w) { return '<b class="' + cls + '">' + w + "</b>"; };
+  var TENSES = [
+    {
+      id: "present", when: "now", core: true,
+      name: { ru: "Настоящее время", bg: "Сегашно време" },
+      formula: { ru: "основа + окончание настоящего времени", bg: "основа + окончание за сегашно време" },
+      short: { ru: "сейчас, привычки, факты", bg: "сега, навици, факти" },
+      uses: {
+        ru: ["Действие сейчас: «чета» = «читаю». Отдельной продолженной формы нет.", "Привычки и повторяющиеся действия.", "Общие истины и факты.", "Запланированное ближайшее будущее: «Утре заминавам» — «Завтра уезжаю»."],
+        bg: ["Действие в момента: Какво правиш? – Чета.", "Навици и повтарящи се действия.", "Общовалидни истини и факти.", "Планирано близко бъдеще: Утре заминавам."]
+      },
+      aspect: {
+        i: { ru: "Обычное настоящее время.", bg: "Нормалното сегашно време." },
+        p: { ru: "Никогда не стоит отдельно. Только после <i>да, ще, ако, когато, щом, преди да</i>: «Искам да прочета…»", bg: "Никога не стои самостоятелно. Само след <i>да, ще, ако, когато, щом, преди да</i>: Искам да прочета…" }
+      },
+      signals: ["сега", "всеки ден", "обикновено", "винаги", "често", "рядко", "никога"],
+      examples: [
+        ["Какво правиш? – " + b("i", "Чета") + " книга.", "Что делаешь? – Читаю книгу."],
+        ["Обикновено " + b("i", "вземам") + " автобус.", "Обычно я езжу на автобусе."],
+        ["Искам да " + b("p", "прочета") + " тази книга до неделя.", "Хочу прочитать эту книгу до воскресенья."]
+      ],
+      neg: ["Не " + b("i", "чета") + " вестници.", "Я не читаю газет."],
+      q: [b("i", "Четеш") + " ли на български?", "Ты читаешь по-болгарски?"],
+      tips: {
+        ru: ["Спряжение видно по форме «ти»: <i>-еш</i> → I, <i>-иш</i> → II, <i>-аш / -яш</i> → III. Именно её даёт ваш список: «да взема, -еш».", "«ли» ставится сразу после слова, о котором спрашивают: «Четеш ли?»"],
+        bg: ["Спрежението личи по формата за „ти“: <i>-еш</i> → I, <i>-иш</i> → II, <i>-аш / -яш</i> → III.", "„ли“ стои веднага след думата, за която питаме: Четеш ли?"]
+      },
+      ruCompare: "В русском «прочитаю» — это будущее. В болгарском «прочета» само по себе не употребляется: будущее всегда с «ще» — «ще прочета». И инфинитива нет: «хочу читать» = «искам да чета»."
+    },
+    {
+      id: "aorist", when: "past", core: true,
+      name: { ru: "Аорист (прошедшее совершённое)", bg: "Минало свършено време (аорист)" },
+      formula: { ru: "основа + -х, –, –, -хме, -хте, -ха", bg: "основа + -х, –, –, -хме, -хте, -ха" },
+      short: { ru: "событие закончилось в известный момент", bg: "завършено действие в определен момент" },
+      uses: {
+        ru: ["Законченное действие в определённый момент прошлого.", "Цепочка событий в рассказе: «Влязох, седнах и поръчах» — «Вошёл, сел и заказал».", "Главное время, чтобы рассказать, что произошло."],
+        bg: ["Завършено действие в определен момент в миналото.", "Поредица от събития в разказ: Влязох, седнах и поръчах.", "Основното време за разказ за случилото се."]
+      },
+      aspect: {
+        i: { ru: "Действие происходило или длилось, без акцента на результат: «Четох два часа» — «Читал два часа».", bg: "Действието се е случвало или е траело, без акцент върху резултата: Четох два часа." },
+        p: { ru: "Обычный выбор — действие завершено: «Прочетох книгата» — «Прочитал книгу».", bg: "Обичайният избор – действието е завършено: Прочетох книгата." }
+      },
+      signals: ["вчера", "миналата седмица", "през 2020 г.", "тогава", "изведнъж", "после", "накрая"],
+      examples: [
+        ["Вчера " + b("p", "прочетох") + " цялата книга.", "Вчера я прочитал(а) всю книгу."],
+        [b("i", "Четох") + " два часа и " + b("p", "заспах") + ".", "Я читал(а) два часа и уснул(а)."],
+        [b("p", "Попитах") + " учителката, но тя не знаеше.", "Я спросил(а) учительницу, но она не знала."]
+      ],
+      neg: ["Не " + b("p", "прочетох") + " писмото.", "Я не прочитал(а) письмо."],
+      q: [b("p", "Прочете") + " ли книгата?", "Ты прочитал(а) книгу?"],
+      tips: {
+        ru: ["Формы «ти» и «той / тя» совпадают: ти прочете, той прочете.", "I спряжение: настоящее «чете́» (ударение в конце), аорист «че́те» (ударение в начале).", "Многие глаголы меняют основу: пиша → писах, дам → дадох, взема → взех, дойда → дойдох."],
+        bg: ["Формите за „ти“ и „той / тя“ съвпадат: ти прочете, той прочете.", "I спрежение: сегашно „чете́“ (ударение накрая), аорист „че́те“ (ударение в началото).", "Много глаголи сменят основата: пиша → писах, дам → дадох, взема → взех, дойда → дойдох."]
+      },
+      ruCompare: "Аорист ≈ русское прошедшее время. Аорист СВ = «прочитал», аорист НСВ = «читал (какое-то время)». Рода нет: «аз прочетох» = «я прочитал» и «я прочитала»."
+    },
+    {
+      id: "imperfect", when: "past", core: true,
+      name: { ru: "Имперфект (прошедшее несовершённое)", bg: "Минало несвършено време (имперфект)" },
+      formula: { ru: "основа + -ях / -ех / -ах; -ше в «ти» и «той»", bg: "основа + -ях / -ех / -ах; -ше за „ти“ и „той“" },
+      short: { ru: "фон, «делал в тот момент», привычка", bg: "фон, процес в миналото, навик" },
+      uses: {
+        ru: ["Длительное действие в прошлом: «читал, когда…».", "Фон и описание в рассказе: «Навън валеше» — «На улице шёл дождь».", "Привычки в прошлом: «раньше я часто…»."],
+        bg: ["Продължително действие в миналото.", "Фон и описание в разказ: Навън валеше.", "Навици в миналото."]
+      },
+      aspect: {
+        i: { ru: "Обычный выбор: процесс, фон, привычка.", bg: "Обичайният избор: процес, фон, навик." },
+        p: { ru: "Редко: только в придаточных повторения: «Когато дойдеше, винаги носеше подарък» — «Когда бы он ни приходил, всегда приносил подарок».", bg: "Рядко – само в подчинени изречения за повторение: Когато дойдеше, винаги носеше подарък." }
+      },
+      signals: ["докато", "когато бях малък / малка", "всяка вечер", "по цял ден", "често", "винаги"],
+      examples: [
+        [b("i", "Четях") + ", когато ти се обади.", "Я читал(а), когда ты позвонил(а)."],
+        ["Когато бях малка, " + b("i", "четях") + " всяка вечер.", "Когда я была маленькой, я читала каждый вечер."],
+        ["Навън " + b("i", "валеше") + " дъжд.", "На улице шёл дождь."]
+      ],
+      neg: ["Не " + b("i", "четях") + " много като дете.", "В детстве я мало читал(а)."],
+      q: ["Какво " + b("i", "правеше") + " вчера в шест?", "Что ты делал(а) вчера в шесть?"],
+      tips: {
+        ru: ["Формы «ти» и «той / тя» оканчиваются на <i>-ше</i> — так проще всего отличить имперфект от аориста.", "III спряжение: форма «аз» совпадает с аористом (питах). Различают контекст и формы на <i>-ше</i>.", "Сочетайте с аористом: имперфект — фон, аорист — событие, которое его прерывает."],
+        bg: ["Формите за „ти“ и „той / тя“ завършват на <i>-ше</i> – така най-лесно се различава от аориста.", "III спрежение: формата за „аз“ съвпада с аориста (питах). Различават ги контекстът и формите на <i>-ше</i>.", "Комбинирайте с аориста: имперфект за фона, аорист за събитието, което го прекъсва."]
+      },
+      ruCompare: "Имперфект ≈ русское прошедшее НСВ в значении процесса или повторения. В русском одна форма «читал», в болгарском две: «четох» (аорист) и «четях» (имперфект)."
+    },
+    {
+      id: "perfect", when: "past", core: true,
+      name: { ru: "Перфект (прошедшее неопределённое)", bg: "Минало неопределено време (перфект)" },
+      formula: { ru: "съм + причастие на -л", bg: "съм + минало деятелно причастие (-л)" },
+      short: { ru: "опыт, результат сейчас, время не важно", bg: "опит, резултат сега, времето не е важно" },
+      uses: {
+        ru: ["Жизненный опыт: «Ты когда-нибудь был…?»", "Прошлое действие, результат которого важен сейчас.", "Когда точное время неважно или неизвестно.", "Факты, о которых вы знаете, но не видели сами."],
+        bg: ["Житейски опит: Бил ли си някога…?", "Минало действие, чийто резултат е важен сега.", "Когато точното време не е важно или не е известно.", "Факти, които знаем, но не сме видели."]
+      },
+      aspect: {
+        i: { ru: "Опыт, деятельность: «Чел съм тази книга» — «Я читал эту книгу».", bg: "Опит, дейност: Чел съм тази книга." },
+        p: { ru: "Результат: «Някой е направил кафе» — «Кто-то сварил кофе».", bg: "Резултат: Някой е направил кафе." }
+      },
+      signals: ["вече", "досега", "никога", "някога", "още не", "два пъти"],
+      examples: [
+        [b("i", "Чел съм") + " тази книга два пъти.", "Я читал эту книгу два раза."],
+        [b("i", "Била ли си") + " в Пловдив?", "Ты была в Пловдиве?"],
+        ["Някой " + b("p", "е направил") + " кафе.", "Кто-то сварил кофе."]
+      ],
+      neg: ["Още не " + b("p", "съм прочел") + " писмото.", "Я ещё не прочитал письмо."],
+      q: [b("i", "Чел ли си") + " „Под игото“?", "Ты читал «Под игом»?"],
+      tips: {
+        ru: ["«съм, си, е…» не стоят в начале предложения: «Чел съм», а не «Съм чел». С подлежащим: «Аз съм чел».", "Причастие согласуется с подлежащим: чел (м), чела (ж), чело (ср), чели (мн).", "В вопросе «ли» идёт после причастия: «Чел ли си?»", "С точным временем («вчера») нужен аорист."],
+        bg: ["„съм, си, е…“ не стоят в началото на изречението: „Чел съм“, а не „Съм чел“. С подлог: Аз съм чел.", "Причастието се съгласува с подлога: чел (м.р.), чела (ж.р.), чело (ср.р.), чели (мн.ч.).", "Във въпрос „ли“ стои след причастието: Чел ли си?", "С точно време (вчера) се използва аорист."]
+      },
+      ruCompare: "Прямого аналога в русском нет, ближе всего английский Present Perfect. «Я читал эту книгу» (опыт) → «чел съм»; «вчера я прочитал» (точное время) → аорист «прочетох»."
+    },
+    {
+      id: "pluperfect", when: "past", core: false,
+      name: { ru: "Плюсквамперфект (давнопрошедшее)", bg: "Минало предварително време" },
+      formula: { ru: "бях + причастие на -л", bg: "бях + минало деятелно причастие (-л)" },
+      short: { ru: "раньше другого события в прошлом", bg: "преди друго минало действие" },
+      uses: {
+        ru: ["Действие, завершённое до другого прошлого действия или момента.", "Нужен, только когда важен порядок двух событий. Иначе хватит аориста."],
+        bg: ["Действие, завършено преди друго минало действие или момент.", "Използва се, когато редът на двете събития е важен. Иначе стига аористът."]
+      },
+      aspect: {
+        i: { ru: "Реже: «Бях чел за това» — «Я уже читал об этом».", bg: "По-рядко: Бях чел за това." },
+        p: { ru: "Обычный выбор: «Филмът беше започнал» — «Фильм уже начался».", bg: "Обичайният избор: Филмът беше започнал." }
+      },
+      signals: ["вече", "преди това", "дотогава", "още не"],
+      examples: [
+        ["Когато пристигнахме, филмът вече " + b("p", "беше започнал") + ".", "Когда мы пришли, фильм уже начался."],
+        ["Не " + b("i", "бях чела") + " книгата преди филма.", "До фильма я не читала книгу."],
+        ["Той " + b("p", "беше забравил") + " ключовете вкъщи.", "Он (ещё раньше) забыл ключи дома."]
+      ],
+      neg: ["Не " + b("p", "бях прочел") + " условието.", "Я не прочитал условие заранее."],
+      q: [b("i", "Беше ли чел") + " книгата преди това?", "Ты читал книгу до этого?"],
+      tips: {
+        ru: ["В книгах встречается «бе» вместо «беше»: «бе започнал».", "Причастие согласуется с подлежащим, как в перфекте."],
+        bg: ["В книгите се среща „бе“ вместо „беше“: бе започнал.", "Причастието се съгласува с подлога, както в перфекта."]
+      },
+      ruCompare: "В русском это передают словом «уже» и обычным прошедшим. В болгарском для этого есть отдельное время."
+    },
+    {
+      id: "future", when: "future", core: true,
+      name: { ru: "Будущее время", bg: "Бъдеще време" },
+      formula: { ru: "ще + настоящее время", bg: "ще + сегашно време" },
+      short: { ru: "сделаю / буду делать", bg: "ще направя / ще правя" },
+      uses: {
+        ru: ["Любое будущее действие.", "Важны оба вида — вид передаёт смысл, как в русском."],
+        bg: ["Всяко бъдещо действие.", "И двата вида са чести – видът носи смисъла."]
+      },
+      aspect: {
+        i: { ru: "Процесс или регулярное действие: «ще чета» = «буду читать».", bg: "Процес или повторение: През лятото ще чета всеки ден." },
+        p: { ru: "Одно завершённое действие: «ще прочета» = «прочитаю».", bg: "Едно завършено действие: Утре ще прочета последната глава." }
+      },
+      signals: ["утре", "следващата седмица", "скоро", "по-късно", "догодина"],
+      examples: [
+        ["Утре " + b("p", "ще прочета") + " последната глава.", "Завтра я прочитаю последнюю главу."],
+        ["През лятото " + b("i", "ще чета") + " всеки ден.", "Летом я буду читать каждый день."],
+        ["Днес бързам и " + b("p", "ще взема") + " такси.", "Сегодня я тороплюсь и возьму такси."]
+      ],
+      neg: [b("i", "Няма да питам") + " повече.", "Больше не буду спрашивать."],
+      q: [b("p", "Ще дойдеш ли") + " довечера?", "Придёшь сегодня вечером?"],
+      tips: {
+        ru: ["«ще» не изменяется: ще чета, ще четеш, ще четат.", "Отрицание — «няма да» + глагол. Не говорите «не ще».", "В вопросе «ли» идёт после глагола: «Ще дойдеш ли?»"],
+        bg: ["„ще“ не се променя: ще чета, ще четеш, ще четат.", "Отрицанието е „няма да“ + глагол, а не „не ще“.", "Във въпрос „ли“ е след глагола: Ще дойдеш ли?"]
+      },
+      ruCompare: "«ще чета» = «буду читать», «ще прочета» = «прочитаю». Логика как в русском, только частица «ще» нужна всегда."
+    },
+    {
+      id: "fip", when: "future", core: true,
+      name: { ru: "Будущее в прошедшем", bg: "Бъдеще време в миналото" },
+      formula: { ru: "щях да + настоящее время", bg: "щях да + сегашно време" },
+      short: { ru: "собирался сделать; сделал бы", bg: "щях да направя" },
+      uses: {
+        ru: ["План, увиденный из прошлого: «собирался».", "Нереальное прошлое: «я бы сделал» (с «ако» + прошедшее)."],
+        bg: ["Бъдещо действие, гледано от миналото: щях да…, но…", "Нереално минало: Ако знаех, щях да дойда."]
+      },
+      aspect: {
+        i: { ru: "Процесс: «Щях да чета цяла вечер, но гостите дойдоха».", bg: "Процес: Щях да чета цяла вечер, но гостите дойдоха." },
+        p: { ru: "Обычный выбор: «Щях да ти се обадя, но забравих».", bg: "Обичайният избор: Щях да ти се обадя, но забравих." }
+      },
+      signals: ["…, но", "ако знаех", "иначе"],
+      examples: [
+        [b("p", "Щях да ти се обадя") + ", но забравих.", "Я собирался тебе позвонить, но забыл."],
+        ["Ако знаех, " + b("p", "щях да дойда") + ".", "Если бы я знал, я бы пришёл."],
+        [b("i", "Щяхме да ходим") + " на море, но заваля.", "Мы собирались на море, но пошёл дождь."]
+      ],
+      neg: [b("p", "Нямаше да дойда") + ", ако не ме беше поканил.", "Я бы не пришёл, если бы ты меня не пригласил."],
+      q: [b("p", "Щеше ли да дойдеш") + "?", "Ты собирался прийти? / Ты бы пришёл?"],
+      tips: {
+        ru: ["«щях» изменяется как прошедшее: щях, щеше, щяхме… После «да» — обычная форма настоящего.", "В косвенной речи не нужно: «Каза, че ще дойде» = «Сказал, что придёт».", "Отрицание: «нямаше да» + глагол."],
+        bg: ["„щях“ се променя като минало време: щях, щеше, щяхме… След „да“ е обикновена сегашна форма.", "При предаване на чужда реч не е нужно: Каза, че ще дойде.", "Отрицанието е „нямаше да“ + глагол."]
+      },
+      ruCompare: "Частая замена русского «бы» о прошлом: «я бы пришёл» = «щях да дойда»."
+    },
+    {
+      id: "fp", when: "future", core: false, impfRare: true,
+      name: { ru: "Будущее предварительное", bg: "Бъдеще предварително време" },
+      formula: { ru: "ще съм + причастие на -л", bg: "ще съм + минало деятелно причастие (-л)" },
+      short: { ru: "сделаю к какому-то моменту", bg: "ще съм направил до…" },
+      uses: {
+        ru: ["Действие, которое будет завершено до определённого момента в будущем."],
+        bg: ["Действие, което ще е завършено преди определен момент в бъдещето."]
+      },
+      aspect: { i: { ru: "Редко.", bg: "Рядко." }, p: { ru: "Обычный выбор: «До петък ще съм прочел книгата».", bg: "Обичайният избор: До петък ще съм прочел книгата." } },
+      signals: ["до петък", "дотогава", "когато се върнеш", "вече"],
+      examples: [
+        ["До петък " + b("p", "ще съм прочел") + " книгата.", "К пятнице я уже прочитаю книгу."],
+        ["Когато се върнеш, " + b("p", "ще сме направили") + " вечерята.", "Когда ты вернёшься, ужин уже будет готов."]
+      ],
+      neg: ["До утре " + b("p", "няма да съм свършил") + ".", "К завтрашнему дню я не успею закончить."],
+      tips: {
+        ru: ["Можно и «ще бъда» вместо «ще съм»: ще бъда прочел.", "В разговорной речи часто заменяют простым будущим: «До петък ще прочета книгата»."],
+        bg: ["Може и „ще бъда“ вместо „ще съм“: ще бъда прочел.", "В разговорната реч често се заменя с бъдеще време: До петък ще прочета книгата."]
+      },
+      ruCompare: "По-русски: «к пятнице уже прочитаю»."
+    },
+    {
+      id: "fpp", when: "future", core: false, impfRare: true,
+      name: { ru: "Будущее предварительное в прошедшем", bg: "Бъдеще предварително време в миналото" },
+      formula: { ru: "щях да съм + причастие на -л", bg: "щях да съм + минало деятелно причастие (-л)" },
+      short: { ru: "уже сделал бы к тому моменту", bg: "щях да съм направил" },
+      uses: {
+        ru: ["Самое редкое время. В основном нереальное прошлое.", "Достаточно его узнавать: обычно подходит и «щях да» + настоящее."],
+        bg: ["Най-рядкото време. Най-често за нереално минало.", "Достатъчно е да го разпознавате – обикновено може и „щях да“ + сегашно."]
+      },
+      aspect: { i: { ru: "Очень редко.", bg: "Много рядко." }, p: { ru: "Обычный выбор.", bg: "Обичайният избор." } },
+      signals: ["досега", "дотогава", "ако не беше…"],
+      examples: [["Ако влакът не беше закъснял, досега " + b("p", "щяхме да сме пристигнали") + ".", "Если бы поезд не опоздал, мы бы уже приехали."]],
+      neg: ["Без твоята помощ " + b("p", "нямаше да съм свършила") + " навреме.", "Без твоей помощи я бы не закончила вовремя."],
+      tips: { ru: ["Строится как будущее в прошедшем + «съм» + причастие."], bg: ["Образува се като бъдеще в миналото + „съм“ + причастие."] },
+      ruCompare: "По-русски: «уже бы…»."
+    },
+    {
+      id: "cond", when: "mood", core: true,
+      name: { ru: "Условное наклонение", bg: "Условно наклонение" },
+      formula: { ru: "бих + причастие на -л", bg: "бих + минало деятелно причастие (-л)" },
+      short: { ru: "«бы», вежливые просьбы", bg: "учтиви молби, „бих“" },
+      uses: {
+        ru: ["Вежливые просьбы и пожелания: «я бы хотел…»", "Совет: «на твоём месте я бы…»", "Гипотетические ситуации."],
+        bg: ["Учтиви молби и желания: Бих искал…", "Съвет: На твое място бих…", "Хипотетични ситуации."]
+      },
+      aspect: {
+        i: { ru: "Общее или длительное: «Бих чел повече, ако имах време» — «Я бы читал больше, будь у меня время».", bg: "Общо или продължително: Бих чел повече, ако имах време." },
+        p: { ru: "Одно действие: «Би ли ми помогнал?» — «Не мог бы ты мне помочь?»", bg: "Едно действие: Би ли ми помогнал?" }
+      },
+      signals: ["на твое място", "ако", "с удоволствие"],
+      examples: [
+        [b("i", "Бих искала") + " едно кафе, моля.", "Я бы хотела кофе, пожалуйста."],
+        [b("p", "Би ли ми помогнал") + "?", "Не мог бы ты мне помочь?"],
+        ["На твое място " + b("p", "бих попитал") + " учителя.", "На твоём месте я бы спросил учителя."]
+      ],
+      neg: ["Не " + b("p", "бих казал") + " това.", "Я бы так не сказал."],
+      q: [b("p", "Бихте ли повторили") + "?", "Не могли бы вы повторить?"],
+      tips: {
+        ru: ["Причастие согласуется: бих искал (м), бих искала (ж).", "Реальное условие: «ако» + настоящее и «ще»: «Ако имам време, ще дойда» — «Если будет время, приду»."],
+        bg: ["Причастието се съгласува: бих искал (м.р.), бих искала (ж.р.).", "Реално условие: ако + сегашно и „ще“: Ако имам време, ще дойда."]
+      },
+      ruCompare: "«бих» = русское «бы», но меняется по лицам: бих, би, бихме, бихте, биха. И «если будет время» = «ако имам време» (настоящее, без «ще»)."
+    },
+    {
+      id: "impv", when: "mood", core: true,
+      name: { ru: "Повелительное наклонение", bg: "Повелително наклонение" },
+      formula: { ru: "основа + -и / -ете или -й / -йте", bg: "основа + -и / -ете или -й / -йте" },
+      short: { ru: "приказы, просьбы", bg: "заповеди, молби" },
+      persons: ["ти", "вие", "не! (ти)"],
+      uses: {
+        ru: ["Приказы, просьбы, инструкции. Свои формы есть только у «ти» и «вие».", "«Давай(те)…» — «нека / да»: «Нека да опитаме!», «Да вървим!»"],
+        bg: ["Заповеди, молби, инструкции. Собствени форми има само за „ти“ и „вие“.", "За подкана: нека / да: Нека да опитаме! Да вървим!"]
+      },
+      aspect: {
+        i: { ru: "Повторяющееся действие и почти все запреты: «Не вземай!» — «Не бери!»", bg: "Повтарящо се действие и почти всички забрани: Не вземай!" },
+        p: { ru: "Одно конкретное действие: «Прочети това!» — «Прочитай это!»", bg: "Едно конкретно действие: Прочети това!" }
+      },
+      signals: ["моля", "хайде", "не"],
+      examples: [
+        [b("p", "Прочети") + " това, моля.", "Прочитай это, пожалуйста."],
+        [b("p", "Направете") + " упражнението вкъщи.", "Сделайте упражнение дома."],
+        ["Не " + b("i", "питай") + "!", "Не спрашивай!"]
+      ],
+      neg: ["Не " + b("i", "вземай") + " пари назаем.", "Не бери деньги в долг."],
+      tips: {
+        ru: ["Просьба: «Вземи!» Запрет: «Не вземай!» — переходим на НСВ, как в русском.", "Неправильные формы: ела / елате (иди сюда), виж / вижте (смотри), дай / дайте, яж / яжте (ешь), влез / влезте, излез / излезте."],
+        bg: ["Положително: Вземи! Отрицателно: Не вземай! – с несвършен вид.", "Неправилни форми: ела / елате, виж / вижте, дай / дайте, яж / яжте, влез / влезте, излез / излезте."]
+      },
+      ruCompare: "Правило вида такое же, как в русском: «возьми» (СВ), но «не бери» (НСВ)."
+    }
+  ];
+
+  /* ---------- Builder: one form split into explained pieces ---------- */
+  var PRES_END = {
+    I: [["а", "я", "м"], ["еш"], ["е"], ["ем"], ["ете"], ["ат", "ят"]],
+    II: [["а", "я"], ["иш"], ["и"], ["им"], ["ите"], ["ат", "ят"]],
+    III: [["м"], ["ш"], [""], ["ме"], ["те"], ["т"]]
+  };
+  var IMP_END = [["х"], ["ше"], ["ше"], ["хме"], ["хте"], ["ха"]];
+  function split(form, ends) {
+    var e = ends.slice().sort(function (a, c) { return c.length - a.length; }).filter(function (x) { return x && form.slice(-x.length) === x && form.length > x.length; })[0] || "";
+    return [form.slice(0, form.length - e.length), e];
+  }
+  var PN = { ru: ["«аз»", "«ти»", "«той / тя»", "«ние»", "«вие»", "«те»"], bg: ["„аз“", "„ти“", "„той / тя“", "„ние“", "„вие“", "„те“"] };
+  var GR = function (g, lang) { return lang === "ru" ? g + " спряжение" : g + " спрежение"; };
+
+  function info(kind, ctx, lang) {
+    var ru = lang === "ru", p = PN[lang][ctx.i];
+    switch (kind) {
+      case "end-present": return ctx.e ? (ru ? "-" + ctx.e + ": окончание для " + p + ", " + GR(ctx.g, lang) + "." : "-" + ctx.e + ": окончание за " + p + ", " + GR(ctx.g, lang) + ".")
+        : (ru ? "Без окончания: в III спряжении «той / тя» = основа." : "Без окончание: в III спрежение „той / тя“ = основата.");
+      case "end-aorist": return ctx.i === 1 || ctx.i === 2
+        ? (ru ? "В аористе у «ти» и «той / тя» нет окончания (у глаголов на -ох: -е)." : "В аориста „ти“ и „той / тя“ нямат окончание (при глаголите на -ох: -е).")
+        : (ru ? "-" + ctx.e + ": окончание аориста для " + p + ". Одинаково для всех глаголов." : "-" + ctx.e + ": окончание на аориста за " + p + ". Еднакво за всички глаголи.");
+      case "end-imperfect": return ru ? "-" + ctx.e + ": окончание имперфекта для " + p + ". -ше у «ти / той» — главный признак." : "-" + ctx.e + ": окончание на имперфекта за " + p + ". -ше при „ти / той“ е главният белег.";
+      case "end-impv": return ctx.e ? (ru ? "-" + ctx.e + ": повелительное для " + p + ". -и / -ете после согласной, -й / -йте после гласной." : "-" + ctx.e + ": повелително за " + p + ". -и / -ете след съгласна, -й / -йте след гласна.")
+        : (ru ? "Неправильная форма — просто запомнить." : "Неправилна форма – запомнете я.");
+      case "end-part": return ru ? "Причастие на -л: -л (м), -ла (ж), -ли (мн). Согласуется с подлежащим." : "Причастие на -л: -л (м.р.), -ла (ж.р.), -ли (мн.ч.). Съгласува се с подлога.";
+      case "stem-aorist": return ru ? "Основа аориста. Может отличаться от настоящего: взема → взех, пиша → писах." : "Основа на аориста. Може да се различава от сегашната: взема → взех, пиша → писах.";
+      case "stem-part": return ru ? "Основа причастия = аорист без -х: прочетох → прочел, взех → взел." : "Основата на причастието = аорист без -х: прочетох → прочел, взех → взел.";
+      case "stem": return ru ? "Основа глагола." : "Основа на глагола.";
+      case "ще": return ru ? "«ще» — частица будущего. Никогда не меняется." : "„ще“ – частица за бъдеще време. Не се променя.";
+      case "да": return ru ? "СВ в настоящем времени стоит только после «да» (ще, ако, когато)." : "Свършен вид в сегашно време стои само след „да“ (ще, ако, когато).";
+      case "aux": return ru ? "«" + ctx.w + "» — форма глагола «съм» для " + p + "." : "„" + ctx.w + "“ – форма на „съм“ за " + p + ".";
+      case "бях": return ru ? "«" + ctx.w + "» — «съм» в прошедшем для " + p + "." : "„" + ctx.w + "“ – „съм“ в минало време за " + p + ".";
+      case "щях": return ru ? "«" + ctx.w + "» — прошедшее от «ща» (хотеть) для " + p + ", затем «да»." : "„" + ctx.w + "“ – минало време на „ща“ за " + p + ", после „да“.";
+      case "бих": return ru ? "«" + ctx.w + "» = «бы». Меняется по лицам: бих, би, бихме, бихте, биха." : "„" + ctx.w + "“ – меня се по лица: бих, би, бихме, бихте, биха.";
+      case "не": return ru ? "Отрицание. Частицы (се, съм…) идут сразу после «не»." : "Отрицание. Кратките думи (се, съм…) идват веднага след „не“.";
+      case "няма да": return ru ? "Отрицание будущего: «няма да» вместо «ще»." : "Отрицание за бъдеще: „няма да“ вместо „ще“.";
+      case "нямаше да": return ru ? "Отрицание: «нямаше да» вместо «щях да»." : "Отрицание: „нямаше да“ вместо „щях да“.";
+      case "se": return ru ? "«" + ctx.w + "» — возвратная частица. После глагола, но перед ним после не / ще / да." : "„" + ctx.w + "“ – възвратна частица. След глагола, но пред него след не / ще / да.";
+    }
+    return "";
+  }
+
+  var PART_TENSES = { perfect: 1, pluperfect: 1, fp: 1, fpp: 1, cond: 1 };
+
+  /* Returns { pieces: [{t, k, info}], na: reason } for one cell of the builder. */
+  function build(tid, v, pf, i, gender, neg, lang) {
+    var f = pf ? v.pf : v.impf, se = v.se, out = [], g = f.group;
+    function P(t, k, inf) { out.push({ t: t, k: k, info: inf }); }
+    function pt(w, kind) { P(w, "pt", info(kind, { i: i, w: w }, lang)); }
+    function seP() { if (se) P(se, "se", info("se", { w: se }, lang)); }
+    function word(form, ends, endKind, stemKind) {
+      var s = split(form, ends);
+      P(s[0], "stem", info(stemKind || "stem", { i: i }, lang));
+      if (s[1]) P(s[1], "end", info(endKind, { i: i, e: s[1], g: g }, lang));
+      else if (endKind === "end-present" || endKind === "end-aorist" || endKind === "end-impv") out[out.length - 1].info += " " + info(endKind, { i: i, e: "", g: g }, lang);
+    }
+    function participle() {
+      var w = i < 3 ? (gender === "f" ? f.part.f : f.part.m) : f.part.pl;
+      word(w, ["ъл", "ла", "ли", "л"], "end-part", "stem-part");
+    }
+    function auxPiece(arr, kind) {
+      if (se && i === 2 && kind === "aux") { seP(); pt("е", "aux"); return; }
+      pt(arr[i], kind); seP();
+    }
+    var presWord = function () { word(f.pres[i], PRES_END[g][i], "end-present"); };
+
+    switch (tid) {
+      case "present":
+        if (pf) { pt("да", "да"); if (neg) pt("не", "не"); seP(); presWord(); }
+        else if (neg) { pt("не", "не"); seP(); presWord(); }
+        else { presWord(); seP(); }
+        break;
+      case "aorist":
+        var a2 = (i === 1 || i === 2) ? (f.aor[0].slice(-2) === "ох" ? ["е"] : [""]) : [["х"], 0, 0, ["хме"], ["хте"], ["ха"]][i];
+        if (neg) { pt("не", "не"); seP(); }
+        word(f.aor[i], a2, "end-aorist", "stem-aorist");
+        if (!neg) seP();
+        break;
+      case "imperfect":
+        if (pf || !f.imp) return { na: lang === "ru" ? "Имперфект СВ почти не используется — берите НСВ." : "Имперфект от свършен вид почти не се използва – вземете НСВ." };
+        if (neg) { pt("не", "не"); seP(); }
+        word(f.imp[i], IMP_END[i], "end-imperfect");
+        if (!neg) seP();
+        break;
+      case "perfect":
+        if (neg) pt("не", "не");
+        auxPiece(AUX, "aux"); participle(); break;
+      case "pluperfect":
+        if (neg) { pt("не", "не"); seP(); pt(BYAH[i], "бях"); }
+        else { pt(BYAH[i], "бях"); seP(); }
+        participle(); break;
+      case "future":
+        neg ? pt("няма да", "няма да") : pt("ще", "ще"); seP(); presWord(); break;
+      case "fip":
+        if (neg) pt("нямаше да", "нямаше да"); else pt(SHTYAH[i] + " да", "щях");
+        seP(); presWord(); break;
+      case "fp":
+        neg ? pt("няма да", "няма да") : pt("ще", "ще"); auxPiece(AUX, "aux"); participle(); break;
+      case "fpp":
+        if (neg) pt("нямаше да", "нямаше да"); else pt(SHTYAH[i] + " да", "щях");
+        auxPiece(AUX, "aux"); participle(); break;
+      case "cond":
+        if (neg) pt("не", "не");
+        pt(BIH[i], "бих"); seP(); participle(); break;
+      case "impv":
+        if (i !== 1 && i !== 4) return { na: lang === "ru" ? "Повелительное есть только для «ти» и «вие»." : "Повелително има само за „ти“ и „вие“." };
+        var banned = "не " + (se ? se + " " : "") + v.impf.impv[i === 1 ? 0 : 1];
+        if (neg && pf) return { na: lang === "ru" ? "Запрет — только НСВ: «" + banned + "»." : "Забрана – само с НСВ: „" + banned + "“." };
+        var iw = f.impv[i === 1 ? 0 : 1];
+        if (neg) { pt("не", "не"); seP(); }
+        word(iw, i === 1 ? ["и", "й"] : ["ете", "йте"], "end-impv");
+        if (!neg) seP();
+        break;
+    }
+    return { pieces: out };
+  }
+  function joinPieces(r) {
+    // stem + ending are written together; everything else separated by spaces
+    var s = "", prev = null;
+    r.pieces.forEach(function (p) { s += (prev && !(prev.k === "stem" && p.k === "end") ? " " : "") + p.t; prev = p; });
+    return s;
+  }
+
+  /* Cheat-sheet extras per tense: Russian equivalent, ending strip, timeline icon. */
+  var RUEQ = {
+    present: "делаю / делаю всегда", aorist: "сделал, делал (в известный момент)", imperfect: "делал, когда… / раньше делал",
+    perfect: "уже делал, бывал (опыт, результат)", pluperfect: "уже сделал до того", future: "сделаю / буду делать",
+    fip: "собирался сделать; сделал бы", fp: "уже сделаю к моменту", fpp: "уже сделал бы", cond: "сделал бы, хотел бы", impv: "сделай! / не делай!"
+  };
+  var STRIP = {
+    present: { rows: [["I", ["-а / -я", "-еш", "-е", "-ем", "-ете", "-ат / -ят"]], ["II", ["-я / -а", "-иш", "-и", "-им", "-ите", "-ят / -ат"]], ["III", ["-м", "-ш", "–", "-ме", "-те", "-т"]]] },
+    aorist: { rows: [["", ["-х", "– *", "– *", "-хме", "-хте", "-ха"]]], after: { ru: "* у глаголов на -ох: -е (прочете)", bg: "* при глаголите на -ох: -е (прочете)" } },
+    imperfect: { rows: [["", ["-х", "-ше", "-ше", "-хме", "-хте", "-ха"]]], after: { ru: "основа на -я / -е / -а: четях, правех, питах", bg: "основа на -я / -е / -а: четях, правех, питах" } },
+    perfect: { rows: [["", AUX]], after: { ru: "+ причастие: -л / -ла / -ли", bg: "+ причастие: -л / -ла / -ли" } },
+    pluperfect: { rows: [["", BYAH]], after: { ru: "+ причастие: -л / -ла / -ли", bg: "+ причастие: -л / -ла / -ли" } },
+    future: { rows: [["", ["ще", "ще", "ще", "ще", "ще", "ще"]]], after: { ru: "+ настоящее время", bg: "+ сегашно време" } },
+    fip: { rows: [["", SHTYAH]], after: { ru: "+ да + настоящее время", bg: "+ да + сегашно време" } },
+    fp: { rows: [["", AUX.map(function (a) { return "ще " + a; })]], after: { ru: "+ причастие", bg: "+ причастие" } },
+    fpp: { rows: [["", AUX.map(function (a, i) { return SHTYAH[i] + " да " + a; })]], after: { ru: "+ причастие", bg: "+ причастие" } },
+    cond: { rows: [["", BIH]], after: { ru: "+ причастие: -л / -ла / -ли", bg: "+ причастие: -л / -ла / -ли" } },
+    impv: { rows: [["", ["", "-и / -й", "", "", "-ете / -йте", ""]]], after: { ru: "запрет: не + НСВ (не вземай)", bg: "забрана: не + НСВ (не вземай)" } }
+  };
+  /* Tiny timeline glyphs: a line, a "now" tick at x=30, and marks for the event. */
+  var ICON_MARKS = {
+    present: '<circle cx="30" cy="8" r="4.5" class="m"/>',
+    aorist: '<circle cx="13" cy="8" r="4" class="m"/>',
+    imperfect: '<rect x="5" y="5" width="18" height="6" rx="3" class="m"/>',
+    perfect: '<circle cx="11" cy="8" r="3.5" class="m"/><path d="M15 8h11" class="a"/><path d="M23 5l3 3-3 3" class="a"/>',
+    pluperfect: '<circle cx="7" cy="8" r="3.5" class="m"/><circle cx="19" cy="8" r="3" class="o"/>',
+    future: '<circle cx="47" cy="8" r="4" class="m"/>',
+    fip: '<circle cx="12" cy="8" r="3" class="o"/><path d="M15 8h20" class="a d"/><circle cx="38" cy="8" r="3.5" class="m"/>',
+    fp: '<circle cx="40" cy="8" r="3.5" class="m"/><path d="M48 3v10" class="a"/>',
+    fpp: '<circle cx="9" cy="8" r="3" class="o"/><circle cx="20" cy="8" r="3.5" class="m d"/><path d="M26 3v10" class="a"/>',
+    cond: '<circle cx="30" cy="8" r="4.5" class="m d"/>',
+    impv: '<path d="M30 2v7" class="a w"/><circle cx="30" cy="13" r="1.6" class="m"/>'
+  };
+  function icon(tid) {
+    var line = tid === "impv" ? "" : '<path d="M2 8h52" class="l"/><path d="M30 3v10" class="n"/>';
+    return '<svg class="ticon" viewBox="0 0 56 16" aria-hidden="true">' + line + ICON_MARKS[tid] + "</svg>";
+  }
+
+  window.BG = {
+    VERBS: VERBS, TENSES: TENSES, PERSONS: PERSONS, AUX: AUX,
+    cells: cells, wordSet: wordSet, aux: aux,
+    build: build, joinPieces: joinPieces, PART_TENSES: PART_TENSES,
+    RUEQ: RUEQ, STRIP: STRIP, icon: icon
+  };
+})();
+
+</script>
+<script>
+(function () {
+  "use strict";
+  var G = window.BG, VERBS = G.VERBS, TENSES = G.TENSES;
+  var TBY = {}; TENSES.forEach(function (t) { TBY[t.id] = t; });
+  var CORE = TENSES.filter(function (t) { return t.core; }), RARE = TENSES.filter(function (t) { return !t.core; });
+
+  /* ---------- UI strings ---------- */
+  var U = {
+    ru: {
+      sub: "Шпаргалка по болгарским глаголам",
+      tForm: "Форма", tTenses: "Времена", tVerbs: "Глаголы",
+      impfS: "НСВ", pfS: "СВ", legI: "процесс, повторение", legP: "одно завершённое действие",
+      m: "м", f: "ж", neg: "не", rare: "редкие",
+      tapHint: "Нажмите на часть слова, чтобы узнать, откуда она.",
+      allPersons: "Все лица", aboutTense: "О времени →", change: "сменить",
+      search: "Поиск: вземам, vzemam или «брать»",
+      count: function (n) { return n + " " + plural(n, "глагол", "глагола", "глаголов"); },
+      none: "Ничего не нашлось. Попробуйте форму «аз» (вземам) или русский перевод.",
+      model: "модельный", back: "← Все глаголы", examples: "Примеры", tr: "Перевод",
+      openBuilder: "В конструктор", more: "Подробнее", less: "Свернуть",
+      choose: "Какое время выбрать?", say: "Хотите сказать…", use: "Берите",
+      aspectT: "НСВ или СВ?", rareT: "Редкие времена", stemsT: "Как получить основу",
+      when: "Когда", signals: "Слова-сигналы", tips: "Ловушки", compare: "По-русски",
+      negL: "Отрицание", qL: "Вопрос", forms: "Формы", group: "спр.", grid: "Все времена"
+    },
+    bg: {
+      sub: "Пищов за българските глаголи",
+      tForm: "Форма", tTenses: "Времена", tVerbs: "Глаголи",
+      impfS: "НСВ", pfS: "СВ", legI: "процес, повторение", legP: "едно завършено действие",
+      m: "м", f: "ж", neg: "не", rare: "редки",
+      tapHint: "Докоснете част от думата, за да видите откъде идва.",
+      allPersons: "Всички лица", aboutTense: "За времето →", change: "смени",
+      search: "Търсене: вземам, vzemam или „брать“",
+      count: function (n) { return n + " " + (n === 1 ? "глагол" : "глагола"); },
+      none: "Няма резултати. Опитайте с формата за „аз“ (вземам) или с превода.",
+      model: "модел", back: "← Всички глаголи", examples: "Примери", tr: "Превод",
+      openBuilder: "В конструктора", more: "Още", less: "Скрий",
+      choose: "Кое време да избера?", say: "Искате да кажете…", use: "Време",
+      aspectT: "НСВ или СВ?", rareT: "Редки времена", stemsT: "Как се получава основата",
+      when: "Кога", signals: "Сигнални думи", tips: "Капани", compare: "На руски",
+      negL: "Отрицание", qL: "Въпрос", forms: "Форми", group: "спр.", grid: "Всички времена"
+    }
+  };
+  function plural(n, one, few, many) {
+    var a = n % 10, b = n % 100;
+    return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
+  }
+
+  /* ---------- State ---------- */
+  var store = {
+    get: function (k) { try { return localStorage.getItem("glagoli3:" + k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem("glagoli3:" + k, v); } catch (e) { /* ignore */ } }
+  };
+  var DEFAULT_VERB = VERBS.filter(function (v) { return v.pf.inf === "взема"; })[0].id;
+  var savedB = null;
+  try { savedB = JSON.parse(store.get("builder") || "null"); } catch (e) { savedB = null; }
+  var S = {
+    lang: store.get("lang") === "bg" ? "bg" : "ru",
+    tab: "form", verb: null, query: "", tr: store.get("tr") !== "0",
+    open: {}, showRare: false, vperson: 0, vrare: false,
+    B: { verb: DEFAULT_VERB, tense: "present", person: 0, pf: false, gender: "m", neg: false, sel: -1, picking: false, q: "", rare: false }
+  };
+  if (savedB && VERBS[savedB.verb] && TBY[savedB.tense]) {
+    ["verb", "tense", "person", "pf", "gender", "neg"].forEach(function (k) { S.B[k] = savedB[k]; });
+  }
+  function saveB() { store.set("builder", JSON.stringify(S.B)); }
+  function t(k) { return U[S.lang][k]; }
+  function L(o) { return o ? (o[S.lang] || o.ru) : ""; }
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  var CHIP = {
+    ru: { present: "Настоящее", aorist: "Аорист", imperfect: "Имперфект", perfect: "Перфект", pluperfect: "Плюсквамперфект", future: "Будущее", fip: "Будущее в прош.", fp: "Буд. предварит.", fpp: "Буд. предв. в прош.", cond: "Условное", impv: "Повелительное" },
+    bg: { present: "Сегашно", aorist: "Аорист", imperfect: "Имперфект", perfect: "Перфект", pluperfect: "Мин. предварително", future: "Бъдеще", fip: "Бъдеще в миналото", fp: "Бъд. предварително", fpp: "Бъд. предв. в миналото", cond: "Условно", impv: "Повелително" }
+  };
+  function shortName(tn) { return CHIP[S.lang][tn.id]; }
+
+  /* ---------- Verb helpers ---------- */
+  function impfTitle(v) { return v.impf.inf + (v.se ? " " + v.se : "") + (v.opt ? " (" + v.opt + ")" : "") + (v.tail ? " " + v.tail : ""); }
+  function pfTitle(v) { return "да " + (v.se ? v.se + " " : "") + (v.opt ? "(" + v.opt + ") " : "") + v.pf.inf + (v.tail ? " " + v.tail : ""); }
+  function pairHTML(v) { return '<span class="i-txt">' + impfTitle(v) + '</span><span class="dash"> – </span><span class="p-txt">' + pfTitle(v) + "</span>"; }
+  var TR = { а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ж: "zh", з: "z", и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o", п: "p", р: "r", с: "s", т: "t", у: "u", ф: "f", х: "h", ц: "ts", ч: "ch", ш: "sh", щ: "sht", ъ: "a", ь: "y", ю: "yu", я: "ya" };
+  VERBS.forEach(function (v) {
+    var bg = (v.impf.inf + " " + v.pf.inf + " " + v.pf.pres[1]).toLowerCase();
+    v.hayBg = bg; v.hayLat = bg.replace(/[а-я]/g, function (c) { return TR[c] || c; }); v.hayRu = v.ru.toLowerCase();
+    v.setI = G.wordSet(v.impf); v.setP = G.wordSet(v.pf);
+  });
+  var SORTED = VERBS.slice().sort(function (a, b) { return a.impf.inf.localeCompare(b.impf.inf, "bg") || a.id - b.id; });
+  function search(q) {
+    q = q.trim().toLowerCase();
+    if (!q) return SORTED;
+    var lat = /[a-z]/.test(q);
+    return SORTED.filter(function (v) { return lat ? v.hayLat.indexOf(q) >= 0 : (v.hayBg.indexOf(q) >= 0 || v.hayRu.indexOf(q) >= 0); });
+  }
+  function highlight(text, v) {
+    var w = text.split(/([А-Яа-яЍѝ]+)/);
+    return w.map(function (x, i) {
+      if (i % 2 === 0) return esc(x);
+      var lw = x.toLowerCase(), a = v.setI[lw], b = v.setP[lw];
+      if (!a && !b) return x;
+      var cls = b && !a ? "p" : a && !b ? "i" : (/(^|\s)(да|ще|ако|когато|като)(\s+(се|си|ми|ти|му|ѝ|ни|ви|им|го|я|ги|те|ме))*\s*$/.test(w.slice(Math.max(0, i - 6), i).join(" ").toLowerCase()) ? "p" : "i");
+      return '<b class="' + cls + '">' + x + "</b>";
+    }).join("");
+  }
+  function ex(bg, ru) { return '<div class="ex-item"><span class="bgt">' + bg + '</span><span class="tr">' + esc(ru) + "</span></div>"; }
+  function trToggle() { return '<label class="tr-toggle"><input type="checkbox" class="trbox"' + (S.tr ? " checked" : "") + "> " + t("tr") + "</label>"; }
+
+  function cellText(tid, v, pf, i, gender, neg) {
+    var r = G.build(tid, v, pf, i, gender || "m", !!neg, S.lang);
+    if (r.na) return null;
+    var html = "", prev = null;
+    r.pieces.forEach(function (p) {
+      var glue = prev && prev.k === "stem" && p.k === "end";
+      html += (prev && !glue ? " " : "") + (p.k === "pt" || p.k === "se" ? '<span class="aux">' + p.t + "</span>" : p.k === "end" ? '<span class="endc">' + p.t + "</span>" : p.t);
+      prev = p;
+    });
+    return html;
+  }
+
+  /* ---------- Chrome ---------- */
+  function renderChrome() {
+    document.documentElement.lang = S.lang;
+    $("sub").textContent = t("sub");
+    $("leg").innerHTML = '<span><i class="dot i"></i><b>' + t("impfS") + "</b> " + t("legI") + '</span><span><i class="dot p"></i><b>' + t("pfS") + "</b> " + t("legP") + "</span>";
+    $("lang").innerHTML = ["ru", "bg"].map(function (l) { return '<button data-lang="' + l + '" aria-pressed="' + (S.lang === l) + '">' + l.toUpperCase() + "</button>"; }).join("");
+    ["form", "tenses", "verbs"].forEach(function (k) {
+      $("tab-btn-" + k).textContent = t({ form: "tForm", tenses: "tTenses", verbs: "tVerbs" }[k]);
+      $(k).hidden = S.tab !== k;
+      $("tab-btn-" + k).setAttribute("aria-selected", String(S.tab === k));
+    });
+    document.body.classList.toggle("no-tr", !S.tr);
+  }
+
+  /* ---------- Форма (builder) ---------- */
+  function renderForm() {
+    var B = S.B, v = VERBS[B.verb], tn = TBY[B.tense];
+    if (!tn.core) B.rare = true;
+    if (B.tense === "impv" && B.person !== 1 && B.person !== 4) B.person = 1;
+    var r = G.build(B.tense, v, B.pf, B.person, B.gender, B.neg, S.lang);
+    var html = '<div class="card builder">';
+
+    // verb
+    html += '<div class="b-verb"><button class="vpick" data-pick><span class="pair">' + pairHTML(v) + '</span><span class="chev">▾</span></button><span class="vmean">' + esc(v.ru) + "</span></div>";
+    if (B.picking) {
+      html += '<div class="picker"><input id="bq" type="search" autocomplete="off" spellcheck="false" placeholder="' + esc(t("search")) + '" value="' + esc(B.q) + '"><div class="plist">' +
+        search(B.q).slice(0, 12).map(function (x) { return '<button class="prow" data-bverb="' + x.id + '"><span class="pair">' + pairHTML(x) + '</span><span class="vmean">' + esc(x.ru) + "</span></button>"; }).join("") + "</div></div>";
+    }
+
+    // tense chips
+    var list = CORE.concat(B.rare ? RARE : []);
+    html += '<div class="b-tenses">' + list.map(function (x) {
+      return '<button class="tchip' + (x.core ? "" : " rare") + '" data-btense="' + x.id + '" aria-pressed="' + (x.id === B.tense) + '">' + G.icon(x.id) + "<span>" + shortName(x) + "</span></button>";
+    }).join("") + '<button class="tchip more" data-brare>' + (B.rare ? "−" : "+" + RARE.length + " " + t("rare")) + "</button></div>";
+
+    // person + toggles
+    var persons = G.PERSONS.map(function (p, i) {
+      var dis = B.tense === "impv" && i !== 1 && i !== 4;
+      return '<button class="pchip" data-bperson="' + i + '" aria-pressed="' + (i === B.person) + '"' + (dis ? " disabled" : "") + ">" + p + "</button>";
+    }).join("");
+    var needG = G.PART_TENSES[B.tense] && B.person < 3;
+    html += '<div class="b-ctl"><div class="pchips">' + persons + "</div>" +
+      '<div class="toggles"><div class="seg2 asp"><button data-bpf="0" aria-pressed="' + !B.pf + '" class="i">' + t("impfS") + '</button><button data-bpf="1" aria-pressed="' + B.pf + '" class="p">' + t("pfS") + "</button></div>" +
+      (needG ? '<div class="seg2"><button data-bg="m" aria-pressed="' + (B.gender === "m") + '">' + t("m") + '</button><button data-bg="f" aria-pressed="' + (B.gender === "f") + '">' + t("f") + "</button></div>" : "") +
+      '<button class="negbtn" data-bneg aria-pressed="' + B.neg + '">' + t("neg") + "</button></div></div>";
+
+    // output
+    var pron = B.person === 2 ? (needG && B.gender === "f" ? "тя" : "той") : G.PERSONS[B.person];
+    if (r.na) {
+      html += '<div class="b-out na"><span class="b-pron">' + pron + '</span><p class="b-na">' + esc(r.na) + "</p></div>";
+    } else {
+      var sel = B.sel >= 0 && B.sel < r.pieces.length ? B.sel : -1;
+      if (sel < 0) { r.pieces.forEach(function (p, i) { if (p.k === "end") sel = i; }); if (sel < 0) sel = r.pieces.length - 1; }
+      var word = "", prev = null;
+      r.pieces.forEach(function (p, i) {
+        var glue = prev && prev.k === "stem" && p.k === "end";
+        word += (prev && !glue ? '<span class="sp"> </span>' : "") + '<button class="pc k-' + p.k + (B.pf ? " pf" : " impf") + '" data-piece="' + i + '" aria-pressed="' + (i === sel) + '">' + p.t + "</button>";
+        prev = p;
+      });
+      html += '<div class="b-out"><span class="b-pron">' + pron + '</span><div class="b-word">' + word + '</div><p class="b-info">' + esc(r.pieces[sel].info) + "</p></div>";
+    }
+
+    // meta + all persons
+    html += '<div class="b-meta">' + G.icon(tn.id) + "<span><b>" + L(tn.name) + "</b> · " + (S.lang === "ru" ? "≈ " + G.RUEQ[tn.id] : L(tn.short)) + '</span><button class="link" data-totense="' + tn.id + '">' + t("aboutTense") + "</button></div>";
+    var rows = G.PERSONS.map(function (p, i) {
+      var c = cellText(B.tense, v, B.pf, i, B.gender, B.neg);
+      if (!c) return "";
+      return '<button class="arow" data-bperson="' + i + '" aria-pressed="' + (i === B.person) + '"><span class="who">' + p + '</span><span class="fm">' + c + "</span></button>";
+    }).join("");
+    html += '<div class="b-all"><span class="ctl-label">' + t("allPersons") + "</span>" + rows + "</div>";
+    html += "</div>";
+    if (v.ex && v.ex[0]) html += '<div class="card ex"><div class="card-h"><h3>' + t("examples") + "</h3>" + trToggle() + "</div>" + v.ex.map(function (e) { return ex(highlight(e[0], v), e[1]); }).join("") + "</div>";
+    $("form").innerHTML = html;
+    if (B.picking) { var q = $("bq"); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
+  }
+
+  /* ---------- Времена (cards) ---------- */
+  var CHOOSE = [
+    ["present", { ru: "делаю, делаю всегда", bg: "правя, правя винаги" }],
+    ["aorist", { ru: "сделал / делал — в известный момент", bg: "направих / правих – в определен момент" }],
+    ["imperfect", { ru: "делал, когда… · раньше делал", bg: "правех, когато… · навик в миналото" }],
+    ["perfect", { ru: "уже делал, бывал · результат сейчас", bg: "опит · резултат сега" }],
+    ["future", { ru: "сделаю / буду делать", bg: "ще направя / ще правя" }],
+    ["fip", { ru: "собирался… · сделал бы (о прошлом)", bg: "щях да…, но… · нереално минало" }],
+    ["cond", { ru: "сделал бы · хотел бы", bg: "бих направил · бих искал" }],
+    ["impv", { ru: "сделай! · не делай!", bg: "направи! · не прави!" }]
+  ];
+
+  function strip(tn) {
+    var s = G.STRIP[tn.id];
+    var head = '<tr><th></th>' + G.PERSONS.map(function (p) { return "<th>" + p + "</th>"; }).join("") + "</tr>";
+    var rows = s.rows.map(function (r) {
+      return "<tr><td class=\"g\">" + (r[0] ? r[0] : "") + "</td>" + r[1].map(function (c) { return "<td>" + (c || '<span class="na">·</span>') + "</td>"; }).join("") + "</tr>";
+    }).join("");
+    return '<div class="table-wrap"><table class="strip">' + head + rows + "</table></div>" + (s.after ? '<p class="after">' + L(s.after) + "</p>" : "");
+  }
+
+  function tenseCard(tn) {
+    var open = !!S.open[tn.id], e = tn.examples[0];
+    var h = '<article class="tcard" id="t-' + tn.id + '">' +
+      '<header class="tc-h">' + G.icon(tn.id) + '<div class="tc-names"><span class="tn">' + L(tn.name) + "</span>" +
+      '<span class="tc-sub">' + (S.lang === "ru" ? tn.name.bg + " · ≈ " + G.RUEQ[tn.id] : L(tn.short)) + "</span></div></header>" +
+      '<span class="formula">' + L(tn.formula) + "</span>" + strip(tn) + ex(e[0], e[1]) +
+      '<div class="row-btns"><button class="btn sm" data-tobuilder="' + tn.id + '">' + t("openBuilder") + ' →</button><button class="btn ghost sm" data-toggle="' + tn.id + '">' + (open ? t("less") : t("more")) + "</button></div>";
+    if (open) {
+      h += '<div class="tc-more">' +
+        '<div><h3>' + t("when") + '</h3><ul class="clean">' + L(tn.uses).map(function (u) { return "<li>" + u + "</li>"; }).join("") + "</ul></div>" +
+        '<div class="aspect-notes"><div class="an i"><span class="tag">' + t("impfS") + "</span><span>" + L(tn.aspect.i) + '</span></div><div class="an p"><span class="tag">' + t("pfS") + "</span><span>" + L(tn.aspect.p) + "</span></div></div>" +
+        '<div><h3>' + t("signals") + '</h3><div class="signals">' + tn.signals.map(function (s) { return '<span class="sig">' + s + "</span>"; }).join("") + "</div></div>" +
+        '<div><h3>' + t("tips") + '</h3><ul class="tips">' + L(tn.tips).map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ul></div>" +
+        (S.lang === "ru" && tn.ruCompare ? '<div class="compare"><h3>' + t("compare") + "</h3><p>" + tn.ruCompare + "</p></div>" : "") +
+        '<div class="ex">' + tn.examples.slice(1).map(function (x) { return ex(x[0], x[1]); }).join("") +
+        '<span class="ex-label">' + t("negL") + "</span>" + ex(tn.neg[0], tn.neg[1]) +
+        (tn.q ? '<span class="ex-label">' + t("qL") + "</span>" + ex(tn.q[0], tn.q[1]) : "") + "</div></div>";
+    }
+    return h + "</article>";
+  }
+
+  function renderTenses() {
+    var ru = S.lang === "ru";
+    var choose = '<div class="card"><h3>' + t("choose") + '</h3><div class="choose">' + CHOOSE.map(function (c) {
+      var tn = TBY[c[0]];
+      return '<button class="crow" data-jump="' + tn.id + '"><span class="say">' + L(c[1]) + '</span><span class="arrow">→</span><span class="ctn">' + G.icon(tn.id) + shortName(tn) + "</span></button>";
+    }).join("") + "</div></div>";
+
+    var aspect = '<div class="card"><h3>' + t("aspectT") + '</h3><div class="asp2">' +
+      '<div class="an i col"><span class="tag">' + t("impfS") + "</span><span>" + (ru ? "процесс, привычка, длительность, запрет" : "процес, навик, продължителност, забрана") + '</span><span class="sigs">винаги · обикновено · често · всеки ден · докато</span></div>' +
+      '<div class="an p col"><span class="tag">' + t("pfS") + "</span><span>" + (ru ? "одно действие с результатом" : "едно действие с резултат") + '</span><span class="sigs">веднъж · този път · изведнъж · до утре · за час</span></div></div>' +
+      (ru ? '<p class="src">Отличие от русского: СВ без «ще» / «да» не значит будущее. «Возьму» = «ще взема».</p>' : '<p class="src">Свършеният вид в сегашно време стои само след „да“, „ще“, „ако“, „когато“.</p>') + "</div>";
+
+    var stems = '<details class="card stems"><summary><h3>' + t("stemsT") + "</h3></summary>" +
+      '<div class="table-wrap"><table class="plain"><tbody>' +
+        "<tr><td>" + (ru ? "Аорист" : "Аорист") + "</td><td>" + (ru ? "III: -м → -х (питам → питах). I и II — гласная перед -х разная:" : "III: -м → -х (питам → питах). При I и II гласната пред -х е различна:") + "<br>-ох: чета → четох, дойда → дойдох · -ах / -ях: кажа → казах, видя → видях · -их: правя → правих · -х: взема → взех, чуя → чух</td></tr>" +
+        "<tr><td>" + (ru ? "Имперфект" : "Имперфект") + "</td><td>" + (ru ? "I и II: под ударением -ях, без ударения -ех (четях, правех); после ж, ч, ш — -ах. III: -м → -х (питах)." : "I и II: под ударение -ях, без ударение -ех (четях, правех); след ж, ч, ш – -ах. III: -м → -х (питах).") + "</td></tr>" +
+        "<tr><td>" + (ru ? "Причастие" : "Причастие") + "</td><td>" + (ru ? "аорист без -х + -л: правих → правил, взех → взел; -ох → -ъл: донесох → донесъл. Мн. ч.: я → е (видял → видели)." : "аорист без -х + -л: правих → правил, взех → взел; -ох → -ъл: донесох → донесъл. Мн.ч.: я → е (видял → видели).") + "</td></tr>" +
+        "<tr><td>" + (ru ? "Спряжение" : "Спрежение") + "</td><td>" + (ru ? "по форме «ти»: -еш → I, -иш → II, -аш / -яш → III" : "по формата за „ти“: -еш → I, -иш → II, -аш / -яш → III") + "</td></tr>" +
+      "</tbody></table></div></details>";
+
+    $("tenses").innerHTML = '<div class="tgrid-top">' + choose + aspect + "</div>" +
+      '<div class="tcards">' + CORE.map(tenseCard).join("") + "</div>" +
+      '<details class="rare-wrap"' + (S.showRare ? " open" : "") + '><summary class="btn ghost sm">' + t("rareT") + " (" + RARE.length + ')</summary><div class="tcards">' + RARE.map(tenseCard).join("") + "</div></details>" +
+      stems;
+  }
+
+  /* ---------- Глаголы ---------- */
+  function renderVerbs() {
+    var el = $("verbs");
+    if (S.verb !== null) { el.innerHTML = verbPage(VERBS[S.verb]); return; }
+    var list = search(S.query), keep = document.activeElement && document.activeElement.id === "q";
+    el.innerHTML = '<div class="search-row"><input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="' + esc(t("search")) + '" value="' + esc(S.query) + '"><span class="count">' + t("count")(list.length) + "</span></div>" +
+      (list.length ? '<div class="vlist">' + list.map(function (v) {
+        return '<button class="vrow" data-verb="' + v.id + '"><span class="pair">' + pairHTML(v) + '</span><span class="vmean">' + esc(v.ru) + '</span><span class="grp">' + v.impf.group + " · " + v.pf.group + (v.extra ? ' <em class="badge">' + t("model") + "</em>" : "") + "</span></button>";
+      }).join("") + "</div>" : '<p class="empty">' + t("none") + "</p>");
+    if (keep) { var q = $("q"); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
+  }
+
+  function verbPage(v) {
+    var i = S.vperson, tenses = CORE.concat(S.vrare ? RARE : []);
+    var persons = G.PERSONS.map(function (p, k) { return '<button class="pchip" data-vperson="' + k + '" aria-pressed="' + (k === i) + '">' + p + "</button>"; }).join("");
+    var rows = tenses.map(function (tn) {
+      var pi = tn.id === "impv" ? (i === 4 ? 4 : 1) : i;
+      var a = cellText(tn.id, v, false, pi), b = cellText(tn.id, v, true, pi);
+      return '<tr><th><button class="tlink" data-cell="' + tn.id + '|0|' + pi + '">' + G.icon(tn.id) + "<span>" + shortName(tn) + "</span></button></th>" +
+        '<td><button class="cell i" data-cell="' + tn.id + "|0|" + pi + '">' + (a || '<span class="na">—</span>') + "</button></td>" +
+        '<td><button class="cell p" data-cell="' + tn.id + "|1|" + pi + '">' + (b || '<span class="na">—</span>') + "</button></td></tr>";
+    }).join("");
+    return '<button class="back" data-back>' + t("back") + "</button>" +
+      '<div class="vhead"><h2 class="pairbig">' + pairHTML(v) + '</h2><p class="vru">' + esc(v.ru) + '</p><div class="badges"><span class="badge i">' + t("impfS") + " · " + v.impf.group + " " + t("group") + '</span><span class="badge p">' + t("pfS") + " · " + v.pf.group + " " + t("group") + "</span></div>" +
+      (v.note ? '<p class="note">' + esc(L(v.note)) + "</p>" : "") + "</div>" +
+      '<div class="card"><div class="card-h"><h3>' + t("grid") + '</h3><div class="pchips">' + persons + "</div></div>" +
+      '<div class="table-wrap"><table class="vgrid"><thead><tr><th></th><th class="i">' + t("impfS") + " · " + v.impf.inf + '</th><th class="p">' + t("pfS") + " · " + v.pf.inf + "</th></tr></thead><tbody>" + rows + "</tbody></table></div>" +
+      '<button class="link" data-vrare>' + (S.vrare ? "−" : "+" + RARE.length + " " + t("rare")) + "</button></div>" +
+      '<div class="card ex"><div class="card-h"><h3>' + t("examples") + "</h3>" + trToggle() + "</div>" + v.ex.map(function (e) { return ex(highlight(e[0], v), e[1]); }).join("") + "</div>";
+  }
+
+  /* ---------- Routing ---------- */
+  function setHash() {
+    var h = S.tab === "verbs" ? (S.verb !== null ? "verb-" + S.verb : "verbs") : S.tab;
+    try { history.replaceState(null, "", "#" + h); } catch (e) { /* ignore */ }
+  }
+  function readHash() {
+    var h = (location.hash || "").slice(1), m;
+    if ((m = /^verb-(\d+)$/.exec(h)) && VERBS[+m[1]]) { S.tab = "verbs"; S.verb = +m[1]; }
+    else if (h === "verbs") { S.tab = "verbs"; S.verb = null; }
+    else if (h === "tenses") S.tab = "tenses";
+    else if ((m = /^t-(\w+)$/.exec(h)) && TBY[m[1]]) { S.tab = "tenses"; S.open[m[1]] = true; S.jump = m[1]; }
+    else if (h === "form") S.tab = "form";
+  }
+  function render() {
+    renderChrome();
+    if (S.tab === "form") renderForm();
+    if (S.tab === "tenses") renderTenses();
+    if (S.tab === "verbs") renderVerbs();
+    setHash();
+    if (S.jump) { var el = $("t-" + S.jump); S.jump = null; if (el) el.scrollIntoView({ block: "start" }); }
+  }
+  function go(fn) { fn(); render(); window.scrollTo(0, 0); }
+  function setB(fn) { fn(S.B); S.B.sel = -1; saveB(); renderForm(); }
+
+  /* ---------- Events ---------- */
+  document.addEventListener("click", function (e) {
+    var el = e.target.closest("button, summary");
+    if (!el) return;
+    var d = el.dataset;
+    if (d.lang) { S.lang = d.lang; store.set("lang", S.lang); render(); return; }
+    if (d.tab) { go(function () { if (d.tab === "verbs" && S.tab === "verbs") S.verb = null; S.tab = d.tab; }); return; }
+    // builder
+    if ("pick" in d) { S.B.picking = !S.B.picking; renderForm(); return; }
+    if (d.bverb) { setB(function (B) { B.verb = +d.bverb; B.picking = false; B.q = ""; }); return; }
+    if (d.btense) { setB(function (B) { B.tense = d.btense; }); return; }
+    if ("brare" in d) { setB(function (B) { B.rare = !B.rare; if (!B.rare && !TBY[B.tense].core) B.tense = "present"; }); return; }
+    if (d.bperson) { setB(function (B) { B.person = +d.bperson; }); return; }
+    if (d.bpf) { setB(function (B) { B.pf = d.bpf === "1"; }); return; }
+    if (d.bg) { setB(function (B) { B.gender = d.bg; }); return; }
+    if ("bneg" in d) { setB(function (B) { B.neg = !B.neg; }); return; }
+    if (d.piece) { S.B.sel = +d.piece; renderForm(); return; }
+    if (d.totense) { go(function () { S.tab = "tenses"; S.open[d.totense] = true; S.jump = d.totense; }); return; }
+    // tenses
+    if (d.tobuilder) { S.B.tense = d.tobuilder; S.B.sel = -1; saveB(); go(function () { S.tab = "form"; }); return; }
+    if (d.toggle) { S.open[d.toggle] = !S.open[d.toggle]; renderTenses(); return; }
+    if (d.jump) { S.open[d.jump] = true; if (!TBY[d.jump].core) S.showRare = true; renderTenses(); var j = $("t-" + d.jump); if (j) j.scrollIntoView({ block: "start", behavior: "smooth" }); return; }
+    // verbs
+    if (d.verb) { go(function () { S.tab = "verbs"; S.verb = +d.verb; }); return; }
+    if ("back" in d) { go(function () { S.verb = null; }); return; }
+    if (d.vperson) { S.vperson = +d.vperson; renderVerbs(); return; }
+    if ("vrare" in d) { S.vrare = !S.vrare; renderVerbs(); return; }
+    if (d.cell) {
+      var c = d.cell.split("|"), vid = S.verb;
+      S.B.verb = vid; S.B.tense = c[0]; S.B.pf = c[1] === "1"; S.B.person = +c[2]; S.B.neg = false; S.B.sel = -1; saveB();
+      go(function () { S.tab = "form"; }); return;
+    }
+  });
+  document.addEventListener("input", function (e) {
+    if (e.target.id === "q") { S.query = e.target.value; renderVerbs(); }
+    if (e.target.id === "bq") { S.B.q = e.target.value; renderForm(); }
+  });
+  document.addEventListener("change", function (e) {
+    if (e.target.classList.contains("trbox")) {
+      S.tr = e.target.checked; store.set("tr", S.tr ? "1" : "0"); document.body.classList.toggle("no-tr", !S.tr);
+      Array.prototype.forEach.call(document.querySelectorAll(".trbox"), function (b) { b.checked = S.tr; });
+    }
+  });
+  document.addEventListener("toggle", function (e) { if (e.target.classList && e.target.classList.contains("rare-wrap")) S.showRare = e.target.open; }, true);
+  window.addEventListener("hashchange", function () { readHash(); render(); });
+
+  readHash();
+  render();
+})();
+
+</script>
+
+</body>
+</html>
