@@ -66,7 +66,7 @@
     lang: store.get("lang") === "bg" ? "bg" : "ru",
     tab: "form", verb: null, query: "", tr: store.get("tr") !== "0", legend: false,
     open: {}, showRare: false, vperson: 0, vrare: false,
-    B: { verb: DEFAULT_VERB, tense: "present", person: 0, pf: false, gender: "m", neg: false, sel: -1, picking: false, q: "" },
+    B: { verb: DEFAULT_VERB, tense: "present", person: 0, pf: false, gender: "m", neg: false, sel: -1, picking: false, q: "", open: false },
     anim: null, prev: null
   };
   if (savedB && VERBS[savedB.verb] && TBY[savedB.tense]) {
@@ -143,38 +143,24 @@
   }
 
   /* ---------- Форма (builder) ---------- */
+  function plainCell(tid, v, pf, i) {
+    var r = G.build(tid, v, pf, i, S.B.gender, S.B.neg, S.lang);
+    return r.na ? "" : G.joinPieces(r);
+  }
   function renderForm() {
     var B = S.B, v = VERBS[B.verb], tn = TBY[B.tense], grp = groupOf(B.tense);
+    var partT = !!G.PART_TENSES[B.tense];
     if (B.tense === "impv" && B.person !== 1 && B.person !== 4) B.person = 1;
-    var needG = !!G.PART_TENSES[B.tense] && B.person < 3;
-    var r = G.build(B.tense, v, B.pf, B.person, B.gender, B.neg, S.lang);
 
-    // result
-    var pron = B.person === 2 ? (needG && B.gender === "f" ? "тя" : "той") : G.PERSONS[B.person];
-    var result;
-    if (r.na) {
-      result = '<div class="b-result"><span class="b-pron bg">' + pron + '</span><p class="b-na">' + esc(r.na) + "</p>" + meta(tn) + "</div>";
-      S.prev = null;
-    } else {
-      var key = B.verb + "|" + B.tense + "|" + B.pf;
-      var texts = r.pieces.map(function (p) { return p.t; });
-      var changed = {}, fade = false;
-      if (S.anim && S.prev) {
-        if (S.prev.key !== key || S.anim === "fade") fade = true;
-        else texts.forEach(function (x, i) { if (S.prev.texts.length !== texts.length || S.prev.texts[i] !== x) changed[i] = 1; });
-      }
-      S.prev = { key: key, texts: texts };
-      var sel = B.sel >= 0 && B.sel < r.pieces.length ? B.sel : -1;
-      if (sel < 0) { r.pieces.forEach(function (p, i) { if (p.k === "end") sel = i; }); if (sel < 0) sel = r.pieces.length - 1; }
-      var word = "", open = false;
-      r.pieces.forEach(function (p, i) {
-        var next = r.pieces[i + 1];
-        if (p.k === "stem" && next && next.k === "end") { word += '<span class="w">'; open = true; }
-        word += '<button class="pc k-' + p.k + (B.pf ? " pf" : " impf") + (changed[i] ? " chg" : "") + '" data-piece="' + i + '" aria-pressed="' + (i === sel) + '">' + p.t + "</button>";
-        if (open && p.k === "end") { word += "</span>"; open = false; }
-      });
-      result = '<div class="b-result"><span class="b-pron bg">' + pron + '</span><div class="b-word' + (fade ? " fade" : "") + '">' + word + '</div><p class="b-info">' + esc(r.pieces[sel].info) + "</p>" + meta(tn) + "</div>";
+    // change detection: tense/verb change → fade the table; не / м-ж → flash changed cells
+    var key = B.verb + "|" + B.tense, now = {}, changed = {}, fade = false;
+    for (var i = 0; i < 6; i++) for (var a = 0; a < 2; a++) now[i + "|" + a] = plainCell(B.tense, v, !!a, i);
+    if (S.anim && S.prev) {
+      if (S.prev.key !== key || S.anim === "fade") fade = true;
+      else if (S.anim === "chg") Object.keys(now).forEach(function (k) { if (now[k] !== S.prev.cells[k]) changed[k] = 1; });
     }
+    S.prev = { key: key, cells: now };
+    var selAnim = S.anim === "sel";
     S.anim = null;
 
     // verb picker
@@ -184,7 +170,7 @@
         search(B.q).slice(0, 15).map(function (x) { return '<button class="prow" data-bverb="' + x.id + '"><span class="pair">' + pairHTML(x) + '</span><span class="vmean">' + esc(x.ru) + "</span></button>"; }).join("") + "</div></div>" : "") +
       "</div>";
 
-    // controls
+    // tense picker
     var groups = '<div class="seg" role="group">' + GROUPS.map(function (g) {
       return '<button data-bgroup="' + g.id + '" aria-pressed="' + (g === grp) + '">' + L(g.name) + "</button>";
     }).join("") + "</div>";
@@ -192,32 +178,49 @@
       var x = TBY[id];
       return '<button class="tbtn' + (x.core ? "" : " rare") + '" data-btense="' + id + '" aria-pressed="' + (id === B.tense) + '">' + G.icon(id) + "<span>" + shortName(x) + "</span></button>";
     }).join("") + "</div>" : "";
-    var persons = '<div class="persons"><span class="label">' + t("sg") + '</span><span class="label">' + t("pl") + "</span>" +
-      GRID_ORDER.map(function (i) {
-        var dis = B.tense === "impv" && i !== 1 && i !== 4;
-        return '<button class="pbtn" data-bperson="' + i + '" aria-pressed="' + (i === B.person) + '"' + (dis ? " disabled" : "") + ">" + G.PERSONS[i] + "</button>";
-      }).join("") + "</div>";
-    var togs = '<div class="togs">' +
-      '<div class="seg asp"><button class="i" data-bpf="0" aria-pressed="' + !B.pf + '">' + t("impfS") + '</button><button class="p" data-bpf="1" aria-pressed="' + B.pf + '">' + t("pfS") + "</button></div>" +
-      '<div class="seg"><button data-bgen="m" aria-pressed="' + (B.gender === "m") + '"' + (needG ? "" : " disabled") + ">" + t("m") + '</button><button data-bgen="f" aria-pressed="' + (B.gender === "f") + '"' + (needG ? "" : " disabled") + ">" + t("f") + "</button></div>" +
+    var ctl = '<div class="ctl">' + groups + tlist + "</div>";
+
+    // detail of the selected cell
+    var r = G.build(B.tense, v, B.pf, B.person, B.gender, B.neg, S.lang);
+    var pron = (B.person === 2 && partT ? (B.gender === "f" ? "тя" : "той") : G.PERSONS[B.person]) + " · " + (B.pf ? t("pfS") : t("impfS"));
+    var detail;
+    if (r.na) {
+      detail = '<div class="b-detail"><span class="b-pron">' + pron + '</span><p class="b-na">' + esc(r.na) + "</p></div>";
+    } else {
+      var sp = B.sel >= 0 && B.sel < r.pieces.length ? B.sel : -1;
+      if (sp < 0) { r.pieces.forEach(function (pc, k) { if (pc.k === "end") sp = k; }); if (sp < 0) sp = r.pieces.length - 1; }
+      var word = "", open = false;
+      r.pieces.forEach(function (pc, k) {
+        var next = r.pieces[k + 1];
+        if (pc.k === "stem" && next && next.k === "end") { word += '<span class="w">'; open = true; }
+        word += '<button class="pc k-' + pc.k + (B.pf ? " pf" : " impf") + '" data-piece="' + k + '" aria-pressed="' + (k === sp) + '">' + pc.t + "</button>";
+        if (open && pc.k === "end") { word += "</span>"; open = false; }
+      });
+      detail = '<div class="b-detail"><span class="b-pron">' + pron + '</span><div class="b-word' + (selAnim || fade ? " fade" : "") + '">' + word + '</div><p class="b-info">' + esc(r.pieces[sp].info) + "</p></div>";
+    }
+
+    // the table: all persons × НСВ | СВ
+    var tools = '<div class="t-tools"><span class="t-name">' + G.icon(tn.id) + "<b>" + shortName(tn) + "</b></span>" +
+      (partT ? '<div class="seg"><button data-bgen="m" aria-pressed="' + (B.gender === "m") + '">' + t("m") + '</button><button data-bgen="f" aria-pressed="' + (B.gender === "f") + '">' + t("f") + "</button></div>" : "") +
       '<button class="negbtn" data-bneg aria-pressed="' + B.neg + '">' + t("neg") + "</button></div>";
-    var ctl = '<div class="ctl">' + groups + tlist + persons + togs + meta(tn) + "</div>";
-
-    // all persons
     var rows = G.PERSONS.map(function (p, i) {
-      var c = cellText(B.tense, v, B.pf, i, B.gender, B.neg);
-      if (!c) return "";
-      return '<button class="arow" data-bperson="' + i + '" aria-pressed="' + (i === B.person) + '"><span class="who">' + p + '</span><span class="fm">' + c + "</span></button>";
+      var who = i === 2 ? (partT && B.gender === "f" ? "тя" : "той") : p;
+      var tds = [0, 1].map(function (a) {
+        var c = cellText(B.tense, v, !!a, i, B.gender, B.neg), sel = B.open && i === B.person && !!a === B.pf;
+        return '<td><button class="fcell ' + (a ? "p" : "i") + (changed[i + "|" + a] ? " chg" : "") + (c ? "" : " empty") + '" data-fcell="' + i + "|" + a + '" aria-pressed="' + sel + '">' + (c || "—") + "</button></td>";
+      }).join("");
+      if (!now[i + "|0"] && !now[i + "|1"] && !(B.open && i === B.person)) return "";
+      return '<tr><th class="who">' + who + "</th>" + tds + "</tr>" + (B.open && i === B.person ? '<tr class="drow"><td colspan="3">' + detail + "</td></tr>" : "");
     }).join("");
-    var all = '<div class="all"><span class="label">' + t("allPersons") + "</span>" + rows + "</div>";
-    var exs = examplesPanel(v);
+    var table = '<div class="panel tpanel">' + tools +
+      '<table class="ftable' + (fade ? " fade" : "") + '"><colgroup><col class="cw"><col><col></colgroup><thead><tr><th></th>' +
+      '<th class="i">' + t("impfS") + ' <span class="bg">' + v.impf.inf + '</span></th><th class="p">' + t("pfS") + ' <span class="bg">' + v.pf.inf + "</span></th></tr></thead><tbody>" + rows + "</tbody></table>" +
+      '<div class="b-meta"><span><b>' + L(tn.name) + "</b> · " + (S.lang === "ru" ? "≈ " + G.RUEQ[tn.id] : L(tn.short)) + '</span><button class="link" data-totense="' + tn.id + '">' + t("aboutTense") + "</button></div></div>";
 
-    $("form").innerHTML = '<div class="builder"><div class="b-col left">' + verb + ctl + exs + '</div><div class="b-col right">' + result + all + "</div></div>";
+    $("form").innerHTML = '<div class="builder"><div class="b-col left">' + verb + ctl + examplesPanel(v) + '</div><div class="b-col right">' + table + "</div></div>";
     if (B.picking) { var q = $("bq"); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
   }
-  function meta(tn) {
-    return '<div class="b-meta">' + G.icon(tn.id) + "<span><b>" + L(tn.name) + "</b>" + (S.lang === "ru" ? " · ≈ " + G.RUEQ[tn.id] : " · " + L(tn.short)) + '</span><button class="link" data-totense="' + tn.id + '">' + t("aboutTense") + "</button></div>";
-  }
+
 
   /* ---------- Времена ---------- */
   var CHOOSE = [
@@ -352,6 +355,10 @@
     if (d.bpf) { setB(function (B) { B.pf = d.bpf === "1"; }, "fade"); return; }
     if (d.bgen) { setB(function (B) { B.gender = d.bgen; }); return; }
     if ("bneg" in d) { setB(function (B) { B.neg = !B.neg; }); return; }
+    if (d.fcell) {
+      var fc = d.fcell.split("|"), same = S.B.open && S.B.person === +fc[0] && S.B.pf === (fc[1] === "1");
+      S.B.person = +fc[0]; S.B.pf = fc[1] === "1"; S.B.open = !same; S.B.sel = -1; S.anim = "sel"; saveB(); renderForm(); return;
+    }
     if (d.piece) { S.B.sel = +d.piece; renderForm(); return; }
     if (d.totense) { go(function () { S.tab = "tenses"; S.open[d.totense] = true; S.jump = d.totense; if (!TBY[d.totense].core) S.showRare = true; }); return; }
     // tenses
@@ -365,7 +372,7 @@
     if ("vrare" in d) { S.vrare = !S.vrare; renderVerbs(); return; }
     if (d.cell) {
       var c = d.cell.split("|");
-      S.B.verb = S.verb; S.B.tense = c[0]; S.B.pf = c[1] === "1"; S.B.person = +c[2]; S.B.neg = false; S.B.sel = -1; saveB();
+      S.B.verb = S.verb; S.B.tense = c[0]; S.B.pf = c[1] === "1"; S.B.person = +c[2]; S.B.neg = false; S.B.open = true; S.B.sel = -1; saveB();
       go(function () { S.tab = "form"; }); return;
     }
   });
