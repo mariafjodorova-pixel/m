@@ -27,7 +27,13 @@
       openBuilder: "Открыть в конструкторе →", more: "Подробнее", less: "Свернуть",
       choose: "Какое время выбрать?", aspectT: "НСВ или СВ?", rareT: "Редкие времена", stemsT: "Как получить основу",
       when: "Когда", signals: "Слова-сигналы", tips: "Ловушки", compare: "По-русски",
-      negL: "Отрицание", qL: "Вопрос", group: "спр.", grid: "Все времена", formula: "Формула"
+      negL: "Отрицание", qL: "Вопрос", group: "спр.", grid: "Все времена", formula: "Формула",
+      tPractice: "Практика", mForms: "Формы", mAspect: "Вид", mTense: "Время",
+      qForms: "Выберите правильную форму", qAspect: "НСВ или СВ? Вставьте глагол", qTense: "Какое время подходит?",
+      right: "верно", streak: "серия", best: "рекорд", yes: "Верно!", no: "Неверно", next: "Дальше →",
+      keys: "Клавиши: 1–4 — ответ, Enter — дальше", sigs: "Слова-сигналы", inBuilder: "Открыть в конструкторе",
+      whyI: "НСВ: процесс, повторение, привычка.", whyP: "СВ: одно завершённое действие с результатом.",
+      orig: "Так в оригинале из вашего списка:"
     },
     bg: {
       sub: "пищов", tForm: "Форма", tTenses: "Времена", tVerbs: "Глаголи",
@@ -42,7 +48,13 @@
       openBuilder: "Отвори в конструктора →", more: "Още", less: "Скрий",
       choose: "Кое време да избера?", aspectT: "НСВ или СВ?", rareT: "Редки времена", stemsT: "Как се получава основата",
       when: "Кога", signals: "Сигнални думи", tips: "Капани", compare: "На руски",
-      negL: "Отрицание", qL: "Въпрос", group: "спр.", grid: "Всички времена", formula: "Образуване"
+      negL: "Отрицание", qL: "Въпрос", group: "спр.", grid: "Всички времена", formula: "Образуване",
+      tPractice: "Упражнения", mForms: "Форми", mAspect: "Вид", mTense: "Време",
+      qForms: "Изберете правилната форма", qAspect: "НСВ или СВ? Попълнете глагола", qTense: "Кое време е правилно?",
+      right: "вярно", streak: "серия", best: "рекорд", yes: "Вярно!", no: "Грешно", next: "Напред →",
+      keys: "Клавиши: 1–4 – отговор, Enter – напред", sigs: "Сигнални думи", inBuilder: "Отвори в конструктора",
+      whyI: "НСВ: процес, повторение, навик.", whyP: "СВ: едно завършено действие с резултат.",
+      orig: "Така е в оригинала от вашия списък:"
     }
   };
   function plural(n, one, few, many) {
@@ -134,8 +146,9 @@
     $("help").setAttribute("aria-expanded", String(S.legend));
     $("legend").hidden = !S.legend;
     $("legend").innerHTML = '<div class="row"><i class="dot i"></i><span><b class="i">' + t("impfS") + "</b> " + t("legI") + '</span></div><div class="row"><i class="dot p"></i><span><b class="p">' + t("pfS") + "</b> " + t("legP") + '</span></div><div class="row"><i class="dot h"></i><span>' + t("legH") + '</span></div><p class="muted">' + t("legTap") + "</p>";
-    ["form", "tenses", "verbs"].forEach(function (k) {
-      $("tab-btn-" + k).querySelector("span").textContent = t({ form: "tForm", tenses: "tTenses", verbs: "tVerbs" }[k]);
+    document.querySelector("nav.tabs").style.setProperty("--active-tab", "var(--tab-" + S.tab + ")");
+    ["form", "tenses", "verbs", "practice"].forEach(function (k) {
+      $("tab-btn-" + k).querySelector("span").textContent = t({ form: "tForm", tenses: "tTenses", verbs: "tVerbs", practice: "tPractice" }[k]);
       $(k).hidden = S.tab !== k;
       $("tab-btn-" + k).setAttribute("aria-selected", String(S.tab === k));
     });
@@ -314,6 +327,179 @@
       examplesPanel(v);
   }
 
+  /* ---------- Практика ---------- */
+  function rnd(n) { return Math.floor(Math.random() * n); }
+  function pick(a) { return a[rnd(a.length)]; }
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = rnd(i + 1), x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
+  function uniq(a) { return a.filter(function (x, i) { return x && a.indexOf(x) === i; }); }
+  function cap(w, like) { return like && like.charAt(0) !== like.charAt(0).toLowerCase() ? w.charAt(0).toUpperCase() + w.slice(1) : w; }
+
+  var P = { mode: store.get("pmode") || "forms", q: null, ans: -1, right: 0, total: 0, streak: 0, best: +(store.get("best") || 0), deck: [] };
+  if (["forms", "aspect", "tense"].indexOf(P.mode) < 0) P.mode = "forms";
+
+  /* 1. Формы: the engine builds the answer and plausible wrong answers */
+  var PR_TENSES = ["present", "aorist", "imperfect", "perfect", "future", "fip", "cond", "impv"];
+  var CONF = { present: ["future"], aorist: ["imperfect", "perfect"], imperfect: ["aorist"], perfect: ["aorist", "pluperfect"], future: ["present", "fip"], fip: ["future", "cond"], cond: ["fip", "perfect"], impv: ["present"] };
+  function formStr(tid, v, pf, i) { var r = G.build(tid, v, pf, i, "m", false, S.lang); return r.na ? null : G.joinPieces(r); }
+  function genForms() {
+    for (var n = 0; n < 60; n++) {
+      var v = pick(VERBS), tid = pick(PR_TENSES), pf = Math.random() < 0.5, i = rnd(6);
+      if (tid === "impv") i = pick([1, 4]);
+      if (tid === "imperfect") pf = false;
+      var c = formStr(tid, v, pf, i);
+      if (!c) continue;
+      var others = shuffle([0, 1, 2, 3, 4, 5].filter(function (k) { return k !== i && !(tid === "impv" && k !== 1 && k !== 4); }));
+      var pool = [formStr(tid, v, !pf, i)]
+        .concat(shuffle(CONF[tid] || []).map(function (t2) { return formStr(t2, v, pf, i); }))
+        .concat(others.map(function (k) { return formStr(tid, v, pf, k); }));
+      var wrong = uniq(pool).filter(function (x) { return x !== c; }).slice(0, 3);
+      if (wrong.length < 2) continue;
+      return { mode: "forms", v: v.id, tid: tid, pf: pf, i: i, opts: shuffle([c].concat(wrong)), ok: c };
+    }
+    return null;
+  }
+
+  /* 2. Вид: a sentence from the PDF with one verb form blanked */
+  var ASPECT_ITEMS = null;
+  function keysOf(f, w) {
+    var ks = [];
+    ["pres", "aor", "imp", "impv"].forEach(function (a) { (f[a] || []).forEach(function (x, j) { if (x === w) ks.push(a + "|" + j); }); });
+    ["m", "f", "n", "pl"].forEach(function (g) { if (f.part[g] === w) ks.push("part|" + g); });
+    return ks;
+  }
+  function formAt(f, k) { var p = k.split("|"); if (p[0] === "part") return f.part[p[1]]; return f[p[0]] ? f[p[0]][+p[1]] : null; }
+  function clsOf(words, i, v) {
+    var lw = words[i].toLowerCase(), a = v.setI[lw], b = v.setP[lw];
+    if (!a && !b) return null;
+    if (b && !a) return "p";
+    if (a && !b) return "i";
+    return /(^|\s)(да|ще|ако|когато|като)(\s+(се|си|ми|ти|му|ѝ|ни|ви|им|го|я|ги|те|ме))*\s*$/.test(words.slice(Math.max(0, i - 6), i).join(" ").toLowerCase()) ? "p" : "i";
+  }
+  function aspectItems() {
+    if (ASPECT_ITEMS) return ASPECT_ITEMS;
+    ASPECT_ITEMS = [];
+    VERBS.forEach(function (v) {
+      if (v.extra) return;
+      v.ex.forEach(function (ex, e) {
+        var w = ex[0].split(/([А-Яа-яЍѝ]+)/);
+        for (var k = 1; k < w.length; k += 2) {
+          var cls = clsOf(w, k, v);
+          if (!cls) continue;
+          var mine = cls === "i" ? v.impf : v.pf, opp = cls === "i" ? v.pf : v.impf, lw = w[k].toLowerCase();
+          var other = uniq(keysOf(mine, lw).map(function (key) { return formAt(opp, key); }));
+          if (other.length !== 1 || other[0] === lw) continue;
+          ASPECT_ITEMS.push({ v: v.id, e: e, k: k, cls: cls, other: other[0] });
+        }
+      });
+    });
+    return ASPECT_ITEMS;
+  }
+  function genAspect() {
+    var it = pick(aspectItems()), v = VERBS[it.v], w = v.ex[it.e][0].split(/([А-Яа-яЍѝ]+)/), orig = w[it.k];
+    return { mode: "aspect", it: it, opts: shuffle([orig, cap(it.other, orig)]), ok: orig };
+  }
+  var SIGNALS = { i: ["обикновено", "винаги", "никога", "рядко", "често", "всеки", "всяка", "всяко", "понякога", "докато", "постоянно", "най-често"], p: ["този път", "веднага", "веднъж", "изведнъж", "най-накрая", "до края"] };
+  function signalsIn(text) {
+    var low = " " + text.toLowerCase().replace(/[.,!?;:–—"„“«»-]/g, " ") + " ", out = [];
+    ["i", "p"].forEach(function (a) { SIGNALS[a].forEach(function (sg) { if (low.indexOf(" " + sg + " ") >= 0) out.push('<span class="pr-tag bg ' + a + '">' + sg + "</span>"); }); });
+    return out.join(" ");
+  }
+
+  /* 3. Время: hand-written sentences for the confusable tenses */
+  var TQ = [
+    { s: "Вчера ___ цялата книга.", o: ["прочетох", "четях", "съм прочел"], ru: "Вчера я прочитал(а) всю книгу.", why: { ru: "Действие закончилось в известный момент («вчера») → аорист.", bg: "Действието е завършено в определен момент („вчера“) → аорист." } },
+    { s: "Когато ти се обади, ___ книга.", o: ["четях", "прочетох", "ще чета"], ru: "Когда ты позвонил(а), я читал(а) книгу.", why: { ru: "Фон, который прервало другое событие → имперфект.", bg: "Фон, прекъснат от друго събитие → имперфект." } },
+    { s: "Досега ___ тази книга три пъти.", o: ["съм чел", "четях", "ще прочета"], ru: "Я уже трижды читал эту книгу.", why: { ru: "Опыт до настоящего момента, время не важно («досега») → перфект.", bg: "Опит до момента, времето не е важно („досега“) → перфект." } },
+    { s: "Когато бях малка, всяко лято ___ на море.", o: ["ходех", "отидох", "ще ходя"], ru: "Когда я была маленькой, каждое лето я ездила на море.", why: { ru: "Привычка в прошлом («всяко лято») → имперфект.", bg: "Навик в миналото („всяко лято“) → имперфект." } },
+    { s: "Утре ___ на работа по-рано.", o: ["ще отида", "отидох", "отивах"], ru: "Завтра я пойду на работу пораньше.", why: { ru: "Будущее, одно действие → ще + СВ.", bg: "Бъдеще, едно действие → ще + СВ." } },
+    { s: "Ако имах време, ___ с теб.", o: ["щях да дойда", "ще дойда", "дойдох"], ru: "Если бы у меня было время, я бы пошёл с тобой.", why: { ru: "Нереальное условие → щях да + настоящее (или «бих дошъл»).", bg: "Нереално условие → щях да + сегашно (или „бих дошъл“)." } },
+    { s: "___ едно кафе, моля.", o: ["Бих искал", "Ще искам", "Исках"], ru: "Я бы хотел кофе, пожалуйста.", why: { ru: "Вежливая просьба → бих + причастие.", bg: "Учтива молба → бих + причастие." } },
+    { s: "Когато пристигнахме, филмът вече ___.", o: ["беше започнал", "започваше", "ще започне"], ru: "Когда мы пришли, фильм уже начался.", why: { ru: "Случилось раньше другого прошлого события → плюсквамперфект.", bg: "Случило се е преди друго минало събитие → минало предварително време." } },
+    { s: "Докато ___ вечеря, децата гледаха телевизия.", o: ["готвех", "сготвих", "ще сготвя"], ru: "Пока я готовил(а) ужин, дети смотрели телевизор.", why: { ru: "Два одновременных процесса («докато») → имперфект НСВ.", bg: "Два едновременни процеса („докато“) → имперфект, НСВ." } },
+    { s: "Обещах, че ___ навреме, но закъснях.", o: ["ще дойда", "щях да дойда", "дойдох"], ru: "Я обещал, что приду вовремя, но опоздал.", why: { ru: "В пересказе болгарский сохраняет будущее: «обещал, что приду» → «че ще дойда».", bg: "При предаване на чужда реч бъдещето се запазва: „обещах, че ще дойда“." } },
+    { s: "___ да ти се обадя, но забравих.", o: ["Щях", "Ще", "Бих"], ru: "Я собирался тебе позвонить, но забыл.", why: { ru: "Собирался, но не сделал → щях да.", bg: "Намерение, което не се е случило → щях да." } },
+    { s: "Всеки ден ___ по един час български.", o: ["уча", "науча", "ще науча"], ru: "Каждый день я учу болгарский по часу.", why: { ru: "Привычка («всеки ден») → настоящее НСВ.", bg: "Навик („всеки ден“) → сегашно време, НСВ." } },
+    { s: "До петък ___ проекта.", o: ["ще съм завършил", "завърших", "завършвах"], ru: "К пятнице я уже закончу проект.", why: { ru: "Будет закончено к моменту в будущем → ще съм + причастие.", bg: "Ще е завършено до момент в бъдещето → ще съм + причастие." } },
+    { s: "Извинете, ___ ли ми помогнали с куфара?", o: ["бихте", "ще", "бяхте"], ru: "Извините, не могли бы вы помочь мне с чемоданом?", why: { ru: "Вежливая просьба → бихте ли + причастие.", bg: "Учтива молба → бихте ли + причастие." } },
+    { s: "Вчера в пет часа ___ от работа и се прибрах.", o: ["тръгнах", "тръгвах", "съм тръгнал"], ru: "Вчера в пять я ушёл с работы и вернулся домой.", why: { ru: "Цепочка законченных событий в прошлом → аорист.", bg: "Поредица от завършени събития → аорист." } },
+    { s: "Още не ___ писмото – ще го прочета довечера.", o: ["съм прочел", "четях", "ще чета"], ru: "Я ещё не прочитал письмо — прочитаю вечером.", why: { ru: "Результат на сейчас («още не») → перфект.", bg: "Резултат към момента („още не“) → перфект." } }
+  ];
+  function genTense() {
+    if (!P.deck.length) P.deck = shuffle(TQ.map(function (_, i) { return i; }));
+    var idx = P.deck.pop(), item = TQ[idx];
+    return { mode: "tense", idx: idx, opts: shuffle(item.o), ok: item.o[0] };
+  }
+  function genQ() { return P.mode === "aspect" ? genAspect() : P.mode === "tense" ? genTense() : genForms(); }
+
+  function blankSentence(s, fill) {
+    return esc(s).replace("___", fill ? '<span class="blank filled">' + esc(fill) + "</span>" : '<span class="blank">?</span>');
+  }
+
+  function renderPractice() {
+    if (!P.q) P.q = genQ();
+    var q = P.q, done = P.ans >= 0, html = "", title = "", body = "", why = "";
+    if (q.mode === "forms") {
+      var v = VERBS[q.v], tn = TBY[q.tid];
+      var who = q.i === 2 ? "той" : G.PERSONS[q.i];
+      title = t("qForms");
+      body = '<div class="pr-prompt"><span class="pair">' + pairHTML(v) + '</span><span class="muted">' + esc(v.ru) + '</span>' +
+        '<div class="pr-tags"><span class="pr-tag bg">' + who + '</span><span class="pr-tag">' + shortName(tn) + '</span><span class="pr-tag ' + (q.pf ? "p" : "i") + '">' + (q.pf ? t("pfS") : t("impfS")) + "</span></div></div>";
+      if (done) {
+        var r = G.build(q.tid, v, q.pf, q.i, "m", false, S.lang), endP = r.pieces.filter(function (pc) { return pc.k === "end"; }).pop();
+        why = '<p class="full">' + who + " " + cellText(q.tid, v, q.pf, q.i, "m", false) + "</p>" +
+          (endP ? "<p>" + esc(endP.info) + "</p>" : "") +
+          "<p><b>" + L(tn.name) + "</b> · " + (S.lang === "ru" ? "≈ " + G.RUEQ[tn.id] : L(tn.short)) + "</p>" +
+          '<button class="link" data-popen="1">' + t("inBuilder") + " →</button>";
+      }
+    } else if (q.mode === "aspect") {
+      var va = VERBS[q.it.v], ex = va.ex[q.it.e], w = ex[0].split(/([А-Яа-яЍѝ]+)/);
+      title = t("qAspect");
+      var sent = w.map(function (x, k) {
+        if (k !== q.it.k) return esc(x);
+        return done ? '<span class="blank filled">' + esc(x) + "</span>" : '<span class="blank">?</span>';
+      }).join("");
+      body = '<div class="pr-prompt"><p class="pr-sent">' + sent + '</p><p class="pr-tr">' + esc(ex[1]) + "</p></div>";
+      if (done) {
+        var sg = signalsIn(ex[0]);
+        why = "<p>" + (q.it.cls === "i" ? t("whyI") : t("whyP")) + "</p>" +
+          (sg ? '<p class="pr-tags"><span class="muted">' + t("sigs") + ":</span> " + sg + "</p>" : "") +
+          '<p class="muted">' + t("orig") + '</p><p class="full">' + highlight(ex[0], va) + "</p>";
+      }
+    } else {
+      var item = TQ[q.idx];
+      title = t("qTense");
+      body = '<div class="pr-prompt"><p class="pr-sent">' + blankSentence(item.s, done ? item.o[0] : null) + '</p><p class="pr-tr">' + esc(item.ru) + "</p></div>";
+      if (done) why = "<p>" + esc(L(item.why)) + "</p>";
+    }
+    var opts = '<div class="pr-opts' + (q.opts.length > 2 ? " four" : "") + '">' + q.opts.map(function (o, j) {
+      var cls = "", mark = "";
+      if (done) {
+        if (o === q.ok) { cls = " ok"; mark = "✓"; }
+        else if (j === P.ans) { cls = " bad"; mark = "✗"; }
+        else cls = " dim";
+      }
+      return '<button class="opt' + cls + '" data-ans="' + j + '"' + (done ? ' aria-disabled="true"' : "") + '><span class="key">' + (j + 1) + "</span><span>" + esc(o) + '</span><span class="mark">' + mark + "</span></button>";
+    }).join("") + "</div>";
+    var good = done && q.opts[P.ans] === q.ok;
+    html = '<div class="pr"><div class="seg" role="group">' + ["forms", "aspect", "tense"].map(function (m) {
+        return '<button data-pmode="' + m + '" aria-pressed="' + (P.mode === m) + '">' + t({ forms: "mForms", aspect: "mAspect", tense: "mTense" }[m]) + "</button>";
+      }).join("") + "</div>" +
+      '<div class="pr-score"><span>✓ <b>' + P.right + " / " + P.total + "</b> " + t("right") + "</span><span>" + t("streak") + " <b>" + P.streak + "</b></span><span>" + t("best") + " <b>" + P.best + "</b></span></div>" +
+      '<div class="panel pr-card"><span class="label">' + title + "</span>" + body + opts +
+      (done ? '<div class="pr-why"><span class="verdict ' + (good ? "ok" : "bad") + '">' + (good ? t("yes") : t("no")) + "</span>" + why + "</div>" +
+        '<div class="pr-next"><button class="btn" data-pnext>' + t("next") + '</button><span class="pr-hint">' + t("keys") + "</span></div>" : "") +
+      "</div></div>";
+    $("practice").innerHTML = html;
+  }
+  function answer(j) {
+    if (P.ans >= 0 || !P.q || j >= P.q.opts.length) return;
+    P.ans = j; P.total++;
+    if (P.q.opts[j] === P.q.ok) { P.right++; P.streak++; if (P.streak > P.best) { P.best = P.streak; store.set("best", P.best); } }
+    else P.streak = 0;
+    renderPractice();
+  }
+  function nextQ() { P.q = genQ(); P.ans = -1; renderPractice(); var c = document.querySelector(".pr-card"); if (c && c.getBoundingClientRect().top < 0) c.scrollIntoView({ block: "start" }); }
+
   /* ---------- Routing ---------- */
   function setHash() {
     var h = S.tab === "verbs" ? (S.verb !== null ? "verb-" + S.verb : "verbs") : S.tab;
@@ -326,12 +512,14 @@
     else if (h === "tenses") S.tab = "tenses";
     else if ((m = /^t-(\w+)$/.exec(h)) && TBY[m[1]]) { S.tab = "tenses"; S.open[m[1]] = true; S.jump = m[1]; }
     else if (h === "form") S.tab = "form";
+    else if (h === "practice") S.tab = "practice";
   }
   function render() {
     renderChrome();
     if (S.tab === "form") renderForm();
     if (S.tab === "tenses") renderTenses();
     if (S.tab === "verbs") renderVerbs();
+    if (S.tab === "practice") renderPractice();
     setHash();
     if (S.jump) { var el = $("t-" + S.jump); S.jump = null; if (el) el.scrollIntoView({ block: "start" }); }
   }
@@ -365,6 +553,14 @@
     if (d.tobuilder) { S.B.tense = d.tobuilder; S.B.sel = -1; saveB(); go(function () { S.tab = "form"; }); return; }
     if (d.toggle) { S.open[d.toggle] = !S.open[d.toggle]; renderTenses(); return; }
     if (d.jump) { S.open[d.jump] = true; if (!TBY[d.jump].core) S.showRare = true; renderTenses(); var j = $("t-" + d.jump); if (j) j.scrollIntoView({ block: "start", behavior: "smooth" }); return; }
+    // practice
+    if (d.pmode) { P.mode = d.pmode; store.set("pmode", P.mode); P.q = genQ(); P.ans = -1; renderPractice(); return; }
+    if (d.ans !== undefined) { answer(+d.ans); return; }
+    if ("pnext" in d) { nextQ(); return; }
+    if ("popen" in d && P.q && P.q.mode === "forms") {
+      S.B.verb = P.q.v; S.B.tense = P.q.tid; S.B.pf = P.q.pf; S.B.person = P.q.i; S.B.neg = false; S.B.open = true; S.B.sel = -1; saveB();
+      go(function () { S.tab = "form"; }); return;
+    }
     // verbs
     if (d.verb) { go(function () { S.tab = "verbs"; S.verb = +d.verb; }); return; }
     if ("back" in d) { go(function () { S.verb = null; }); return; }
@@ -387,6 +583,11 @@
     }
   });
   document.addEventListener("toggle", function (e) { if (e.target.classList && e.target.classList.contains("rare-wrap")) S.showRare = e.target.open; }, true);
+  document.addEventListener("keydown", function (e) {
+    if (S.tab !== "practice" || e.altKey || e.ctrlKey || e.metaKey || /input|textarea|select/i.test(e.target.tagName)) return;
+    if (P.ans < 0 && /^[1-4]$/.test(e.key)) { answer(+e.key - 1); e.preventDefault(); }
+    else if (P.ans >= 0 && (e.key === "Enter" || e.key === "ArrowRight")) { nextQ(); e.preventDefault(); }
+  });
   window.addEventListener("hashchange", function () { readHash(); render(); });
 
   readHash();

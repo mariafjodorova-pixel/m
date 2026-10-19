@@ -23,6 +23,8 @@
   --on-accent: #FFFFFF;
   --hl: #FFE27A;
   --hl-soft: #FFF5CC;
+  --tab-form: #F3DF8E; --tab-tenses: #C4E3D2; --tab-verbs: #D9D0F2; --tab-practice: #F4C9D2;
+  --ok: #1E7B4F; --ok-soft: #E3F4EA; --bad: #B42318; --bad-soft: #FBE9E7;
   --ui: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --bg-font: "Literata", "PT Serif", Georgia, "Times New Roman", serif;
   --t-xs: 12px; --t-s: 14px; --t-m: 16px; --t-l: 20px; --t-xl: 34px;
@@ -33,14 +35,14 @@
   :root:not([data-theme="light"]) {
     --bg: #111318; --surface: #1A1D24; --sunk: #232731; --ink: #ECEEF2; --muted: #A3A9B5; --line: #2C313B;
     --impf: #84B3FF; --impf-soft: #1B2A44; --pf: #FFA463; --pf-soft: #3A2517; --on-accent: #111318;
-    --hl: #7A6618; --hl-soft: #3A3418;
+    --hl: #7A6618; --hl-soft: #3A3418; --tab-form: #5C5023; --tab-tenses: #284437; --tab-verbs: #3B3458; --tab-practice: #55303A; --ok: #5FD39A; --ok-soft: #173426; --bad: #FF8A7A; --bad-soft: #3D1C18;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #111318; --surface: #1A1D24; --sunk: #232731; --ink: #ECEEF2; --muted: #A3A9B5; --line: #2C313B;
   --impf: #84B3FF; --impf-soft: #1B2A44; --pf: #FFA463; --pf-soft: #3A2517; --on-accent: #111318;
-  --hl: #7A6618; --hl-soft: #3A3418;
+  --hl: #7A6618; --hl-soft: #3A3418; --tab-form: #5C5023; --tab-tenses: #284437; --tab-verbs: #3B3458; --tab-practice: #55303A; --ok: #5FD39A; --ok-soft: #173426; --bad: #FF8A7A; --bad-soft: #3D1C18;
   color-scheme: dark;
 }
 
@@ -76,23 +78,25 @@ header.top { padding-block: 12px; }
 .dot.p { background: var(--pf); }
 .dot.h { background: var(--hl); }
 
-/* Tabs: top on desktop, bottom bar with icons on phones */
-nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
-nav.tabs .wrap { display: flex; gap: var(--s1); }
-.tab { flex: none; display: inline-flex; align-items: center; gap: var(--s2); border: 0; background: none; height: 48px; padding: 0 var(--s3); font-weight: 600; font-size: var(--t-m); color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; }
-.tab svg { width: 20px; height: 20px; flex: none; }
-.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
-@media (max-width: 640px) {
-  nav.tabs { position: fixed; top: auto; bottom: 0; left: 0; right: 0; border-bottom: 0; border-top: 1px solid var(--line); padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--surface); }
-  nav.tabs .wrap { padding-inline: 0; }
-  .tab { flex: 1 1 0; flex-direction: column; justify-content: center; gap: 2px; height: 58px; padding: 0; font-size: var(--t-xs); border-bottom: 0; }
-  .tab[aria-selected="true"] svg { stroke-width: 2.4; }
-  main { padding-bottom: 96px !important; }
-  footer { padding-bottom: 90px !important; }
+/* Tabs: notebook dividers. Each tab is a coloured trapezoid; the active one sits in front
+   and merges with the coloured page edge (border-bottom of the nav). */
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); padding-top: var(--s2); border-bottom: 6px solid var(--active-tab, var(--tab-form)); }
+nav.tabs .wrap { display: flex; align-items: flex-end; padding-left: 24px; }
+.tab { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: var(--s2); border: 0; background: none; height: 42px; margin-right: -10px; padding: 0 26px; font-weight: 600; font-size: var(--t-s); color: var(--ink); cursor: pointer; transform: translateY(5px); transition: transform .15s ease; }
+.tab::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--tc); border-radius: 10px 10px 0 0; transform: perspective(70px) rotateX(9deg); transform-origin: bottom; box-shadow: inset 0 -7px 8px -6px rgba(0,0,0,.22), 0 -1px 2px rgba(0,0,0,.08); filter: saturate(.8) brightness(.96); }
+.tab svg { width: 18px; height: 18px; flex: none; opacity: .75; }
+.tab:hover { transform: translateY(2px); }
+.tab[aria-selected="true"] { z-index: 6; transform: none; font-weight: 700; }
+.tab[aria-selected="true"]::before { filter: none; box-shadow: 0 -2px 4px rgba(0,0,0,.08); }
+.tab[aria-selected="true"] svg { opacity: 1; }
+@media (max-width: 560px) {
+  nav.tabs .wrap { padding-left: 10px; padding-right: 10px; }
+  .tab { flex: 1 1 0; justify-content: center; padding: 0 6px; margin-right: -6px; font-size: 13px; }
+  .tab svg { display: none; }
 }
 
 main { padding-block: var(--s3) var(--s4); }
-section[role="tabpanel"] { display: grid; gap: var(--s3); }
+section[role="tabpanel"] { display: grid; gap: var(--s3); scroll-margin-top: 72px; }
 h2 { font-size: var(--t-l); font-weight: 700; margin: 0; line-height: 1.25; text-wrap: balance; }
 .label { font-size: var(--t-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
 .panel { background: var(--surface); border-radius: var(--r); padding: var(--s3); display: grid; gap: var(--s3); min-width: 0; align-content: start; }
@@ -312,6 +316,41 @@ table.vgrid .stick { position: sticky; left: 0; background: var(--surface); z-in
 .cell.i { color: var(--impf); }
 .cell.p { color: var(--pf); }
 
+/* ---------- Practice ---------- */
+.pr { display: grid; gap: var(--s3); max-width: 720px; }
+.pr-score { display: flex; gap: var(--s3); flex-wrap: wrap; font-size: var(--t-s); color: var(--muted); }
+.pr-score b { color: var(--ink); }
+.pr-card { gap: var(--s3); }
+.pr-prompt { display: grid; gap: var(--s2); }
+.pr-prompt .pair { font-family: var(--bg-font); font-weight: 600; font-size: var(--t-l); }
+.pr-tags { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.pr-tag { background: var(--sunk); border-radius: 999px; padding: 4px 12px; font-size: var(--t-s); font-weight: 600; }
+.pr-tag.bg { font-family: var(--bg-font); }
+.pr-tag.i { background: var(--impf-soft); color: var(--impf); }
+.pr-tag.p { background: var(--pf-soft); color: var(--pf); }
+.pr-sent { font-family: var(--bg-font); font-size: 20px; line-height: 1.5; }
+.pr-tr { color: var(--muted); font-size: var(--t-s); }
+.blank { display: inline-block; min-width: 4.5em; border-bottom: 2px solid var(--ink); text-align: center; color: var(--muted); }
+.blank.filled { border-bottom-color: var(--ok); color: var(--ok); font-weight: 700; min-width: 0; padding-inline: 2px; }
+.pr-opts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
+@media (max-width: 420px) { .pr-opts.four { grid-template-columns: 1fr; } }
+.opt { display: flex; align-items: center; gap: var(--s2); min-height: 56px; border: 0; border-radius: var(--r-s); background: var(--sunk); padding: var(--s2) var(--s3); cursor: pointer; text-align: left; font-family: var(--bg-font); font-size: 18px; font-weight: 600; color: var(--ink); }
+.opt:hover { box-shadow: inset 0 0 0 2px var(--line); }
+.opt .key { font-family: var(--ui); font-size: var(--t-xs); font-weight: 700; color: var(--muted); background: var(--surface); border-radius: 6px; min-width: 22px; height: 22px; display: grid; place-items: center; flex: none; }
+.opt .mark { margin-left: auto; font-family: var(--ui); font-weight: 700; }
+.opt.ok { background: var(--ok-soft); box-shadow: inset 0 0 0 2px var(--ok); color: var(--ok); }
+.opt.bad { background: var(--bad-soft); box-shadow: inset 0 0 0 2px var(--bad); color: var(--bad); }
+.opt.dim { opacity: .45; }
+.opt[aria-disabled="true"] { cursor: default; }
+.pr-why { display: grid; gap: var(--s2); background: var(--hl-soft); border-radius: var(--r-s); padding: var(--s3); font-size: var(--t-s); }
+.pr-why .verdict { font-weight: 700; font-size: var(--t-m); }
+.pr-why .verdict.ok { color: var(--ok); }
+.pr-why .verdict.bad { color: var(--bad); }
+.pr-why .full { font-family: var(--bg-font); font-size: 17px; }
+.pr-next { display: flex; gap: var(--s3); align-items: center; flex-wrap: wrap; }
+.btn { border: 0; background: var(--ink); color: var(--bg); border-radius: var(--r-s); min-height: 48px; padding: 0 var(--s4); font-weight: 700; font-size: var(--t-m); cursor: pointer; }
+.pr-hint { font-size: var(--t-xs); color: var(--muted); }
+
 footer { color: var(--muted); font-size: var(--t-xs); padding-block: var(--s2) var(--s4); }
 @media (max-width: 520px) {
   .b-word { font-size: 30px; }
@@ -333,9 +372,10 @@ footer { color: var(--muted); font-size: var(--t-xs); padding-block: var(--s2) v
 
 <nav class="tabs" aria-label="Sections">
   <div class="wrap" role="tablist">
-    <button class="tab" role="tab" id="tab-btn-form" data-tab="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="7" height="8" rx="2"/><rect x="10" y="8" width="5" height="8" rx="2"/><rect x="15" y="8" width="6" height="8" rx="2"/></svg><span></span></button>
-    <button class="tab" role="tab" id="tab-btn-tenses" data-tab="tenses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 12h20"/><path d="M12 7v10"/><circle cx="6" cy="12" r="2" fill="currentColor"/><circle cx="18" cy="12" r="2"/></svg><span></span></button>
-    <button class="tab" role="tab" id="tab-btn-verbs" data-tab="verbs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg><span></span></button>
+    <button class="tab" role="tab" id="tab-btn-form" data-tab="form" style="--tc: var(--tab-form)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="7" height="8" rx="2"/><rect x="10" y="8" width="5" height="8" rx="2"/><rect x="15" y="8" width="6" height="8" rx="2"/></svg><span></span></button>
+    <button class="tab" role="tab" id="tab-btn-tenses" data-tab="tenses" style="--tc: var(--tab-tenses)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 12h20"/><path d="M12 7v10"/><circle cx="6" cy="12" r="2" fill="currentColor"/><circle cx="18" cy="12" r="2"/></svg><span></span></button>
+    <button class="tab" role="tab" id="tab-btn-verbs" data-tab="verbs" style="--tc: var(--tab-verbs)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg><span></span></button>
+    <button class="tab" role="tab" id="tab-btn-practice" data-tab="practice" style="--tc: var(--tab-practice)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg><span></span></button>
   </div>
 </nav>
 
@@ -343,6 +383,7 @@ footer { color: var(--muted); font-size: var(--t-xs); padding-block: var(--s2) v
   <section role="tabpanel" id="form" aria-labelledby="tab-btn-form"></section>
   <section role="tabpanel" id="tenses" aria-labelledby="tab-btn-tenses" hidden></section>
   <section role="tabpanel" id="verbs" aria-labelledby="tab-btn-verbs" hidden></section>
+  <section role="tabpanel" id="practice" aria-labelledby="tab-btn-practice" hidden></section>
 </main>
 
 <footer class="wrap">100 пар · Study in BG</footer>
