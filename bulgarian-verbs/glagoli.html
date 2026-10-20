@@ -8,44 +8,43 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=Literata:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <style>
-/* Layout: one compact header row; content column; bottom tab bar on phones.
-   Builder: result pinned on top, controls below (thumb zone).
-   Colour: blue = НСВ, orange = СВ — used for aspect only. UI accent is neutral ink; yellow = selection / change.
-   Type: Onest for the interface, Literata for every Bulgarian word. Scale 12 / 14 / 16 / 20 / 34. */
+/* Layout: one header row, flat tabs, one content column (two on wide screens).
+   Colour: blue = НСВ, orange = СВ — the only accents. Yellow only marks the selected part of a word and changes.
+   Type: Onest for the interface, Literata for every Bulgarian word. Spacing 4 / 8 / 16 / 24 / 32, radii 12 / 8. */
 :root {
   --bg: #F6F7F9;
   --surface: #FFFFFF;
-  --sunk: #EEF0F4;
+  --sunk: #EFF1F4;
   --ink: #15171C;
   --muted: #5B606B;
-  --line: #E2E5EA;
+  --line: #E3E6EB;
   --impf: #1F5FBF;
-  --impf-soft: #E6EEFB;
+  --impf-soft: #E8EFFB;
   --pf: #B54708;
-  --pf-soft: #FCEEE4;
+  --pf-soft: #FBEFE6;
   --on-accent: #FFFFFF;
   --hl: #FFE27A;
-  --hl-soft: #FFF5CC;
-  --tab-form: #F3DF8E; --tab-tenses: #C4E3D2; --tab-verbs: #D9D0F2; --tab-practice: #F4C9D2;
-  --ok: #1E7B4F; --ok-soft: #E3F4EA; --bad: #B42318; --bad-soft: #FBE9E7;
+  --hl-soft: #FFF4C2;
+  --ok: #1E7B4F;
+  --bad: #B42318;
   --ui: "Onest", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --bg-font: "Literata", "PT Serif", Georgia, "Times New Roman", serif;
-  --t-xs: 12px; --t-s: 14px; --t-m: 16px; --t-l: 20px; --t-xl: 34px;
-  --s1: 4px; --s2: 8px; --s3: 16px; --s4: 24px;
-  --r: 14px; --r-s: 10px;
+  --t-xs: 12px; --t-s: 14px; --t-m: 16px; --t-l: 20px; --t-xl: 42px;
+  --s1: 4px; --s2: 8px; --s3: 16px; --s4: 24px; --s5: 32px;
+  --r: 12px; --r-s: 8px;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #111318; --surface: #1A1D24; --sunk: #232731; --ink: #ECEEF2; --muted: #A3A9B5; --line: #2C313B;
     --impf: #84B3FF; --impf-soft: #1B2A44; --pf: #FFA463; --pf-soft: #3A2517; --on-accent: #111318;
-    --hl: #7A6618; --hl-soft: #3A3418; --tab-form: #5C5023; --tab-tenses: #284437; --tab-verbs: #3B3458; --tab-practice: #55303A; --ok: #5FD39A; --ok-soft: #173426; --bad: #FF8A7A; --bad-soft: #3D1C18;
+    --hl: #7A6618; --hl-soft: #3A3418; --ok: #5FD39A; --bad: #FF8A7A;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #111318; --surface: #1A1D24; --sunk: #232731; --ink: #ECEEF2; --muted: #A3A9B5; --line: #2C313B;
   --impf: #84B3FF; --impf-soft: #1B2A44; --pf: #FFA463; --pf-soft: #3A2517; --on-accent: #111318;
-  --hl: #7A6618; --hl-soft: #3A3418; --tab-form: #5C5023; --tab-tenses: #284437; --tab-verbs: #3B3458; --tab-practice: #55303A; --ok: #5FD39A; --ok-soft: #173426; --bad: #FF8A7A; --bad-soft: #3D1C18;
+  --hl: #7A6618; --hl-soft: #3A3418; --ok: #5FD39A; --bad: #FF8A7A;
   color-scheme: dark;
 }
 
@@ -56,62 +55,71 @@ body { margin: 0; color: var(--ink); font-family: var(--ui); font-size: var(--t-
 button, input, select { font: inherit; color: inherit; }
 button { -webkit-tap-highlight-color: transparent; }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 6px; }
-p { margin: 0; }
+p, h2, h3, h4 { margin: 0; }
 .bg { font-family: var(--bg-font); }
 b.i, .i-txt { color: var(--impf); }
 b.p, .p-txt { color: var(--pf); }
 .wrap { max-width: 1080px; margin: 0 auto; padding-inline: 16px; }
+.muted { color: var(--muted); }
+.small { font-size: var(--t-s); }
 
-/* Header: one row */
-header.top { padding-block: 12px; }
+/* Header */
+header.top { padding-block: var(--s3) var(--s2); }
 .top-row { display: flex; align-items: center; gap: var(--s2); }
-.brand { font-weight: 700; font-size: var(--t-l); letter-spacing: -.01em; margin: 0; }
-.brand .bg { font-weight: 700; }
+.brand { font-weight: 700; font-size: var(--t-l); letter-spacing: -.01em; min-width: 0; }
 .brand small { font-weight: 500; font-size: var(--t-s); color: var(--muted); margin-left: var(--s2); }
 .spacer { flex: 1; }
-.help { width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--sunk); font-weight: 700; cursor: pointer; }
+.chipbtn { display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: var(--sunk); color: var(--muted); font-size: var(--t-s); font-weight: 600; cursor: pointer; }
+.chipbtn .acc { font-family: var(--bg-font); font-size: 17px; line-height: 1; }
+.chipbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+.help { width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--sunk); font-weight: 700; cursor: pointer; flex: none; }
 .help[aria-expanded="true"] { background: var(--ink); color: var(--bg); }
-.lang { display: inline-flex; background: var(--sunk); border-radius: 999px; padding: 3px; }
-.lang button { border: 0; background: none; min-width: 44px; height: 32px; border-radius: 999px; font-weight: 600; font-size: var(--t-s); cursor: pointer; color: var(--muted); }
-.lang button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.12); }
-.legend { margin-top: var(--s2); background: var(--surface); border-radius: var(--r); padding: var(--s3); display: grid; gap: var(--s2); font-size: var(--t-s); }
+.lang { display: inline-flex; background: var(--sunk); border-radius: 999px; padding: 3px; flex: none; }
+.lang button { border: 0; background: none; min-width: 40px; height: 30px; border-radius: 999px; font-weight: 600; font-size: var(--t-s); cursor: pointer; color: var(--muted); }
+.lang button[aria-pressed="true"] { background: var(--surface); color: var(--ink); }
+@media (max-width: 480px) {
+  .brand small, .chipbtn .lbl { display: none; }
+  .chipbtn { width: 36px; padding: 0; justify-content: center; }
+}
+.legend, .notice { margin-top: var(--s2); background: var(--surface); border-radius: var(--r); padding: var(--s3); display: grid; gap: var(--s2); font-size: var(--t-s); }
+.notice { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding-block: var(--s2); }
+.notice .link { min-height: 36px; text-decoration: none; }
 .legend .row { display: flex; gap: var(--s2); align-items: baseline; }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
 .dot.i { background: var(--impf); }
 .dot.p { background: var(--pf); }
 .dot.h { background: var(--hl); }
 
-/* Tabs: notebook dividers. Each tab is a coloured trapezoid; the active one sits in front
-   and merges with the coloured page edge (border-bottom of the nav). */
-nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); padding-top: var(--s2); border-bottom: 6px solid var(--active-tab, var(--tab-form)); }
-nav.tabs .wrap { display: flex; align-items: flex-end; padding-left: 24px; }
-.tab { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: var(--s2); border: 0; background: none; height: 42px; margin-right: -10px; padding: 0 26px; font-weight: 600; font-size: var(--t-s); color: var(--ink); cursor: pointer; transform: translateY(5px); transition: transform .15s ease; }
-.tab::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--tc); border-radius: 10px 10px 0 0; transform: perspective(70px) rotateX(9deg); transform-origin: bottom; box-shadow: inset 0 -7px 8px -6px rgba(0,0,0,.22), 0 -1px 2px rgba(0,0,0,.08); filter: saturate(.8) brightness(.96); }
-.tab svg { width: 18px; height: 18px; flex: none; opacity: .75; }
-.tab:hover { transform: translateY(2px); }
-.tab[aria-selected="true"] { z-index: 6; transform: none; font-weight: 700; }
-.tab[aria-selected="true"]::before { filter: none; box-shadow: 0 -2px 4px rgba(0,0,0,.08); }
-.tab[aria-selected="true"] svg { opacity: 1; }
+/* Tabs: flat and neutral; the active one is underlined */
+nav.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+nav.tabs .wrap { display: flex; gap: var(--s1); }
+.tab { display: inline-flex; align-items: center; gap: var(--s2); height: 46px; padding: 0 var(--s3); margin-bottom: -1px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--muted); font-weight: 500; font-size: 15px; cursor: pointer; }
+.tab svg { width: 18px; height: 18px; flex: none; }
+.tab:hover { color: var(--ink); }
+.tab[aria-selected="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--ink); }
 @media (max-width: 560px) {
-  nav.tabs .wrap { padding-left: 10px; padding-right: 10px; }
-  .tab { flex: 1 1 0; justify-content: center; padding: 0 6px; margin-right: -6px; font-size: 13px; }
+  nav.tabs .wrap { gap: 0; }
+  .tab { flex: 1 1 0; justify-content: center; padding: 0 4px; font-size: var(--t-s); }
   .tab svg { display: none; }
 }
 
-main { padding-block: var(--s3) var(--s4); }
-section[role="tabpanel"] { display: grid; gap: var(--s3); scroll-margin-top: 72px; }
-h2 { font-size: var(--t-l); font-weight: 700; margin: 0; line-height: 1.25; text-wrap: balance; }
-.label { font-size: var(--t-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+main { padding-block: var(--s4); }
+section[role="tabpanel"] { display: grid; gap: var(--s3); scroll-margin-top: 64px; }
+h2 { font-size: var(--t-l); font-weight: 700; line-height: 1.25; text-wrap: balance; }
+/* section headings: small, sentence case, a little bolder than body text */
+.label { font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--ink); }
 .panel { background: var(--surface); border-radius: var(--r); padding: var(--s3); display: grid; gap: var(--s3); min-width: 0; align-content: start; }
 .link { border: 0; background: none; padding: 0; min-height: 44px; color: var(--ink); font-weight: 600; font-size: var(--t-s); cursor: pointer; text-decoration: underline; text-decoration-color: var(--line); text-decoration-thickness: 2px; text-underline-offset: 4px; justify-self: start; }
 .link:hover { text-decoration-color: var(--ink); }
-.muted { color: var(--muted); }
 .na { color: var(--muted); font-style: italic; font-size: var(--t-s); }
 .aux { color: var(--muted); font-weight: 400; }
-.endc { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; text-decoration-skip-ink: none; }
+.endc { text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 5px; text-decoration-skip-ink: none; }
+.tts { border: 0; background: none; width: 36px; height: 36px; border-radius: 50%; font-size: 17px; line-height: 1; cursor: pointer; flex: none; vertical-align: middle; }
+.tts:hover { background: var(--sunk); }
+.quote .tts { width: 30px; height: 30px; font-size: 15px; margin-left: 2px; }
 
 /* ---------- Builder ---------- */
-.builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: var(--s3); align-items: start; }
+.builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: var(--s3); align-items: start; }
 .b-col { display: grid; gap: var(--s3); min-width: 0; }
 .vwrap { display: grid; gap: var(--s2); min-width: 0; }
 @media (max-width: 820px) {
@@ -119,103 +127,90 @@ h2 { font-size: var(--t-l); font-weight: 700; margin: 0; line-height: 1.25; text
   .b-col { display: contents; }
   .vwrap { order: 1; } .ctl { order: 2; } .tpanel { order: 3; } .b-ex { order: 4; }
 }
-/* the main table */
-.tpanel { gap: var(--s2); padding-inline: var(--s2); }
-.t-tools { display: flex; align-items: center; gap: var(--s2); padding-inline: var(--s2); flex-wrap: wrap; }
-.t-tools .t-name { display: inline-flex; align-items: center; gap: var(--s2); flex: 1 1 auto; min-width: 0; font-size: var(--t-s); }
-.t-tools .seg button { min-height: 36px; min-width: 40px; }
-.t-tools .negbtn { min-height: 42px; }
-table.ftable { width: 100%; border-collapse: separate; border-spacing: 0 2px; table-layout: fixed; }
-table.ftable col.cw { width: 3.6em; }
-table.ftable thead th { font-size: var(--t-xs); font-weight: 700; text-align: left; padding: var(--s1) var(--s2); }
-table.ftable thead th .bg { font-weight: 600; font-size: var(--t-s); }
-table.ftable thead th.i { color: var(--impf); }
-table.ftable thead th.p { color: var(--pf); }
-table.ftable th.who { font-family: var(--bg-font); font-weight: 400; font-size: var(--t-s); color: var(--muted); text-align: left; padding-left: var(--s2); }
-table.ftable td { padding: 0 2px; }
-.fcell { width: 100%; min-height: 48px; border: 0; background: none; border-radius: var(--r-s); text-align: left; padding: 6px var(--s2); font-family: var(--bg-font); font-size: 17px; font-weight: 600; line-height: 1.3; cursor: pointer; transition: background-color .4s ease; }
-.fcell:hover { background: var(--sunk); }
-.fcell.i { color: var(--impf); }
-.fcell.p { color: var(--pf); }
-.fcell.empty { color: var(--muted); font-weight: 400; }
-.fcell[aria-pressed="true"] { background: var(--hl-soft); box-shadow: inset 0 0 0 2px var(--hl); }
-.fcell.chg { animation: chg 1.1s ease-out; }
-table.ftable.fade tbody { animation: fade .35s ease-out; }
-@media (prefers-reduced-motion: reduce) { .fcell.chg, table.ftable.fade tbody { animation: none; } }
-.tpanel .b-meta { padding-inline: var(--s2); }
-tr.drow td { padding: 2px 2px var(--s2); }
-.b-detail { display: grid; justify-items: center; text-align: center; gap: var(--s1); background: var(--hl-soft); border-radius: var(--r-s); padding: var(--s3) var(--s2); }
-.b-detail .b-word { font-size: 30px; }
-.b-detail .b-info { min-height: 0; }
-.b-detail .pc[aria-pressed="true"] { background: var(--surface); }
-@media (max-width: 520px) { .fcell { font-size: 16px; padding-inline: 6px; } table.ftable col.cw { width: 3.1em; } }
-.b-result { background: var(--surface); border-radius: var(--r); padding: var(--s3); display: grid; gap: var(--s2); justify-items: center; text-align: center; min-height: 168px; align-content: center; }
-.b-pron { font-size: var(--t-s); font-weight: 600; color: var(--muted); }
-.b-word { font-family: var(--bg-font); font-size: var(--t-xl); line-height: 1.2; font-weight: 600; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: .28em; }
-.b-word .w { white-space: nowrap; }
-.pc { border: 0; background: none; padding: 0 2px; font: inherit; color: inherit; cursor: pointer; border-radius: 6px; transition: background-color .5s ease; }
-.pc.k-pt, .pc.k-se { color: var(--muted); font-weight: 400; }
-.pc.k-stem.impf, .pc.k-end.impf { color: var(--impf); }
-.pc.k-stem.pf, .pc.k-end.pf { color: var(--pf); }
-.pc.k-end { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 7px; text-decoration-skip-ink: none; }
-.pc[aria-pressed="true"] { background: var(--hl-soft); box-shadow: inset 0 -2px 0 var(--hl); }
-.pc.chg { animation: chg 1.1s ease-out; }
-.b-word.fade { animation: fade .35s ease-out; }
-@keyframes chg { 0% { background: var(--hl); } 100% { background: transparent; } }
-@keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { .pc.chg, .b-word.fade { animation: none; } }
-.b-info { font-size: var(--t-s); color: var(--ink); max-width: 44ch; min-height: 3em; }
-.b-na { font-size: var(--t-m); color: var(--muted); max-width: 36ch; }
-.b-meta { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); align-items: center; font-size: var(--t-s); color: var(--muted); }
-.b-meta b { color: var(--ink); }
-.b-meta .link { margin-left: auto; }
-
 .vpick { width: 100%; display: flex; align-items: center; gap: var(--s2); min-height: 56px; border: 0; background: var(--surface); border-radius: var(--r); padding: var(--s2) var(--s3); cursor: pointer; text-align: left; }
 .vpick .txt { display: grid; flex: 1; min-width: 0; }
 .vpick .pair { font-family: var(--bg-font); font-weight: 600; font-size: var(--t-l); }
 .vpick .vmean { font-size: var(--t-s); color: var(--muted); }
 .chev { color: var(--muted); }
 .picker { background: var(--surface); border-radius: var(--r); padding: var(--s2); display: grid; gap: var(--s2); }
+.pcount { font-size: var(--t-s); color: var(--muted); padding-inline: var(--s2); }
 .search { width: 100%; border: 0; background: var(--sunk); border-radius: var(--r-s); padding: 0 var(--s3); height: 48px; font-size: var(--t-m); }
-.plist { display: grid; max-height: 320px; overflow-y: auto; }
-.prow { text-align: left; border: 0; background: none; padding: var(--s2) var(--s2); min-height: 52px; border-radius: var(--r-s); cursor: pointer; display: grid; }
+.plist { display: grid; max-height: 360px; overflow-y: auto; }
+.prow { text-align: left; border: 0; background: none; padding: var(--s2); min-height: 52px; border-radius: var(--r-s); cursor: pointer; display: grid; }
 .prow:hover { background: var(--sunk); }
 .prow .pair { font-family: var(--bg-font); font-weight: 600; }
 .prow .vmean { font-size: var(--t-s); color: var(--muted); }
 
 .ctl { background: var(--surface); border-radius: var(--r); padding: var(--s3); display: grid; gap: var(--s3); }
 .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; background: var(--sunk); border-radius: var(--r-s); padding: 3px; gap: 3px; }
-.seg button { border: 0; background: none; min-height: 40px; border-radius: 8px; font-weight: 600; font-size: var(--t-s); color: var(--muted); cursor: pointer; padding: 0 var(--s2); white-space: nowrap; }
-.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.14); }
+.seg button { border: 0; background: none; min-height: 40px; border-radius: 6px; font-weight: 600; font-size: var(--t-s); color: var(--muted); cursor: pointer; padding: 0 var(--s2); white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); }
 .seg button:disabled { opacity: .35; cursor: default; }
-.seg.asp button.i[aria-pressed="true"] { background: var(--impf); color: var(--on-accent); }
-.seg.asp button.p[aria-pressed="true"] { background: var(--pf); color: var(--on-accent); }
 .tlist { display: flex; flex-wrap: wrap; gap: var(--s2); }
 .tbtn { display: inline-flex; align-items: center; gap: var(--s2); border: 0; background: var(--sunk); border-radius: 999px; min-height: 44px; padding: 0 var(--s3) 0 var(--s2); cursor: pointer; font-weight: 600; font-size: var(--t-s); }
 .tbtn.rare { background: transparent; box-shadow: inset 0 0 0 1px var(--line); color: var(--muted); }
 .tbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); box-shadow: none; }
-.persons { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2) var(--s2); }
-.persons .label { text-align: center; }
-.pbtn { border: 0; background: var(--sunk); border-radius: var(--r-s); min-height: 44px; font-family: var(--bg-font); font-weight: 600; font-size: var(--t-m); cursor: pointer; }
-.pbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
-.pbtn:disabled { opacity: .3; cursor: default; }
-.togs { display: grid; grid-template-columns: 1.4fr 1fr auto; gap: var(--s2); }
-.negbtn { border: 0; background: var(--sunk); border-radius: var(--r-s); min-height: 46px; min-width: 64px; font-family: var(--bg-font); font-weight: 600; cursor: pointer; color: var(--muted); }
+.negbtn { border: 0; background: var(--sunk); border-radius: var(--r-s); min-height: 44px; min-width: 56px; font-family: var(--bg-font); font-weight: 600; cursor: pointer; color: var(--muted); }
 .negbtn[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
 
-.all { background: var(--surface); border-radius: var(--r); padding: var(--s2) var(--s3) var(--s3); display: grid; }
-.all .label { padding: var(--s2) 0; }
-.arow { display: grid; grid-template-columns: 4.5em minmax(0, 1fr); gap: var(--s2); text-align: left; border: 0; background: none; min-height: 44px; align-items: center; padding: 0 var(--s2); border-radius: var(--r-s); cursor: pointer; }
-.arow:hover { background: var(--sunk); }
-.arow[aria-pressed="true"] { background: var(--hl-soft); box-shadow: none; }
-.arow .who { color: var(--muted); font-size: var(--t-s); font-family: var(--bg-font); }
-.arow .fm { font-family: var(--bg-font); font-size: var(--t-m); font-weight: 600; }
+/* the table panel: tools, the selected form large in the middle, then every person */
+.tpanel { gap: 0; padding: var(--s3) var(--s2); }
+.t-tools { display: flex; align-items: center; gap: var(--s2); padding-inline: var(--s2); flex-wrap: wrap; }
+.t-tools .t-name { display: inline-flex; align-items: center; gap: var(--s2); flex: 1 1 auto; min-width: 0; font-size: var(--t-s); }
+.t-tools .seg button { min-height: 36px; min-width: 40px; }
+.b-hero { display: grid; justify-items: center; text-align: center; gap: var(--s2); padding: var(--s5) var(--s3) var(--s4); }
+.b-pron { font-size: var(--t-s); font-weight: 600; color: var(--muted); }
+.b-wordrow { display: flex; align-items: center; justify-content: center; gap: var(--s1); flex-wrap: wrap; max-width: 100%; }
+.b-word { font-family: var(--bg-font); font-size: var(--t-xl); line-height: 1.2; font-weight: 600; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; column-gap: .28em; min-width: 0; }
+.b-word .w { white-space: nowrap; }
+.pc { border: 0; background: none; padding: 0 2px; font: inherit; color: inherit; cursor: pointer; border-radius: 6px; transition: background-color .5s ease; }
+.pc.k-pt, .pc.k-se { color: var(--muted); font-weight: 400; }
+.pc.k-stem.impf, .pc.k-end.impf { color: var(--impf); }
+.pc.k-stem.pf, .pc.k-end.pf { color: var(--pf); }
+.pc.k-end { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; text-decoration-skip-ink: none; }
+.pc[aria-pressed="true"] { background: var(--hl-soft); box-shadow: inset 0 -3px 0 var(--hl); }
+.pc.chg { animation: chg 1.1s ease-out; }
+.b-word.fade { animation: fade .35s ease-out; }
+@keyframes chg { 0% { background: var(--hl); } 100% { background: transparent; } }
+@keyframes fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+.b-info { font-size: var(--t-s); color: var(--muted); max-width: 44ch; min-height: 3em; }
+.b-na { font-size: var(--t-m); color: var(--muted); max-width: 36ch; }
+table.ftable { width: 100%; border-collapse: collapse; table-layout: fixed; }
+table.ftable col.cw { width: 3.6em; }
+table.ftable thead th { font-size: var(--t-xs); font-weight: 600; text-align: left; padding: var(--s2); border-bottom: 1px solid var(--line); }
+table.ftable thead th .bg { font-weight: 600; font-size: var(--t-s); }
+table.ftable thead th.i { color: var(--impf); }
+table.ftable thead th.p { color: var(--pf); }
+table.ftable th.who { font-family: var(--bg-font); font-weight: 400; font-size: var(--t-s); color: var(--muted); text-align: left; padding-left: var(--s2); }
+table.ftable td { padding: 2px; }
+.fcell { width: 100%; min-height: 46px; border: 0; background: none; border-radius: var(--r-s); text-align: left; padding: 6px var(--s2); font-family: var(--bg-font); font-size: 17px; font-weight: 600; line-height: 1.3; cursor: pointer; transition: background-color .4s ease; }
+.fcell:hover { background: var(--sunk); }
+.fcell.i { color: var(--impf); }
+.fcell.p { color: var(--pf); }
+.fcell.empty { color: var(--muted); font-weight: 400; }
+.fcell[aria-pressed="true"] { background: var(--sunk); }
+.fcell.chg { animation: chg 1.1s ease-out; }
+table.ftable.fade tbody { animation: fade .35s ease-out; }
+@media (prefers-reduced-motion: reduce) { .pc.chg, .b-word.fade, .fcell.chg, table.ftable.fade tbody { animation: none; } }
+.b-meta { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); align-items: center; font-size: var(--t-s); color: var(--muted); padding: var(--s2) var(--s2) 0; }
+.b-meta b { color: var(--ink); }
+.b-meta .link { margin-left: auto; }
+@media (max-width: 520px) {
+  .b-word { font-size: 34px; }
+  .b-hero { padding: var(--s4) var(--s2) var(--s3); }
+  .fcell { font-size: 16px; padding-inline: 6px; }
+  table.ftable col.cw { width: 3.1em; }
+}
+@media (max-width: 400px) {
+  .fcell { font-size: 15px; padding-inline: 4px; overflow-wrap: anywhere; }
+  table.ftable col.cw { width: 2.8em; }
+}
 
 /* Examples */
 .ex { display: grid; gap: var(--s3); }
 .ex-head { display: flex; justify-content: space-between; align-items: center; gap: var(--s2); }
-.quote { display: grid; gap: 2px; padding-left: var(--s3); border-left: 3px solid var(--line); }
-.quote .bgt { font-family: var(--bg-font); font-size: 17px; line-height: 1.45; }
+.quote { display: grid; gap: 2px; padding-left: var(--s3); border-left: 2px solid var(--line); }
+.quote .bgt { font-family: var(--bg-font); font-size: 17px; line-height: 1.5; }
 .quote .tr { color: var(--muted); font-size: var(--t-s); }
 body.no-tr .quote .tr { display: none; }
 .trt { display: inline-flex; gap: 6px; align-items: center; font-size: var(--t-s); color: var(--muted); cursor: pointer; min-height: 44px; }
@@ -235,8 +230,8 @@ body.no-tr .quote .tr { display: none; }
 .ttop { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--s3); align-items: start; }
 @media (max-width: 820px) { .ttop { grid-template-columns: minmax(0, 1fr); } }
 .choose { display: grid; }
-.crow { display: grid; grid-template-columns: minmax(0, 1fr) 9.5em; gap: var(--s2); align-items: center; text-align: left; border: 0; background: none; min-height: 52px; padding: var(--s2) var(--s2); border-radius: var(--r-s); cursor: pointer; }
-.crow + .crow { box-shadow: inset 0 1px 0 var(--line); }
+.crow { display: grid; grid-template-columns: minmax(0, 1fr) 9.5em; gap: var(--s2); align-items: center; text-align: left; border: 0; background: none; min-height: 48px; padding: var(--s2); border-radius: var(--r-s); cursor: pointer; }
+.crow + .crow { border-top: 1px solid var(--line); }
 .crow:hover { background: var(--sunk); }
 .crow .say { font-size: var(--t-s); }
 .crow .ctn { display: inline-flex; gap: var(--s2); align-items: center; font-weight: 600; font-size: var(--t-s); }
@@ -244,48 +239,47 @@ body.no-tr .quote .tr { display: none; }
 .aspc { display: grid; gap: 2px; padding: var(--s2) var(--s3); border-radius: var(--r-s); font-size: var(--t-s); }
 .aspc.i { background: var(--impf-soft); }
 .aspc.p { background: var(--pf-soft); }
-.aspc b { font-size: var(--t-s); }
 .aspc.i b { color: var(--impf); }
 .aspc.p b { color: var(--pf); }
 .aspc .sigs { font-family: var(--bg-font); color: var(--muted); }
 .tcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: var(--s3); align-items: start; }
 .tcard { background: var(--surface); border-radius: var(--r); padding: var(--s3); display: grid; gap: var(--s3); min-width: 0; scroll-margin-top: 64px; }
 .tc-h { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s2) var(--s3); align-items: center; }
-.tc-h .ticon { width: 64px; height: 19px; }
-.tc-h .tn { font-weight: 700; font-size: var(--t-l); line-height: 1.2; }
+.tc-h .ticon { width: 56px; height: 16px; }
+.tc-h .tn { font-weight: 700; font-size: 18px; line-height: 1.25; }
 .tc-sub { grid-column: 1 / -1; font-size: var(--t-s); color: var(--muted); }
 .tc-sub .bg { color: var(--ink); }
 .formula { font-size: var(--t-s); color: var(--muted); }
 .formula b { color: var(--ink); font-weight: 600; }
-.strip-wrap { overflow-x: auto; background: var(--sunk); border-radius: var(--r-s); padding: var(--s2) var(--s2); }
+.strip-wrap { overflow-x: auto; background: var(--sunk); border-radius: var(--r-s); padding: var(--s2); }
 table.strip { border-collapse: collapse; width: 100%; }
 table.strip th { font-size: var(--t-xs); font-weight: 600; color: var(--muted); text-align: left; padding: 2px 6px; font-family: var(--bg-font); }
 table.strip td { font-family: var(--bg-font); font-weight: 700; font-size: 17px; padding: 4px 6px; white-space: nowrap; }
 table.strip td.g { font-family: var(--ui); font-size: var(--t-xs); font-weight: 600; color: var(--muted); }
 .after { font-size: var(--t-s); color: var(--muted); }
 .tc-links { display: flex; gap: var(--s4); flex-wrap: wrap; }
-.tc-more { display: grid; gap: var(--s3); padding-top: var(--s3); box-shadow: inset 0 1px 0 var(--line); }
+.tc-more { display: grid; gap: var(--s3); padding-top: var(--s3); border-top: 1px solid var(--line); }
+.tc-more .label { margin-bottom: var(--s1); }
 ul.clean { margin: 0; padding-left: 18px; display: grid; gap: var(--s1); font-size: var(--t-s); }
 .signals { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); font-family: var(--bg-font); }
 .sig { background: var(--sunk); border-radius: 999px; padding: 2px 10px; font-size: var(--t-s); }
 .tips { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--s2); font-size: var(--t-s); }
-.tips li { padding-left: 22px; position: relative; }
-.tips li::before { content: "!"; position: absolute; left: 0; top: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--hl); color: var(--ink); font-size: 11px; font-weight: 700; display: grid; place-items: center; line-height: 1; }
-.compare { background: var(--hl-soft); border-radius: var(--r-s); padding: var(--s2) var(--s3); font-size: var(--t-s); display: grid; gap: var(--s1); }
+.tips li { padding-left: 16px; position: relative; }
+.tips li::before { content: "–"; position: absolute; left: 0; color: var(--muted); }
+.compare { background: var(--sunk); border-radius: var(--r-s); padding: var(--s2) var(--s3); font-size: var(--t-s); display: grid; gap: var(--s1); }
 .rare-wrap > summary, .stems > summary { list-style: none; cursor: pointer; }
 .rare-wrap > summary::-webkit-details-marker, .stems > summary::-webkit-details-marker { display: none; }
 .rare-wrap > summary { display: inline-flex; align-items: center; min-height: 44px; font-weight: 600; font-size: var(--t-s); }
 .rare-wrap > summary::after, .stems > summary .label::after { content: " ▾"; color: var(--muted); }
 .rare-wrap[open] > summary { margin-bottom: var(--s3); }
-.stems > summary { min-height: 28px; }
 table.plain { width: 100%; border-collapse: collapse; font-size: var(--t-s); }
-table.plain td { padding: var(--s2) 6px; vertical-align: top; box-shadow: inset 0 -1px 0 var(--line); }
+table.plain td { padding: var(--s2) 6px; vertical-align: top; border-bottom: 1px solid var(--line); }
 table.plain td:first-child { font-weight: 600; white-space: nowrap; }
 
 /* ---------- Verbs ---------- */
 .vlist { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: var(--s2); }
 .vrow { text-align: left; border: 0; background: var(--surface); border-radius: var(--r-s); padding: var(--s2) var(--s3); min-height: 60px; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 var(--s2); align-items: center; }
-.vrow:hover { box-shadow: inset 0 0 0 1px var(--line); }
+.vrow:hover { background: var(--sunk); }
 .vrow .pair { font-family: var(--bg-font); font-weight: 600; font-size: 17px; }
 .vrow .vmean { font-size: var(--t-s); color: var(--muted); grid-column: 1; }
 .vrow .grp { grid-column: 2; grid-row: 1 / span 2; font-size: var(--t-xs); color: var(--muted); font-weight: 600; }
@@ -297,36 +291,51 @@ table.plain td:first-child { font-weight: 600; white-space: nowrap; }
 .count { color: var(--muted); font-size: var(--t-s); white-space: nowrap; }
 .back { border: 0; background: none; padding: 0; min-height: 44px; color: var(--muted); font-weight: 600; cursor: pointer; justify-self: start; }
 .vhead { display: grid; gap: var(--s2); }
-.pairbig { font-family: var(--bg-font); font-size: 28px; line-height: 1.2; font-weight: 600; margin: 0; }
+.pairbig { font-family: var(--bg-font); font-size: 28px; line-height: 1.2; font-weight: 600; }
 .badges { display: flex; gap: var(--s1); flex-wrap: wrap; }
-.note { background: var(--hl-soft); border-radius: var(--r-s); padding: var(--s2) var(--s3); font-size: var(--t-s); }
+.note { background: var(--surface); border-radius: var(--r-s); padding: var(--s2) var(--s3); font-size: var(--t-s); }
 .vgrid-head { display: grid; gap: var(--s2); }
 .pseg { display: grid; grid-template-columns: repeat(6, 1fr); background: var(--sunk); border-radius: var(--r-s); padding: 3px; gap: 3px; }
-.pseg button { border: 0; background: none; min-height: 40px; border-radius: 8px; font-family: var(--bg-font); font-weight: 600; font-size: var(--t-s); color: var(--muted); cursor: pointer; padding: 0; }
-.pseg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.14); }
+.pseg button { border: 0; background: none; min-height: 40px; border-radius: 6px; font-family: var(--bg-font); font-weight: 600; font-size: var(--t-s); color: var(--muted); cursor: pointer; padding: 0; }
+.pseg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); }
 .gwrap { overflow-x: auto; margin-inline: calc(var(--s3) * -1); }
 table.vgrid { border-collapse: separate; border-spacing: 0; width: 100%; table-layout: fixed; }
 table.vgrid col.c0 { width: 34%; }
-@media (max-width: 520px) { .tlink .ticon { display: none; } .tlink { font-size: var(--t-xs); } .cell { font-size: 15px; padding: 6px; } }
-table.vgrid th, table.vgrid td { padding: 0; text-align: left; vertical-align: middle; box-shadow: inset 0 -1px 0 var(--line); }
-table.vgrid thead th { font-size: var(--t-xs); font-weight: 600; padding: var(--s2) var(--s2); font-family: var(--bg-font); }
+table.vgrid th, table.vgrid td { padding: 0; text-align: left; vertical-align: middle; border-bottom: 1px solid var(--line); }
+table.vgrid thead th { font-size: var(--t-xs); font-weight: 600; padding: var(--s2); font-family: var(--bg-font); }
 table.vgrid thead th.i { color: var(--impf); }
 table.vgrid thead th.p { color: var(--pf); }
 table.vgrid .stick { position: sticky; left: 0; background: var(--surface); z-index: 1; padding-left: var(--s3); }
 .tlink { display: inline-flex; gap: var(--s2); align-items: center; border: 0; background: none; cursor: pointer; font-size: var(--t-s); font-weight: 600; color: var(--muted); min-height: 52px; padding: 0 var(--s2) 0 0; text-align: left; }
-.cell { border: 0; background: none; cursor: pointer; min-height: 52px; padding: var(--s2); border-radius: 8px; font-family: var(--bg-font); font-size: var(--t-m); font-weight: 600; text-align: left; width: 100%; }
+.tlink span { min-width: 0; overflow-wrap: anywhere; }
+.cell { border: 0; background: none; cursor: pointer; min-height: 52px; padding: var(--s2); border-radius: var(--r-s); font-family: var(--bg-font); font-size: var(--t-m); font-weight: 600; text-align: left; width: 100%; }
 .cell:hover { background: var(--sunk); }
 .cell.i { color: var(--impf); }
 .cell.p { color: var(--pf); }
+@media (max-width: 520px) { .tlink .ticon { display: none; } .tlink { font-size: var(--t-xs); } table.vgrid col.c0 { width: 27%; } .cell { font-size: 14px; padding: 6px 4px; overflow-wrap: anywhere; } .pairbig { font-size: 24px; } }
 
 /* ---------- Practice ---------- */
-.pr { display: grid; gap: var(--s3); max-width: 720px; }
+.pr { display: grid; gap: var(--s3); max-width: 720px; min-width: 0; }
+.pr > * { min-width: 0; }
+.pr-filter { display: grid; gap: var(--s2); }
+.dd > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 6px; min-height: 44px; padding: 10px var(--s3); background: var(--surface); border-radius: var(--r-s); font-size: 15px; min-width: 0; }
+.dd > summary::-webkit-details-marker { display: none; }
+.dd > summary::after { content: "▾"; margin-left: auto; padding-left: var(--s2); color: var(--muted); }
+.dd[open] > summary::after { content: "▴"; }
+.dd-k { color: var(--muted); flex: none; }
+.dd-v { font-weight: 600; min-width: 0; line-height: 1.35; }
+.dd-panel { margin-top: var(--s1); background: var(--surface); border-radius: var(--r-s); padding: var(--s2) var(--s3); display: grid; gap: var(--s1); }
+.dd-panel label { display: flex; align-items: center; gap: var(--s2); min-height: 38px; font-size: 15px; cursor: pointer; }
+.dd-panel input { width: 18px; height: 18px; margin: 0; flex: none; }
+.dd-all { font-weight: 600; border-bottom: 1px solid var(--line); }
+.dd-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); column-gap: var(--s3); }
+.seg.pasp { grid-template-columns: auto; grid-auto-columns: 1fr; align-items: center; }
+.seg .seg-k { padding: 0 var(--s2) 0 var(--s2); font-size: var(--t-s); color: var(--muted); }
 .pr-score { display: flex; gap: var(--s3); flex-wrap: wrap; font-size: var(--t-s); color: var(--muted); }
 .pr-score b { color: var(--ink); }
-.pr-card { gap: var(--s3); }
 .pr-prompt { display: grid; gap: var(--s2); }
 .pr-prompt .pair { font-family: var(--bg-font); font-weight: 600; font-size: var(--t-l); }
-.pr-tags { display: flex; flex-wrap: wrap; gap: var(--s2); }
+.pr-tags { display: flex; flex-wrap: wrap; gap: var(--s2); align-items: center; }
 .pr-tag { background: var(--sunk); border-radius: 999px; padding: 4px 12px; font-size: var(--t-s); font-weight: 600; }
 .pr-tag.bg { font-family: var(--bg-font); }
 .pr-tag.i { background: var(--impf-soft); color: var(--impf); }
@@ -335,30 +344,30 @@ table.vgrid .stick { position: sticky; left: 0; background: var(--surface); z-in
 .pr-tr { color: var(--muted); font-size: var(--t-s); }
 .blank { display: inline-block; min-width: 4.5em; border-bottom: 2px solid var(--ink); text-align: center; color: var(--muted); }
 .blank.filled { border-bottom-color: var(--ok); color: var(--ok); font-weight: 700; min-width: 0; padding-inline: 2px; }
-.pr-opts { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2); }
-@media (max-width: 420px) { .pr-opts.four { grid-template-columns: 1fr; } }
+.pr-opts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2); }
+@media (max-width: 480px) { .pr-opts { grid-template-columns: minmax(0, 1fr); } }
 .opt { display: flex; align-items: center; gap: var(--s2); min-height: 56px; border: 0; border-radius: var(--r-s); background: var(--sunk); padding: var(--s2) var(--s3); cursor: pointer; text-align: left; font-family: var(--bg-font); font-size: 18px; font-weight: 600; color: var(--ink); }
-.opt:hover { box-shadow: inset 0 0 0 2px var(--line); }
+.opt:hover { background: var(--line); }
+.opt > span:nth-child(2) { min-width: 0; overflow-wrap: anywhere; }
 .opt .key { font-family: var(--ui); font-size: var(--t-xs); font-weight: 700; color: var(--muted); background: var(--surface); border-radius: 6px; min-width: 22px; height: 22px; display: grid; place-items: center; flex: none; }
 .opt .mark { margin-left: auto; font-family: var(--ui); font-weight: 700; }
-.opt.ok { background: var(--ok-soft); box-shadow: inset 0 0 0 2px var(--ok); color: var(--ok); }
-.opt.bad { background: var(--bad-soft); box-shadow: inset 0 0 0 2px var(--bad); color: var(--bad); }
+.opt.ok { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--ok); color: var(--ok); }
+.opt.bad { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--bad); color: var(--bad); }
 .opt.dim { opacity: .45; }
 .opt[aria-disabled="true"] { cursor: default; }
-.pr-why { display: grid; gap: var(--s2); background: var(--hl-soft); border-radius: var(--r-s); padding: var(--s3); font-size: var(--t-s); }
+.opt[aria-disabled="true"]:hover { background: var(--sunk); }
+.opt.ok[aria-disabled="true"]:hover, .opt.bad[aria-disabled="true"]:hover { background: var(--surface); }
+.pr-why { display: grid; gap: var(--s2); background: var(--sunk); border-radius: var(--r-s); padding: var(--s3); font-size: var(--t-s); }
 .pr-why .verdict { font-weight: 700; font-size: var(--t-m); }
 .pr-why .verdict.ok { color: var(--ok); }
 .pr-why .verdict.bad { color: var(--bad); }
 .pr-why .full { font-family: var(--bg-font); font-size: 17px; }
 .pr-next { display: flex; gap: var(--s3); align-items: center; flex-wrap: wrap; }
+.pr-empty { justify-items: start; }
 .btn { border: 0; background: var(--ink); color: var(--bg); border-radius: var(--r-s); min-height: 48px; padding: 0 var(--s4); font-weight: 700; font-size: var(--t-m); cursor: pointer; }
 .pr-hint { font-size: var(--t-xs); color: var(--muted); }
 
-footer { color: var(--muted); font-size: var(--t-xs); padding-block: var(--s2) var(--s4); }
-@media (max-width: 520px) {
-  .b-word { font-size: 30px; }
-  .pairbig { font-size: 24px; }
-}
+footer { color: var(--muted); font-size: var(--t-xs); padding-block: 0 var(--s5); }
 </style>
 
 </head>
@@ -368,30 +377,32 @@ footer { color: var(--muted); font-size: var(--t-xs); padding-block: var(--s2) v
     <div class="top-row">
       <p class="brand"><span class="bg">Глаголи</span><small id="sub"></small></p>
       <span class="spacer"></span>
+      <button class="chipbtn" id="stressBtn" aria-pressed="true"><span class="acc" aria-hidden="true">а́</span><span class="lbl"></span></button>
       <button class="help" id="help" aria-expanded="false" aria-controls="legend" aria-label="?">?</button>
       <div class="lang" id="lang" role="group" aria-label="Language"></div>
     </div>
     <div class="legend" id="legend" hidden></div>
+    <div class="notice" id="notice" role="status" hidden></div>
   </div>
 </header>
 
 <nav class="tabs" aria-label="Sections">
   <div class="wrap" role="tablist">
-    <button class="tab" role="tab" id="tab-btn-form" data-tab="form" style="--tc: var(--tab-form)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="7" height="8" rx="2"/><rect x="10" y="8" width="5" height="8" rx="2"/><rect x="15" y="8" width="6" height="8" rx="2"/></svg><span></span></button>
-    <button class="tab" role="tab" id="tab-btn-tenses" data-tab="tenses" style="--tc: var(--tab-tenses)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 12h20"/><path d="M12 7v10"/><circle cx="6" cy="12" r="2" fill="currentColor"/><circle cx="18" cy="12" r="2"/></svg><span></span></button>
-    <button class="tab" role="tab" id="tab-btn-verbs" data-tab="verbs" style="--tc: var(--tab-verbs)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg><span></span></button>
-    <button class="tab" role="tab" id="tab-btn-practice" data-tab="practice" style="--tc: var(--tab-practice)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg><span></span></button>
+    <button class="tab" role="tab" id="tab-btn-form" aria-controls="pane-form" data-tab="form"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="7" height="8" rx="2"/><rect x="10" y="8" width="5" height="8" rx="2"/><rect x="15" y="8" width="6" height="8" rx="2"/></svg><span></span></button>
+    <button class="tab" role="tab" id="tab-btn-tenses" aria-controls="pane-tenses" data-tab="tenses"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M2 12h20"/><path d="M12 7v10"/><circle cx="6" cy="12" r="2" fill="currentColor"/><circle cx="18" cy="12" r="2"/></svg><span></span></button>
+    <button class="tab" role="tab" id="tab-btn-verbs" aria-controls="pane-verbs" data-tab="verbs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg><span></span></button>
+    <button class="tab" role="tab" id="tab-btn-practice" aria-controls="pane-practice" data-tab="practice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg><span></span></button>
   </div>
 </nav>
 
 <main class="wrap">
-  <section role="tabpanel" id="form" aria-labelledby="tab-btn-form"></section>
-  <section role="tabpanel" id="tenses" aria-labelledby="tab-btn-tenses" hidden></section>
-  <section role="tabpanel" id="verbs" aria-labelledby="tab-btn-verbs" hidden></section>
-  <section role="tabpanel" id="practice" aria-labelledby="tab-btn-practice" hidden></section>
+  <section role="tabpanel" id="pane-form" aria-labelledby="tab-btn-form"></section>
+  <section role="tabpanel" id="pane-tenses" aria-labelledby="tab-btn-tenses" hidden></section>
+  <section role="tabpanel" id="pane-verbs" aria-labelledby="tab-btn-verbs" hidden></section>
+  <section role="tabpanel" id="pane-practice" aria-labelledby="tab-btn-practice" hidden></section>
 </main>
 
-<footer class="wrap">100 пар · Study in BG</footer>
+<footer class="wrap" id="foot"></footer>
 
 <script>
 /* Verb pairs from "100 common aspectual pairs in Bulgarian" (Study in BG), plus three model verbs.
@@ -654,6 +665,30 @@ window.VERB_DATA = [
     ["Винаги питам, когато не разбирам. Ще попитам учителката.", "Я всегда спрашиваю, когда не понимаю. Спрошу учительницу."]], { extra: true }]
 ];
 
+/* Stress of the dictionary forms, as marked (in red) in the PDF; ти-forms only where the PDF gives them.
+   Model verbs at the end are not in the PDF. "събера" is deliberately missing: the PDF seems to mark съб́ера,
+   which contradicts избера́ / разбера́ / прибера́, so it is left unmarked until checked.
+   All other forms are derived from these in grammar.js. */
+window.VERB_STRESS = (
+  "вди́гам вди́гна взе́мам взе́ма ви́ждам ви́дя вли́зам вля́за вле́зеш връ́щам въ́рна да́вам даде́ш доба́вям доба́вя " +
+  "дона́сям донеса́ донесе́ш забра́вям забра́вя зави́вам зави́я заку́свам заку́ся заклю́чвам заклю́ча закъсня́вам закъсне́я " +
+  "замина́вам зами́на запозна́вам запозна́я запо́чвам запо́чна затва́рям затво́ря и́двам до́йда изби́рам избера́ " +
+  "изли́зам изля́за изле́зеш изми́слям изми́сля изнена́двам изнена́дам изпра́щам изпра́тя ка́звам ка́жа ка́чвам кача́ " +
+  "купу́вам ку́пя ля́гам ле́гна мина́вам ми́на мо́ля помо́ля нами́рам наме́ря нае́мам нае́ма оба́ждам оба́дя " +
+  "обеща́вам обеща́я обли́чам облека́ облече́ш обу́вам обу́я обясня́вам обясня́ оста́вам оста́на оста́вям оста́вя " +
+  "отва́рям отво́ря отгова́рям отгово́ря оти́вам оти́да отклю́чвам отклю́ча опи́твам опи́там па́дам па́дна пла́щам платя́ " +
+  "повта́рям повто́ря подаря́вам подаря́ пожела́вам пожела́я поздравя́вам поздравя́ пока́звам пока́жа получа́вам полу́ча " +
+  "пома́гам помо́гна попра́вям попра́вя поръ́чвам поръ́чам посеща́вам посетя́ посре́щам посре́щна почи́вам почи́на " +
+  "преве́ждам преведа́ предла́гам предло́жа предпола́гам предполо́жа предпочи́там предпочета́ предста́вям предста́вя " +
+  "прека́рвам прека́рам преси́чам пресека́ пресече́ш приби́рам прибера́ приго́твям приго́твя прие́мам прие́ма " +
+  "присти́гам присти́гна проверя́вам проверя́ прода́вам прода́м продаде́ш продължа́вам продължа́ проме́ням променя́ " +
+  "разби́рам разбера́ разка́звам разка́жа разхо́ждам разхо́дя реша́вам реша́ свъ́ршвам свъ́рша ска́чам ско́ча сла́гам сло́жа " +
+  "сли́зам сля́за сле́зеш сме́ням сменя́ спестя́вам спестя́ спи́рам спра споде́лям споделя́ сре́щам сре́щна ста́вам ста́на " +
+  "сти́гам сти́гна съби́рам събу́ждам събу́дя събли́чам съблека́ съблече́ш съобща́вам съобщя́ ся́дам се́дна тръ́гвам тръ́гна " +
+  "уми́рам умра́ уморя́вам уморя́ успя́вам успе́я харе́свам харе́сам целу́вам целу́на чу́вам чу́я " +
+  /* model verbs */ "чета́ прочета́ пра́вя напра́вя пи́там попи́там"
+).split(" ");
+
 </script>
 <script>
 /* Conjugation engine + bilingual (RU / BG) grammar content. */
@@ -669,13 +704,15 @@ window.VERB_DATA = [
 
   function lastYaToE(s) { var i = s.lastIndexOf("я"); return i < 0 ? s : s.slice(0, i) + "е" + s.slice(i + 1); }
 
-  function partForms(m) {
+  /* -ял → -ели in the plural (видял → видели) only where я is the old ят of I / II conjugation verbs;
+     the я of III conjugation verbs stays (забравял → забравяли). */
+  function partForms(m, keepYa) {
     if (m.slice(-2) === "ъл") {
       var s = m.slice(0, -2);
       return { m: m, f: s + "ла", n: s + "ло", pl: lastYaToE(s) + "ли" };
     }
     var pl = m + "и";
-    if (m.slice(-2) === "ял" && VOWELS.indexOf(m.charAt(m.length - 3)) < 0) pl = m.slice(0, -2) + "ели";
+    if (!keepYa && m.slice(-2) === "ял" && VOWELS.indexOf(m.charAt(m.length - 3)) < 0) pl = m.slice(0, -2) + "ели";
     return { m: m, f: m + "а", n: m + "о", pl: pl };
   }
 
@@ -690,7 +727,7 @@ window.VERB_DATA = [
         pres: [a, b + "ш", b, b + "ме", b + "те", b + "т"],
         aor: [b + "х", b, b, b + "хме", b + "хте", b + "ха"],
         imp: [b + "х", b + "ше", b + "ше", b + "хме", b + "хте", b + "ха"],
-        part: partForms(b + "л"),
+        part: partForms(b + "л", true),
         impv: x.impv || [b + "й", b + "йте"]
       };
     }
@@ -712,6 +749,66 @@ window.VERB_DATA = [
     };
   }
 
+
+  /* ---------- Stress ----------
+     The PDF gives the stressed vowel of each dictionary form (аз-form, sometimes the ти-form).
+     Everything else is derived by rule, counting vowels from the start of the word.
+     A form whose stress is not certain gets -1 and is shown without a mark. */
+  var ACUTE = "́";
+  var STRESS_IDX = {};
+  (window.VERB_STRESS || []).forEach(function (w) {
+    var plain = w.replace(/́/g, ""), k = w.indexOf(ACUTE);
+    if (k > 0) STRESS_IDX[plain] = vowelNo(plain, k - 1);
+  });
+  function vowelPos(w) { var r = []; for (var i = 0; i < w.length; i++) if (VOWELS.indexOf(w.charAt(i)) >= 0) r.push(i); return r; }
+  function vowelNo(w, charIdx) { return vowelPos(w).indexOf(charIdx); }
+  function dictStress(w) { if (STRESS_IDX[w] !== undefined) return STRESS_IDX[w]; return vowelPos(w).length === 1 ? 0 : -1; }
+  /* char index of vowel number n in w; -1 when unknown or when the word has one vowel (no mark needed) */
+  function at(w, n) { if (!w || n < 0) return -1; var v = vowelPos(w); return v.length > 1 && n < v.length ? v[n] : -1; }
+  function markStr(w, ci) { return ci >= 0 ? w.slice(0, ci + 1) + ACUTE + w.slice(ci + 1) : w; }
+  function stripStress(w) { return String(w).replace(/́/g, ""); }
+
+  /* Imperatives of stem-stressed I-conjugation verbs: stress moves to the ending only in these
+     (кажи́, вземи́, седни́…); for the rest it is uncertain and left unmarked. */
+  var IMPV_ENDING = { "кажа": 1, "покажа": 1, "разкажа": 1, "взема": 1, "седна": 1, "стана": 1, "легна": 1 };
+  /* Irregular imperatives given in verbs.js */
+  var IMPV_IRR = { "ела": "ела́", "елате": "ела́те", "вижте": "ви́жте", "дайте": "да́йте", "продай": "прода́й", "продайте": "прода́йте",
+    "влезте": "вле́зте", "излез": "изле́з", "излезте": "изле́зте", "слезте": "сле́зте" };
+
+  function stressOf(f) {
+    var none = [-1, -1, -1, -1, -1, -1];
+    var st = { inf: -1, pres: none.slice(), aor: none.slice(), imp: none.slice(), part: { m: -1, f: -1, n: -1, pl: -1 }, impv: [-1, -1] };
+    var s1 = dictStress(f.inf);
+    if (s1 < 0) return st;
+    var s2 = STRESS_IDX[f.pres[1]] !== undefined ? STRESS_IDX[f.pres[1]] : s1;
+    var nv = vowelPos(f.inf).length, g = f.group;
+    var vowelStem = /[аеиоуъюя]й$/.test(f.impv[0]) && g !== "III";
+    var endStressed = g !== "III" && s1 === nv - 1 && VOWELS.indexOf(f.inf.slice(-1)) >= 0;
+    st.inf = at(f.inf, s1);
+    // present: the stress stays on the same vowel in every person
+    st.pres = f.pres.map(function (w, i) { return at(w, i === 0 ? s1 : s2); });
+    // aorist
+    var aIdx = s1;
+    if (endStressed) aIdx = f.aor[0].slice(-2) === "ох" ? s1 - 1 : vowelPos(f.aor[0]).length - 1;
+    st.aor = f.aor.map(function (w) { return at(w, aIdx); });
+    // imperfect (only imperfective verbs have it here): same vowel as the аз-form of the present
+    if (f.imp) st.imp = f.imp.map(function (w) { return at(w, s1); });
+    // -л participle: same vowel as the aorist; participles in -ъл are left unmarked (stress may move: дошъл / дошли́)
+    if (f.part.m.slice(-2) !== "ъл") ["m", "f", "n", "pl"].forEach(function (k) { st.part[k] = at(f.part[k], aIdx); });
+    // imperative
+    if (IMPV_IRR[f.impv[0]] || IMPV_IRR[f.impv[1]] || /^(виж|дай|влез|слез)$/.test(f.impv[0])) {
+      st.impv = f.impv.map(function (w) { var x = IMPV_IRR[w]; return x ? x.indexOf(ACUTE) - 1 : -1; });
+    } else if (g === "III" || g === "II" || vowelStem || endStressed) {
+      st.impv = f.impv.map(function (w) { return at(w, s1); });
+    } else if (IMPV_ENDING[f.inf]) {
+      st.impv = [at(f.impv[0], vowelPos(f.impv[0]).length - 1), at(f.impv[1], vowelPos(f.impv[1]).length - 2)];
+    }
+    return st;
+  }
+  /* Polysyllabic auxiliaries (clitics like съм, ще, да are unstressed) */
+  var AUX_ST = { "беше": "бе́ше", "бяхме": "бя́хме", "бяхте": "бя́хте", "бяха": "бя́ха", "щеше да": "ще́ше да", "щяхме да": "щя́хме да",
+    "щяхте да": "щя́хте да", "щяха да": "щя́ха да", "бихме": "би́хме", "бихте": "би́хте", "биха": "би́ха", "няма да": "ня́ма да", "нямаше да": "ня́маше да" };
+
   var VERBS = window.VERB_DATA.map(function (r, idx) {
     var o = r[4] || {};
     return {
@@ -720,6 +817,14 @@ window.VERB_DATA = [
       ru: r[2], ex: r[3], note: o.note || null, extra: !!o.extra
     };
   });
+  VERBS.forEach(function (v) { v.impf.st = stressOf(v.impf); v.pf.st = stressOf(v.pf); });
+  /* stressed text of one simple form: key like "pres|3", "aor|0", "imp|1", "impv|0", "part|f" */
+  function stressedForm(f, key) {
+    var p = key.split("|"), w, ci;
+    if (p[0] === "part") { w = f.part[p[1]]; ci = f.st.part[p[1]]; }
+    else { w = f[p[0]] && f[p[0]][+p[1]]; ci = f.st[p[0]] ? f.st[p[0]][+p[1]] : -1; }
+    return w ? markStr(w, ci) : null;
+  }
 
   /* ---------- Tense cells ---------- */
   function aux(s) { return '<span class="aux">' + s + "</span>"; }
@@ -1013,7 +1118,6 @@ window.VERB_DATA = [
       name: { ru: "Повелительное наклонение", bg: "Повелително наклонение" },
       formula: { ru: "основа + -и / -ете или -й / -йте", bg: "основа + -и / -ете или -й / -йте" },
       short: { ru: "приказы, просьбы", bg: "заповеди, молби" },
-      persons: ["ти", "вие", "не! (ти)"],
       uses: {
         ru: ["Приказы, просьбы, инструкции. Свои формы есть только у «ти» и «вие».", "«Давай(те)…» — «нека / да»: «Нека да опитаме!», «Да вървим!»"],
         bg: ["Заповеди, молби, инструкции. Собствени форми има само за „ти“ и „вие“.", "За подкана: нека / да: Нека да опитаме! Да вървим!"]
@@ -1085,24 +1189,25 @@ window.VERB_DATA = [
   /* Returns { pieces: [{t, k, info}], na: reason } for one cell of the builder. */
   function build(tid, v, pf, i, gender, neg, lang) {
     var f = pf ? v.pf : v.impf, se = v.se, out = [], g = f.group;
-    function P(t, k, inf) { out.push({ t: t, k: k, info: inf }); }
-    function pt(w, kind) { P(w, "pt", info(kind, { i: i, w: w }, lang)); }
+    function P(t, k, inf, s) { out.push({ t: t, k: k, info: inf, s: s === undefined ? -1 : s }); }
+    function pt(w, kind) { var x = AUX_ST[w]; P(w, "pt", info(kind, { i: i, w: w }, lang), x ? x.indexOf(ACUTE) - 1 : -1); }
     function seP() { if (se) P(se, "se", info("se", { w: se }, lang)); }
-    function word(form, ends, endKind, stemKind) {
-      var s = split(form, ends);
-      P(s[0], "stem", info(stemKind || "stem", { i: i }, lang));
-      if (s[1]) P(s[1], "end", info(endKind, { i: i, e: s[1], g: g }, lang));
+    function word(form, ends, endKind, stemKind, ci) {
+      var s = split(form, ends), L = s[0].length;
+      ci = ci === undefined ? -1 : ci;
+      P(s[0], "stem", info(stemKind || "stem", { i: i }, lang), ci >= 0 && ci < L ? ci : -1);
+      if (s[1]) P(s[1], "end", info(endKind, { i: i, e: s[1], g: g }, lang), ci >= L ? ci - L : -1);
       else if (endKind === "end-present" || endKind === "end-aorist" || endKind === "end-impv") out[out.length - 1].info += " " + info(endKind, { i: i, e: "", g: g }, lang);
     }
     function participle() {
-      var w = i < 3 ? (gender === "f" ? f.part.f : f.part.m) : f.part.pl;
-      word(w, ["ъл", "ла", "ли", "л"], "end-part", "stem-part");
+      var k = i < 3 ? (gender === "f" ? "f" : "m") : "pl";
+      word(f.part[k], ["ъл", "ла", "ли", "л"], "end-part", "stem-part", f.st.part[k]);
     }
     function auxPiece(arr, kind) {
       if (se && i === 2 && kind === "aux") { seP(); pt("е", "aux"); return; }
       pt(arr[i], kind); seP();
     }
-    var presWord = function () { word(f.pres[i], PRES_END[g][i], "end-present"); };
+    var presWord = function () { word(f.pres[i], PRES_END[g][i], "end-present", undefined, f.st.pres[i]); };
 
     switch (tid) {
       case "present":
@@ -1113,13 +1218,13 @@ window.VERB_DATA = [
       case "aorist":
         var a2 = (i === 1 || i === 2) ? (f.aor[0].slice(-2) === "ох" ? ["е"] : [""]) : [["х"], 0, 0, ["хме"], ["хте"], ["ха"]][i];
         if (neg) { pt("не", "не"); seP(); }
-        word(f.aor[i], a2, "end-aorist", "stem-aorist");
+        word(f.aor[i], a2, "end-aorist", "stem-aorist", f.st.aor[i]);
         if (!neg) seP();
         break;
       case "imperfect":
         if (pf || !f.imp) return { na: lang === "ru" ? "Имперфект СВ почти не используется — берите НСВ." : "Имперфект от свършен вид почти не се използва – вземете НСВ." };
         if (neg) { pt("не", "не"); seP(); }
-        word(f.imp[i], IMP_END[i], "end-imperfect");
+        word(f.imp[i], IMP_END[i], "end-imperfect", undefined, f.st.imp[i]);
         if (!neg) seP();
         break;
       case "perfect":
@@ -1148,16 +1253,17 @@ window.VERB_DATA = [
         if (neg && pf) return { na: lang === "ru" ? "Запрет — только НСВ: «" + banned + "»." : "Забрана – само с НСВ: „" + banned + "“." };
         var iw = f.impv[i === 1 ? 0 : 1];
         if (neg) { pt("не", "не"); seP(); }
-        word(iw, i === 1 ? ["и", "й"] : ["ете", "йте"], "end-impv");
+        word(iw, i === 1 ? ["и", "й"] : ["ете", "йте"], "end-impv", undefined, f.st.impv[i === 1 ? 0 : 1]);
         if (!neg) seP();
         break;
     }
     return { pieces: out };
   }
-  function joinPieces(r) {
+  function pieceText(p, stressed) { return stressed ? markStr(p.t, p.s) : p.t; }
+  function joinPieces(r, stressed) {
     // stem + ending are written together; everything else separated by spaces
     var s = "", prev = null;
-    r.pieces.forEach(function (p) { s += (prev && !(prev.k === "stem" && p.k === "end") ? " " : "") + p.t; prev = p; });
+    r.pieces.forEach(function (p) { s += (prev && !(prev.k === "stem" && p.k === "end") ? " " : "") + pieceText(p, stressed); prev = p; });
     return s;
   }
 
@@ -1202,7 +1308,8 @@ window.VERB_DATA = [
   window.BG = {
     VERBS: VERBS, TENSES: TENSES, PERSONS: PERSONS, AUX: AUX,
     cells: cells, wordSet: wordSet, aux: aux,
-    build: build, joinPieces: joinPieces, PART_TENSES: PART_TENSES,
+    build: build, joinPieces: joinPieces, pieceText: pieceText, PART_TENSES: PART_TENSES,
+    stressedForm: stressedForm, markStr: markStr, stripStress: stripStress,
     RUEQ: RUEQ, STRIP: STRIP, icon: icon
   };
 })();
@@ -1244,7 +1351,16 @@ window.VERB_DATA = [
       right: "верно", streak: "серия", best: "рекорд", yes: "Верно!", no: "Неверно", next: "Дальше →",
       keys: "Клавиши: 1–4 — ответ, Enter — дальше", sigs: "Слова-сигналы", inBuilder: "Открыть в конструкторе",
       whyI: "НСВ: процесс, повторение, привычка.", whyP: "СВ: одно завершённое действие с результатом.",
-      orig: "Так в оригинале из вашего списка:"
+      whyA: "СВ в настоящем времени не стоит сам по себе, без «да», «ще», «ако», «когато». Здесь возможен только НСВ.",
+      whyB: "Запрет («не» + повелительное) — всегда НСВ.",
+      orig: "Так в оригинале из вашего списка:",
+      stress: "Ударения", stressTitle: "Показывать ударения",
+      foot: function (n) { return n + " " + plural(n, "пара", "пары", "пар") + " глаголов из списка Study in BG"; },
+      train: "Что тренировать", allT: "Все времена", aspL: "Вид", both: "оба",
+      noQ: "Под этот выбор нет упражнений.", pickAll: "Выбрать все времена",
+      noAspInMode: "Вид в этом режиме выбирает задание, поэтому переключателя вида здесь нет.",
+      hasT: "Вопросы этого режима есть только для времён:",
+      say: "Произнести", ttsNo: "Озвучка недоступна: в этом браузере нет болгарского голоса.", close: "Закрыть"
     },
     bg: {
       sub: "пищов", tForm: "Форма", tTenses: "Времена", tVerbs: "Глаголи",
@@ -1265,7 +1381,16 @@ window.VERB_DATA = [
       right: "вярно", streak: "серия", best: "рекорд", yes: "Вярно!", no: "Грешно", next: "Напред →",
       keys: "Клавиши: 1–4 – отговор, Enter – напред", sigs: "Сигнални думи", inBuilder: "Отвори в конструктора",
       whyI: "НСВ: процес, повторение, навик.", whyP: "СВ: едно завършено действие с резултат.",
-      orig: "Така е в оригинала от вашия списък:"
+      whyA: "Свършеният вид в сегашно време не стои самостоятелно, без „да“, „ще“, „ако“, „когато“. Тук е възможен само НСВ.",
+      whyB: "Забрана („не“ + повелително) – винаги НСВ.",
+      orig: "Така е в оригинала от вашия списък:",
+      stress: "Ударения", stressTitle: "Показвай ударенията",
+      foot: function (n) { return n + " " + (n === 1 ? "двойка" : "двойки") + " глаголи от списъка на Study in BG"; },
+      train: "Какво да упражнявам", allT: "Всички времена", aspL: "Вид", both: "двата",
+      noQ: "Няма упражнения за този избор.", pickAll: "Избери всички времена",
+      noAspInMode: "В този режим видът е част от задачата, затова тук няма превключвател за вид.",
+      hasT: "В този режим има въпроси само за времената:",
+      say: "Произнеси", ttsNo: "Озвучаването не е достъпно: в този браузър няма български глас.", close: "Затвори"
     }
   };
   function plural(n, one, few, many) {
@@ -1273,7 +1398,7 @@ window.VERB_DATA = [
     return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many;
   }
   var CHIP = {
-    ru: { present: "Настоящее", aorist: "Аорист", imperfect: "Имперфект", perfect: "Перфект", pluperfect: "Плюсквамперфект", future: "Будущее", fip: "Будущее в прош.", fp: "Буд. предварит.", fpp: "Буд. предв. в прош.", cond: "Условное", impv: "Повелительное" },
+    ru: { present: "Настоящее", aorist: "Аорист", imperfect: "Имперфект", perfect: "Перфект", pluperfect: "Плюсквам\u00adперфект", future: "Будущее", fip: "Будущее в прош.", fp: "Буд. предварит.", fpp: "Буд. предв. в прош.", cond: "Условное", impv: "Повелительное" },
     bg: { present: "Сегашно", aorist: "Аорист", imperfect: "Имперфект", perfect: "Перфект", pluperfect: "Мин. предварително", future: "Бъдеще", fip: "Бъдеще в миналото", fp: "Бъд. предварително", fpp: "Бъд. предв. в миналото", cond: "Условно", impv: "Повелително" }
   };
 
@@ -1288,8 +1413,9 @@ window.VERB_DATA = [
   var S = {
     lang: store.get("lang") === "bg" ? "bg" : "ru",
     tab: "form", verb: null, query: "", tr: store.get("tr") !== "0", legend: false,
+    stress: store.get("stress") !== "0",
     open: {}, showRare: false, vperson: 0, vrare: false,
-    B: { verb: DEFAULT_VERB, tense: "present", person: 0, pf: false, gender: "m", neg: false, sel: -1, picking: false, q: "", open: false },
+    B: { verb: DEFAULT_VERB, tense: "present", person: 0, pf: false, gender: "m", neg: false, sel: -1, picking: false, q: "" },
     anim: null, prev: null
   };
   if (savedB && VERBS[savedB.verb] && TBY[savedB.tense]) {
@@ -1303,8 +1429,9 @@ window.VERB_DATA = [
   function shortName(tn) { return CHIP[S.lang][tn.id]; }
 
   /* ---------- Verb helpers ---------- */
-  function impfTitle(v) { return v.impf.inf + (v.se ? " " + v.se : "") + (v.opt ? " (" + v.opt + ")" : "") + (v.tail ? " " + v.tail : ""); }
-  function pfTitle(v) { return "да " + (v.se ? v.se + " " : "") + (v.opt ? "(" + v.opt + ") " : "") + v.pf.inf + (v.tail ? " " + v.tail : ""); }
+  function dict(f) { return S.stress ? G.markStr(f.inf, f.st.inf) : f.inf; }
+  function impfTitle(v) { return dict(v.impf) + (v.se ? " " + v.se : "") + (v.opt ? " (" + v.opt + ")" : "") + (v.tail ? " " + v.tail : ""); }
+  function pfTitle(v) { return "да " + (v.se ? v.se + " " : "") + (v.opt ? "(" + v.opt + ") " : "") + dict(v.pf) + (v.tail ? " " + v.tail : ""); }
   function pairHTML(v) { return '<span class="i-txt">' + impfTitle(v) + '</span><span class="dash"> – </span><span class="p-txt">' + pfTitle(v) + "</span>"; }
   var TR = { а: "a", б: "b", в: "v", г: "g", д: "d", е: "e", ж: "zh", з: "z", и: "i", й: "y", к: "k", л: "l", м: "m", н: "n", о: "o", п: "p", р: "r", с: "s", т: "t", у: "u", ф: "f", х: "h", ц: "ts", ч: "ch", ш: "sh", щ: "sht", ъ: "a", ь: "y", ю: "yu", я: "ya" };
   VERBS.forEach(function (v) {
@@ -1312,6 +1439,7 @@ window.VERB_DATA = [
     v.hayBg = bg; v.hayLat = bg.replace(/[а-я]/g, function (c) { return TR[c] || c; }); v.hayRu = v.ru.toLowerCase();
     v.setI = G.wordSet(v.impf); v.setP = G.wordSet(v.pf);
   });
+  var LIST_PAIRS = VERBS.filter(function (v) { return !v.extra; }).length;
   var SORTED = VERBS.slice().sort(function (a, b) { return a.impf.inf.localeCompare(b.impf.inf, "bg") || a.id - b.id; });
   function search(q) {
     q = q.trim().toLowerCase();
@@ -1329,11 +1457,51 @@ window.VERB_DATA = [
       return '<b class="' + cls + '">' + x + "</b>";
     }).join("");
   }
-  function quote(bg, ru) { return '<div class="quote"><span class="bgt">' + bg + '</span><span class="tr">' + esc(ru) + "</span></div>"; }
+
+  /* ---------- Speech (built-in browser voice, bg-BG) ---------- */
+  var TTS = { ok: null, voice: null };
+  function plainText(html) { return G.stripStress(String(html).replace(/<[^>]*>/g, "")).replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">"); }
+  function sayBtn(text) {
+    if (!TTS.ok) return "";
+    return '<button class="tts" data-say="' + esc(plainText(text)) + '" aria-label="' + esc(t("say")) + '" title="' + esc(t("say")) + '">🔊</button>';
+  }
+  function speak(text) {
+    try {
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "bg-BG"; if (TTS.voice) u.voice = TTS.voice; u.rate = 0.9;
+      window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+    } catch (e) { /* ignore */ }
+  }
+  function initTTS() {
+    var decided = false;
+    function check(final) {
+      if (decided) return;
+      var vs = [];
+      try { vs = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; } catch (e) { vs = []; }
+      var bg = vs.filter(function (x) { return /^bg([-_]|$)/i.test(x.lang); })[0];
+      if (bg) { decided = true; TTS.ok = true; TTS.voice = bg; render(); return; }
+      if (final) {
+        decided = true; TTS.ok = false;
+        if (store.get("ttsHint") !== "1") { store.set("ttsHint", "1"); showNotice(t("ttsNo")); }
+      }
+    }
+    if (window.speechSynthesis) {
+      try { window.speechSynthesis.addEventListener("voiceschanged", function () { check(false); }); } catch (e) { /* ignore */ }
+      check(false);
+    }
+    setTimeout(function () { check(true); }, 2500);
+  }
+  function showNotice(text) {
+    var n = $("notice");
+    n.innerHTML = "<span>" + esc(text) + '</span><button class="link" data-closenotice aria-label="' + esc(t("close")) + '">✕</button>';
+    n.hidden = false;
+  }
+
+  function quote(bg, ru) { return '<div class="quote"><span class="bgt">' + bg + sayBtn(bg) + '</span><span class="tr">' + esc(ru) + "</span></div>"; }
   function trToggle() { return '<label class="trt"><input type="checkbox" class="trbox"' + (S.tr ? " checked" : "") + "> " + t("tr") + "</label>"; }
   function examplesPanel(v) {
     if (!v.ex || !v.ex.length) return "";
-    return '<div class="panel ex b-ex"><div class="ex-head"><span class="label">' + t("examples") + "</span>" + trToggle() + "</div>" +
+    return '<div class="panel ex b-ex"><div class="ex-head"><h3 class="label">' + t("examples") + "</h3>" + trToggle() + "</div>" +
       v.ex.map(function (e) { return quote(highlight(e[0], v), e[1]); }).join("") + "</div>";
   }
 
@@ -1342,8 +1510,8 @@ window.VERB_DATA = [
     if (r.na) return null;
     var html = "", prev = null;
     r.pieces.forEach(function (p) {
-      var glue = prev && prev.k === "stem" && p.k === "end";
-      html += (prev && !glue ? " " : "") + (p.k === "pt" || p.k === "se" ? '<span class="aux">' + p.t + "</span>" : p.k === "end" ? '<span class="endc">' + p.t + "</span>" : p.t);
+      var glue = prev && prev.k === "stem" && p.k === "end", txt = G.pieceText(p, S.stress);
+      html += (prev && !glue ? " " : "") + (p.k === "pt" || p.k === "se" ? '<span class="aux">' + txt + "</span>" : p.k === "end" ? '<span class="endc">' + txt + "</span>" : txt);
       prev = p;
     });
     return html;
@@ -1354,15 +1522,18 @@ window.VERB_DATA = [
     document.documentElement.lang = S.lang;
     $("sub").textContent = t("sub");
     $("lang").innerHTML = ["ru", "bg"].map(function (l) { return '<button data-lang="' + l + '" aria-pressed="' + (S.lang === l) + '">' + l.toUpperCase() + "</button>"; }).join("");
+    var sb = $("stressBtn");
+    sb.setAttribute("aria-pressed", String(S.stress)); sb.setAttribute("aria-label", t("stressTitle")); sb.title = t("stressTitle");
+    sb.querySelector(".lbl").textContent = t("stress");
     $("help").setAttribute("aria-expanded", String(S.legend));
     $("legend").hidden = !S.legend;
     $("legend").innerHTML = '<div class="row"><i class="dot i"></i><span><b class="i">' + t("impfS") + "</b> " + t("legI") + '</span></div><div class="row"><i class="dot p"></i><span><b class="p">' + t("pfS") + "</b> " + t("legP") + '</span></div><div class="row"><i class="dot h"></i><span>' + t("legH") + '</span></div><p class="muted">' + t("legTap") + "</p>";
-    document.querySelector("nav.tabs").style.setProperty("--active-tab", "var(--tab-" + S.tab + ")");
     ["form", "tenses", "verbs", "practice"].forEach(function (k) {
       $("tab-btn-" + k).querySelector("span").textContent = t({ form: "tForm", tenses: "tTenses", verbs: "tVerbs", practice: "tPractice" }[k]);
-      $(k).hidden = S.tab !== k;
+      $("pane-" + k).hidden = S.tab !== k;
       $("tab-btn-" + k).setAttribute("aria-selected", String(S.tab === k));
     });
+    $("foot").textContent = t("foot")(LIST_PAIRS);
     document.body.classList.toggle("no-tr", !S.tr);
   }
 
@@ -1376,7 +1547,7 @@ window.VERB_DATA = [
     var partT = !!G.PART_TENSES[B.tense];
     if (B.tense === "impv" && B.person !== 1 && B.person !== 4) B.person = 1;
 
-    // change detection: tense/verb change → fade the table; не / м-ж → flash changed cells
+    // change detection: tense/verb change → fade; не / м-ж → flash the cells that changed
     var key = B.verb + "|" + B.tense, now = {}, changed = {}, fade = false;
     for (var i = 0; i < 6; i++) for (var a = 0; a < 2; a++) now[i + "|" + a] = plainCell(B.tense, v, !!a, i);
     if (S.anim && S.prev) {
@@ -1384,14 +1555,16 @@ window.VERB_DATA = [
       else if (S.anim === "chg") Object.keys(now).forEach(function (k) { if (now[k] !== S.prev.cells[k]) changed[k] = 1; });
     }
     S.prev = { key: key, cells: now };
-    var selAnim = S.anim === "sel";
+    var selAnim = S.anim === "sel" || S.anim === "chg";
     S.anim = null;
 
-    // verb picker
+    // verb picker: the whole (filtered) list scrolls
+    var found = B.picking ? search(B.q) : [];
     var verb = '<div class="vwrap">' +
       '<button class="vpick" data-pick aria-expanded="' + B.picking + '"><span class="txt"><span class="pair">' + pairHTML(v) + '</span><span class="vmean">' + esc(v.ru) + '</span></span><span class="chev">▾</span></button>' +
-      (B.picking ? '<div class="picker"><input id="bq" class="search" type="search" autocomplete="off" spellcheck="false" placeholder="' + esc(t("search")) + '" value="' + esc(B.q) + '"><div class="plist">' +
-        search(B.q).slice(0, 15).map(function (x) { return '<button class="prow" data-bverb="' + x.id + '"><span class="pair">' + pairHTML(x) + '</span><span class="vmean">' + esc(x.ru) + "</span></button>"; }).join("") + "</div></div>" : "") +
+      (B.picking ? '<div class="picker"><input id="bq" class="search" type="search" autocomplete="off" spellcheck="false" placeholder="' + esc(t("search")) + '" value="' + esc(B.q) + '">' +
+        '<p class="pcount">' + t("count")(found.length) + '</p><div class="plist">' +
+        found.map(function (x) { return '<button class="prow" data-bverb="' + x.id + '"><span class="pair">' + pairHTML(x) + '</span><span class="vmean">' + esc(x.ru) + "</span></button>"; }).join("") + "</div></div>" : "") +
       "</div>";
 
     // tense picker
@@ -1404,12 +1577,12 @@ window.VERB_DATA = [
     }).join("") + "</div>" : "";
     var ctl = '<div class="ctl">' + groups + tlist + "</div>";
 
-    // detail of the selected cell
+    // the selected form, large, split into explained pieces
     var r = G.build(B.tense, v, B.pf, B.person, B.gender, B.neg, S.lang);
     var pron = (B.person === 2 && partT ? (B.gender === "f" ? "тя" : "той") : G.PERSONS[B.person]) + " · " + (B.pf ? t("pfS") : t("impfS"));
-    var detail;
+    var hero;
     if (r.na) {
-      detail = '<div class="b-detail"><span class="b-pron">' + pron + '</span><p class="b-na">' + esc(r.na) + "</p></div>";
+      hero = '<div class="b-hero"><span class="b-pron">' + pron + '</span><p class="b-na">' + esc(r.na) + "</p></div>";
     } else {
       var sp = B.sel >= 0 && B.sel < r.pieces.length ? B.sel : -1;
       if (sp < 0) { r.pieces.forEach(function (pc, k) { if (pc.k === "end") sp = k; }); if (sp < 0) sp = r.pieces.length - 1; }
@@ -1417,34 +1590,34 @@ window.VERB_DATA = [
       r.pieces.forEach(function (pc, k) {
         var next = r.pieces[k + 1];
         if (pc.k === "stem" && next && next.k === "end") { word += '<span class="w">'; open = true; }
-        word += '<button class="pc k-' + pc.k + (B.pf ? " pf" : " impf") + '" data-piece="' + k + '" aria-pressed="' + (k === sp) + '">' + pc.t + "</button>";
+        word += '<button class="pc k-' + pc.k + (B.pf ? " pf" : " impf") + '" data-piece="' + k + '" aria-pressed="' + (k === sp) + '">' + G.pieceText(pc, S.stress) + "</button>";
         if (open && pc.k === "end") { word += "</span>"; open = false; }
       });
-      detail = '<div class="b-detail"><span class="b-pron">' + pron + '</span><div class="b-word' + (selAnim || fade ? " fade" : "") + '">' + word + '</div><p class="b-info">' + esc(r.pieces[sp].info) + "</p></div>";
+      hero = '<div class="b-hero"><span class="b-pron">' + pron + '</span><div class="b-wordrow"><div class="b-word' + (selAnim || fade ? " fade" : "") + '">' + word + "</div>" + sayBtn(G.joinPieces(r)) + "</div>" +
+        '<p class="b-info">' + esc(r.pieces[sp].info) + "</p></div>";
     }
 
-    // the table: all persons × НСВ | СВ
+    // all persons × НСВ | СВ
     var tools = '<div class="t-tools"><span class="t-name">' + G.icon(tn.id) + "<b>" + shortName(tn) + "</b></span>" +
       (partT ? '<div class="seg"><button data-bgen="m" aria-pressed="' + (B.gender === "m") + '">' + t("m") + '</button><button data-bgen="f" aria-pressed="' + (B.gender === "f") + '">' + t("f") + "</button></div>" : "") +
       '<button class="negbtn" data-bneg aria-pressed="' + B.neg + '">' + t("neg") + "</button></div>";
     var rows = G.PERSONS.map(function (p, i) {
+      if (!now[i + "|0"] && !now[i + "|1"]) return "";
       var who = i === 2 ? (partT && B.gender === "f" ? "тя" : "той") : p;
       var tds = [0, 1].map(function (a) {
-        var c = cellText(B.tense, v, !!a, i, B.gender, B.neg), sel = B.open && i === B.person && !!a === B.pf;
+        var c = cellText(B.tense, v, !!a, i, B.gender, B.neg), sel = i === B.person && !!a === B.pf;
         return '<td><button class="fcell ' + (a ? "p" : "i") + (changed[i + "|" + a] ? " chg" : "") + (c ? "" : " empty") + '" data-fcell="' + i + "|" + a + '" aria-pressed="' + sel + '">' + (c || "—") + "</button></td>";
       }).join("");
-      if (!now[i + "|0"] && !now[i + "|1"] && !(B.open && i === B.person)) return "";
-      return '<tr><th class="who">' + who + "</th>" + tds + "</tr>" + (B.open && i === B.person ? '<tr class="drow"><td colspan="3">' + detail + "</td></tr>" : "");
+      return '<tr><th class="who">' + who + "</th>" + tds + "</tr>";
     }).join("");
-    var table = '<div class="panel tpanel">' + tools +
+    var table = '<div class="panel tpanel">' + tools + hero +
       '<table class="ftable' + (fade ? " fade" : "") + '"><colgroup><col class="cw"><col><col></colgroup><thead><tr><th></th>' +
-      '<th class="i">' + t("impfS") + ' <span class="bg">' + v.impf.inf + '</span></th><th class="p">' + t("pfS") + ' <span class="bg">' + v.pf.inf + "</span></th></tr></thead><tbody>" + rows + "</tbody></table>" +
+      '<th class="i">' + t("impfS") + ' <span class="bg">' + dict(v.impf) + '</span></th><th class="p">' + t("pfS") + ' <span class="bg">' + dict(v.pf) + "</span></th></tr></thead><tbody>" + rows + "</tbody></table>" +
       '<div class="b-meta"><span><b>' + L(tn.name) + "</b> · " + (S.lang === "ru" ? "≈ " + G.RUEQ[tn.id] : L(tn.short)) + '</span><button class="link" data-totense="' + tn.id + '">' + t("aboutTense") + "</button></div></div>";
 
-    $("form").innerHTML = '<div class="builder"><div class="b-col left">' + verb + ctl + examplesPanel(v) + '</div><div class="b-col right">' + table + "</div></div>";
+    $("pane-form").innerHTML = '<div class="builder"><div class="b-col left">' + verb + ctl + examplesPanel(v) + '</div><div class="b-col right">' + table + "</div></div>";
     if (B.picking) { var q = $("bq"); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
   }
-
 
   /* ---------- Времена ---------- */
   var CHOOSE = [
@@ -1468,41 +1641,41 @@ window.VERB_DATA = [
   function tenseCard(tn) {
     var open = !!S.open[tn.id], e = tn.examples[0];
     var h = '<article class="tcard" id="t-' + tn.id + '">' +
-      '<header class="tc-h">' + G.icon(tn.id) + '<span class="tn">' + L(tn.name) + "</span>" +
+      '<header class="tc-h">' + G.icon(tn.id) + '<h3 class="tn">' + L(tn.name) + "</h3>" +
       '<span class="tc-sub">' + (S.lang === "ru" ? '<span class="bg">' + tn.name.bg + "</span> · ≈ " + G.RUEQ[tn.id] : L(tn.short)) + "</span></header>" +
       '<p class="formula">' + t("formula") + ": <b>" + L(tn.formula) + "</b></p>" + strip(tn) + quote(e[0], e[1]) +
       '<div class="tc-links"><button class="link" data-tobuilder="' + tn.id + '">' + t("openBuilder") + '</button><button class="link" data-toggle="' + tn.id + '" aria-expanded="' + open + '">' + (open ? t("less") + " ▴" : t("more") + " ▾") + "</button></div>";
     if (open) {
       h += '<div class="tc-more">' +
-        '<div><p class="label">' + t("when") + '</p><ul class="clean">' + L(tn.uses).map(function (u) { return "<li>" + u + "</li>"; }).join("") + "</ul></div>" +
+        '<div><h4 class="label">' + t("when") + '</h4><ul class="clean">' + L(tn.uses).map(function (u) { return "<li>" + u + "</li>"; }).join("") + "</ul></div>" +
         '<div class="asp"><div class="aspc i"><b>' + t("impfS") + "</b><span>" + L(tn.aspect.i) + '</span></div><div class="aspc p"><b>' + t("pfS") + "</b><span>" + L(tn.aspect.p) + "</span></div></div>" +
-        '<div><p class="label">' + t("signals") + '</p><div class="signals">' + tn.signals.map(function (s) { return '<span class="sig">' + s + "</span>"; }).join("") + "</div></div>" +
-        '<div><p class="label">' + t("tips") + '</p><ul class="tips">' + L(tn.tips).map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ul></div>" +
-        (S.lang === "ru" && tn.ruCompare ? '<div class="compare"><span class="label">' + t("compare") + "</span><p>" + tn.ruCompare + "</p></div>" : "") +
+        '<div><h4 class="label">' + t("signals") + '</h4><div class="signals">' + tn.signals.map(function (s) { return '<span class="sig">' + s + "</span>"; }).join("") + "</div></div>" +
+        '<div><h4 class="label">' + t("tips") + '</h4><ul class="tips">' + L(tn.tips).map(function (s) { return "<li>" + s + "</li>"; }).join("") + "</ul></div>" +
+        (S.lang === "ru" && tn.ruCompare ? '<div class="compare"><h4 class="label">' + t("compare") + "</h4><p>" + tn.ruCompare + "</p></div>" : "") +
         '<div class="ex">' + tn.examples.slice(1).map(function (x) { return quote(x[0], x[1]); }).join("") +
-        '<span class="label">' + t("negL") + "</span>" + quote(tn.neg[0], tn.neg[1]) +
-        (tn.q ? '<span class="label">' + t("qL") + "</span>" + quote(tn.q[0], tn.q[1]) : "") + "</div></div>";
+        '<h4 class="label">' + t("negL") + "</h4>" + quote(tn.neg[0], tn.neg[1]) +
+        (tn.q ? '<h4 class="label">' + t("qL") + "</h4>" + quote(tn.q[0], tn.q[1]) : "") + "</div></div>";
     }
     return h + "</article>";
   }
   function renderTenses() {
     var ru = S.lang === "ru";
-    var choose = '<div class="panel"><span class="label">' + t("choose") + '</span><div class="choose">' + CHOOSE.map(function (c) {
+    var choose = '<div class="panel"><h3 class="label">' + t("choose") + '</h3><div class="choose">' + CHOOSE.map(function (c) {
       var tn = TBY[c[0]];
       return '<button class="crow" data-jump="' + tn.id + '"><span class="say">' + L(c[1]) + '</span><span class="ctn">' + G.icon(tn.id) + shortName(tn) + "</span></button>";
     }).join("") + "</div></div>";
-    var aspect = '<div class="panel"><span class="label">' + t("aspectT") + '</span><div class="asp">' +
+    var aspect = '<div class="panel"><h3 class="label">' + t("aspectT") + '</h3><div class="asp">' +
       '<div class="aspc i"><b>' + t("impfS") + "</b><span>" + (ru ? "процесс, привычка, длительность, запрет" : "процес, навик, продължителност, забрана") + '</span><span class="sigs">винаги · обикновено · често · всеки ден · докато</span></div>' +
       '<div class="aspc p"><b>' + t("pfS") + "</b><span>" + (ru ? "одно действие с результатом" : "едно действие с резултат") + '</span><span class="sigs">веднъж · този път · изведнъж · до утре · за час</span></div></div>' +
-      '<p class="muted" style="font-size:var(--t-s)">' + (ru ? "Отличие от русского: СВ без «ще» / «да» не значит будущее. «Возьму» = «ще взема»." : "Свършеният вид в сегашно време стои само след „да“, „ще“, „ако“, „когато“.") + "</p></div>";
-    var stems = '<details class="panel stems"><summary><span class="label">' + t("stemsT") + "</span></summary>" +
+      '<p class="muted small">' + (ru ? "Отличие от русского: СВ без «ще» / «да» не значит будущее. «Возьму» = «ще взема»." : "Свършеният вид в сегашно време стои само след „да“, „ще“, „ако“, „когато“.") + "</p></div>";
+    var stems = '<details class="panel stems"><summary><h3 class="label">' + t("stemsT") + "</h3></summary>" +
       '<table class="plain"><tbody>' +
       "<tr><td>Аорист</td><td>" + (ru ? "III: -м → -х (питам → питах). I и II — гласная перед -х разная:" : "III: -м → -х (питам → питах). При I и II гласната пред -х е различна:") + ' <span class="bg">-ох: чета → четох · -ах / -ях: кажа → казах, видя → видях · -их: правя → правих · -х: взема → взех</span></td></tr>' +
       "<tr><td>Имперфект</td><td>" + (ru ? "I и II: под ударением -ях, без ударения -ех; после ж, ч, ш — -ах. III: -м → -х." : "I и II: под ударение -ях, без ударение -ех; след ж, ч, ш – -ах. III: -м → -х.") + ' <span class="bg">четях · правех · питах</span></td></tr>' +
       "<tr><td>" + (ru ? "Причастие" : "Причастие") + "</td><td>" + (ru ? "аорист без -х + -л; -ох → -ъл. Мн. ч.: я → е." : "аорист без -х + -л; -ох → -ъл. Мн.ч.: я → е.") + ' <span class="bg">правих → правил · донесох → донесъл · видял → видели</span></td></tr>' +
       "<tr><td>" + (ru ? "Спряжение" : "Спрежение") + "</td><td>" + (ru ? "по форме «ти»:" : "по формата за „ти“:") + ' <span class="bg">-еш → I · -иш → II · -аш / -яш → III</span></td></tr>' +
       "</tbody></table></details>";
-    $("tenses").innerHTML = '<div class="ttop">' + choose + aspect + "</div>" +
+    $("pane-tenses").innerHTML = '<div class="ttop">' + choose + aspect + "</div>" +
       '<div class="tcards">' + CORE.map(tenseCard).join("") + "</div>" +
       '<details class="rare-wrap"' + (S.showRare ? " open" : "") + "><summary>" + t("rareT") + " (" + RARE.length + ')</summary><div class="tcards">' + RARE.map(tenseCard).join("") + "</div></details>" +
       stems;
@@ -1510,7 +1683,7 @@ window.VERB_DATA = [
 
   /* ---------- Глаголы ---------- */
   function renderVerbs() {
-    var el = $("verbs");
+    var el = $("pane-verbs");
     if (S.verb !== null) { el.innerHTML = verbPage(VERBS[S.verb]); return; }
     var list = search(S.query), keep = document.activeElement && document.activeElement.id === "q";
     el.innerHTML = '<div class="search-row"><input id="q" class="search" type="search" autocomplete="off" spellcheck="false" placeholder="' + esc(t("search")) + '" value="' + esc(S.query) + '"><span class="count">' + t("count")(list.length) + "</span></div>" +
@@ -1532,8 +1705,8 @@ window.VERB_DATA = [
     return '<button class="back" data-back>' + t("back") + "</button>" +
       '<div class="vhead"><h2 class="pairbig">' + pairHTML(v) + '</h2><p class="muted">' + esc(v.ru) + '</p><div class="badges"><span class="badge i">' + t("impfS") + " · " + v.impf.group + " " + t("group") + '</span><span class="badge p">' + t("pfS") + " · " + v.pf.group + " " + t("group") + "</span></div>" +
       (v.note ? '<p class="note">' + esc(L(v.note)) + "</p>" : "") + "</div>" +
-      '<div class="panel"><div class="vgrid-head"><span class="label">' + t("grid") + "</span>" + persons + "</div>" +
-      '<div class="gwrap"><table class="vgrid"><colgroup><col class="c0"><col><col></colgroup><thead><tr><th class="stick"></th><th class="i">' + t("impfS") + " · " + v.impf.inf + '</th><th class="p">' + t("pfS") + " · " + v.pf.inf + "</th></tr></thead><tbody>" + rows + "</tbody></table></div>" +
+      '<div class="panel"><div class="vgrid-head"><h3 class="label">' + t("grid") + "</h3>" + persons + "</div>" +
+      '<div class="gwrap"><table class="vgrid"><colgroup><col class="c0"><col><col></colgroup><thead><tr><th class="stick"></th><th class="i">' + t("impfS") + " · " + dict(v.impf) + '</th><th class="p">' + t("pfS") + " · " + dict(v.pf) + "</th></tr></thead><tbody>" + rows + "</tbody></table></div>" +
       '<button class="link" data-vrare>' + (S.vrare ? t("less") + " ▴" : t("rareT") + " (" + RARE.length + ") ▾") + "</button></div>" +
       examplesPanel(v);
   }
@@ -1542,42 +1715,64 @@ window.VERB_DATA = [
   function rnd(n) { return Math.floor(Math.random() * n); }
   function pick(a) { return a[rnd(a.length)]; }
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = rnd(i + 1), x = a[i]; a[i] = a[j]; a[j] = x; } return a; }
-  function uniq(a) { return a.filter(function (x, i) { return x && a.indexOf(x) === i; }); }
   function cap(w, like) { return like && like.charAt(0) !== like.charAt(0).toLowerCase() ? w.charAt(0).toUpperCase() + w.slice(1) : w; }
 
-  var P = { mode: store.get("pmode") || "forms", q: null, ans: -1, right: 0, total: 0, streak: 0, best: +(store.get("best") || 0), deck: [] };
+  var ALL_T = TENSES.map(function (x) { return x.id; });
+  var savedT = null;
+  try { savedT = JSON.parse(store.get("ptenses") || "null"); } catch (e) { savedT = null; }
+  var P = {
+    mode: store.get("pmode") || "forms", q: null, ans: -1, right: 0, total: 0, streak: 0, best: +(store.get("best") || 0), deck: [],
+    tenses: Array.isArray(savedT) ? savedT.filter(function (x) { return TBY[x]; }) : ALL_T.slice(),
+    asp: ["i", "p", "both"].indexOf(store.get("paspect")) >= 0 ? store.get("paspect") : "both",
+    ddOpen: false
+  };
   if (["forms", "aspect", "tense"].indexOf(P.mode) < 0) P.mode = "forms";
+  function tOn(id) { return P.tenses.indexOf(id) >= 0; }
+  function saveFilter() { store.set("ptenses", JSON.stringify(P.tenses)); store.set("paspect", P.asp); }
+  /* every option is { p: plain text (used to check the answer), s: text with stress marks } */
+  function opt(p, s) { return { p: p, s: s || p }; }
 
   /* 1. Формы: the engine builds the answer and plausible wrong answers */
-  var PR_TENSES = ["present", "aorist", "imperfect", "perfect", "future", "fip", "cond", "impv"];
-  var CONF = { present: ["future"], aorist: ["imperfect", "perfect"], imperfect: ["aorist"], perfect: ["aorist", "pluperfect"], future: ["present", "fip"], fip: ["future", "cond"], cond: ["fip", "perfect"], impv: ["present"] };
-  function formStr(tid, v, pf, i) { var r = G.build(tid, v, pf, i, "m", false, S.lang); return r.na ? null : G.joinPieces(r); }
+  var CONF = { present: ["future"], aorist: ["imperfect", "perfect"], imperfect: ["aorist"], perfect: ["aorist", "pluperfect"], pluperfect: ["perfect", "aorist"],
+    future: ["present", "fip"], fip: ["future", "cond"], fp: ["future", "perfect"], fpp: ["fip", "fp"], cond: ["fip", "perfect"], impv: ["present"] };
+  function formOpt(tid, v, pf, i) { var r = G.build(tid, v, pf, i, "m", false, S.lang); return r.na ? null : opt(G.joinPieces(r), G.joinPieces(r, true)); }
   function genForms() {
-    for (var n = 0; n < 60; n++) {
-      var v = pick(VERBS), tid = pick(PR_TENSES), pf = Math.random() < 0.5, i = rnd(6);
+    var tensesOk = P.tenses.filter(function (id) { return !(id === "imperfect" && P.asp === "p"); });
+    if (!tensesOk.length) return null;
+    for (var n = 0; n < 80; n++) {
+      var v = pick(VERBS), tid = pick(tensesOk), i = rnd(6);
+      var pf = P.asp === "both" ? Math.random() < 0.5 : P.asp === "p";
       if (tid === "impv") i = pick([1, 4]);
       if (tid === "imperfect") pf = false;
-      var c = formStr(tid, v, pf, i);
+      var c = formOpt(tid, v, pf, i);
       if (!c) continue;
       var others = shuffle([0, 1, 2, 3, 4, 5].filter(function (k) { return k !== i && !(tid === "impv" && k !== 1 && k !== 4); }));
-      var pool = [formStr(tid, v, !pf, i)]
-        .concat(shuffle(CONF[tid] || []).map(function (t2) { return formStr(t2, v, pf, i); }))
-        .concat(others.map(function (k) { return formStr(tid, v, pf, k); }));
-      var wrong = uniq(pool).filter(function (x) { return x !== c; }).slice(0, 3);
+      var pool = [formOpt(tid, v, !pf, i)]
+        .concat(shuffle(CONF[tid] || []).map(function (t2) { return formOpt(t2, v, pf, i); }))
+        .concat(others.map(function (k) { return formOpt(tid, v, pf, k); }));
+      var seen = {}, wrong = [];
+      seen[c.p] = 1;
+      pool.forEach(function (o) { if (o && !seen[o.p] && wrong.length < 3) { seen[o.p] = 1; wrong.push(o); } });
       if (wrong.length < 2) continue;
-      return { mode: "forms", v: v.id, tid: tid, pf: pf, i: i, opts: shuffle([c].concat(wrong)), ok: c };
+      return { mode: "forms", v: v.id, tid: tid, pf: pf, i: i, opts: shuffle([c].concat(wrong)), ok: c.p };
     }
     return null;
   }
 
-  /* 2. Вид: a sentence from the PDF with one verb form blanked */
+  /* 2. Вид: a sentence from the PDF with one verb blanked — only where one aspect is clearly required */
   var ASPECT_ITEMS = null;
+  var SKIP = { "се": 1, "си": 1, "ми": 1, "ти": 1, "му": 1, "ѝ": 1, "й": 1, "ни": 1, "ви": 1, "им": 1, "го": 1, "я": 1, "ги": 1, "те": 1, "ме": 1, "ли": 1 };
+  var TRIG = { "да": 1, "ще": 1, "ако": 1, "когато": 1, "като": 1, "щом": 1, "докато": 1, "преди": 1, "нека": 1, "няма": 1, "нямаше": 1 };
+  var AUXW = { perfect: ["съм", "си", "е", "сме", "сте", "са"], pluperfect: ["бях", "беше", "бе", "бяхме", "бяхте", "бяха"], cond: ["бих", "би", "бихме", "бихте", "биха"] };
+  var SIG = { i: ["обикновено", "винаги", "никога", "рядко", "често", "всеки", "всяка", "всяко", "понякога", "постоянно", "най-често", "сто пъти", "дневно", "от време на време"],
+    p: ["този път", "веднага", "веднъж", "изведнъж", "най-накрая", "до края"] };
   function keysOf(f, w) {
     var ks = [];
     ["pres", "aor", "imp", "impv"].forEach(function (a) { (f[a] || []).forEach(function (x, j) { if (x === w) ks.push(a + "|" + j); }); });
     ["m", "f", "n", "pl"].forEach(function (g) { if (f.part[g] === w) ks.push("part|" + g); });
     return ks;
   }
+  function kindsOf(ks) { return ks.map(function (x) { return x.split("|")[0]; }).filter(function (x, n, a) { return a.indexOf(x) === n; }); }
   function formAt(f, k) { var p = k.split("|"); if (p[0] === "part") return f.part[p[1]]; return f[p[0]] ? f[p[0]][+p[1]] : null; }
   function clsOf(words, i, v) {
     var lw = words[i].toLowerCase(), a = v.setI[lw], b = v.setP[lw];
@@ -1585,6 +1780,41 @@ window.VERB_DATA = [
     if (b && !a) return "p";
     if (a && !b) return "i";
     return /(^|\s)(да|ще|ако|когато|като)(\s+(се|си|ми|ти|му|ѝ|ни|ви|им|го|я|ги|те|ме))*\s*$/.test(words.slice(Math.max(0, i - 6), i).join(" ").toLowerCase()) ? "p" : "i";
+  }
+  /* previous words in the same clause (stops at punctuation), lower case, without clitics / "не" if asked */
+  function before(w, k, skipNe) {
+    var out = [];
+    for (var j = k - 1; j >= 0; j--) {
+      if (j % 2 === 0) { if (/[.,!?;:–—]/.test(w[j])) break; continue; }
+      var x = w[j].toLowerCase();
+      if (SKIP[x] || (skipNe && x === "не")) continue;
+      out.push(x);
+    }
+    return out;
+  }
+  function clauseOf(w, k) {
+    var a = k, b = k;
+    while (a > 0 && !/[.,!?;:–—]/.test(w[a - 1])) a--;
+    while (b < w.length - 1 && !/[.,!?;:–—]/.test(w[b + 1])) b++;
+    return " " + w.slice(a, b + 1).join("").toLowerCase().replace(/[^а-яѝ\s-]/g, " ").replace(/\s+/g, " ") + " ";
+  }
+  function tenseOfBlank(key, prev) {
+    var kind = key.split("|")[0];
+    if (kind === "aor") return "aorist";
+    if (kind === "imp") return "imperfect";
+    if (kind === "impv") return "impv";
+    if (kind === "pres") {
+      if (prev[0] === "ще" || (prev[0] === "да" && prev[1] === "няма")) return "future";
+      if (prev[0] === "да" && /^(щях|щеше|щяхме|щяхте|щяха|нямаше)$/.test(prev[1] || "")) return "fip";
+      return "present";
+    }
+    if (kind === "part") {
+      var found = null;
+      Object.keys(AUXW).forEach(function (tn) { if (!found && prev.length && AUXW[tn].indexOf(prev[0]) >= 0) found = tn; });
+      if (found === "perfect" && prev[1] === "ще") return "fp";
+      return found;
+    }
+    return null;
   }
   function aspectItems() {
     if (ASPECT_ITEMS) return ASPECT_ITEMS;
@@ -1597,58 +1827,104 @@ window.VERB_DATA = [
           var cls = clsOf(w, k, v);
           if (!cls) continue;
           var mine = cls === "i" ? v.impf : v.pf, opp = cls === "i" ? v.pf : v.impf, lw = w[k].toLowerCase();
-          var other = uniq(keysOf(mine, lw).map(function (key) { return formAt(opp, key); }));
-          if (other.length !== 1 || other[0] === lw) continue;
-          ASPECT_ITEMS.push({ v: v.id, e: e, k: k, cls: cls, other: other[0] });
+          var keys = keysOf(mine, lw);
+          var others = keys.map(function (key) { return formAt(opp, key); }).filter(function (x, n, a) { return x && a.indexOf(x) === n; });
+          if (others.length !== 1 || others[0] === lw) continue;
+          // the wrong option must not be a valid form of the right aspect too (вземам / взема)
+          if ((cls === "i" ? v.setI : v.setP)[others[0]]) continue;
+          // either form must belong to one tense only: "излезе" is both present and aorist, so "Георги излезе навън" would be right too
+          if (kindsOf(keys).length !== 1 || kindsOf(keysOf(opp, others[0])).length !== 1) continue;
+          var prev = before(w, k, false), prevNoNe = before(w, k, true), key = keys[0];
+          var tense = tenseOfBlank(key, prev);
+          if (!tense) continue;
+          var kind = key.split("|")[0], reason = null, clause = clauseOf(w, k), sigs = [];
+          if (kind === "pres" && cls === "i" && tense === "present" && !TRIG[prevNoNe[0]]) reason = "A";
+          else if (kind === "impv" && cls === "i" && prev[0] === "не") reason = "B";
+          else {
+            var mineSig = SIG[cls].filter(function (s) { return clause.indexOf(" " + s + " ") >= 0; });
+            var oppSig = SIG[cls === "i" ? "p" : "i"].filter(function (s) { return clause.indexOf(" " + s + " ") >= 0; });
+            // a habit word does not rule out СВ after "да" / "ще" ("Всеки месец успявам да спестя…"), so only СВ signals count there
+            if (mineSig.length && !oppSig.length && !(cls === "i" && TRIG[prevNoNe[0]])) { reason = "C"; sigs = mineSig; }
+          }
+          if (!reason) continue;
+          var oppKey = keysOf(opp, others[0])[0] || key;
+          ASPECT_ITEMS.push({ v: v.id, e: e, k: k, cls: cls, t: tense, reason: reason, sigs: sigs,
+            origS: G.stressedForm(mine, key), other: others[0], otherS: G.stressedForm(opp, oppKey) || others[0] });
         }
       });
     });
     return ASPECT_ITEMS;
   }
   function genAspect() {
-    var it = pick(aspectItems()), v = VERBS[it.v], w = v.ex[it.e][0].split(/([А-Яа-яЍѝ]+)/), orig = w[it.k];
-    return { mode: "aspect", it: it, opts: shuffle([orig, cap(it.other, orig)]), ok: orig };
-  }
-  var SIGNALS = { i: ["обикновено", "винаги", "никога", "рядко", "често", "всеки", "всяка", "всяко", "понякога", "докато", "постоянно", "най-често"], p: ["този път", "веднага", "веднъж", "изведнъж", "най-накрая", "до края"] };
-  function signalsIn(text) {
-    var low = " " + text.toLowerCase().replace(/[.,!?;:–—"„“«»-]/g, " ") + " ", out = [];
-    ["i", "p"].forEach(function (a) { SIGNALS[a].forEach(function (sg) { if (low.indexOf(" " + sg + " ") >= 0) out.push('<span class="pr-tag bg ' + a + '">' + sg + "</span>"); }); });
-    return out.join(" ");
+    var pool = aspectItems().filter(function (it) { return tOn(it.t); });
+    if (!pool.length) return null;
+    var it = pick(pool), v = VERBS[it.v], w = v.ex[it.e][0].split(/([А-Яа-яЍѝ]+)/), orig = w[it.k];
+    return { mode: "aspect", it: it, opts: shuffle([opt(orig, cap(it.origS || orig, orig)), opt(cap(it.other, orig), cap(it.otherS, orig))]), ok: orig };
   }
 
-  /* 3. Время: hand-written sentences for the confusable tenses */
+  /* 3. Время: hand-written sentences; t = the tense of the right answer, os = options with stress */
   var TQ = [
-    { s: "Вчера ___ цялата книга.", o: ["прочетох", "четях", "съм прочел"], ru: "Вчера я прочитал(а) всю книгу.", why: { ru: "Действие закончилось в известный момент («вчера») → аорист.", bg: "Действието е завършено в определен момент („вчера“) → аорист." } },
-    { s: "Когато ти се обади, ___ книга.", o: ["четях", "прочетох", "ще чета"], ru: "Когда ты позвонил(а), я читал(а) книгу.", why: { ru: "Фон, который прервало другое событие → имперфект.", bg: "Фон, прекъснат от друго събитие → имперфект." } },
-    { s: "Досега ___ тази книга три пъти.", o: ["съм чел", "четях", "ще прочета"], ru: "Я уже трижды читал эту книгу.", why: { ru: "Опыт до настоящего момента, время не важно («досега») → перфект.", bg: "Опит до момента, времето не е важно („досега“) → перфект." } },
-    { s: "Когато бях малка, всяко лято ___ на море.", o: ["ходех", "отидох", "ще ходя"], ru: "Когда я была маленькой, каждое лето я ездила на море.", why: { ru: "Привычка в прошлом («всяко лято») → имперфект.", bg: "Навик в миналото („всяко лято“) → имперфект." } },
-    { s: "Утре ___ на работа по-рано.", o: ["ще отида", "отидох", "отивах"], ru: "Завтра я пойду на работу пораньше.", why: { ru: "Будущее, одно действие → ще + СВ.", bg: "Бъдеще, едно действие → ще + СВ." } },
-    { s: "Ако имах време, ___ с теб.", o: ["щях да дойда", "ще дойда", "дойдох"], ru: "Если бы у меня было время, я бы пошёл с тобой.", why: { ru: "Нереальное условие → щях да + настоящее (или «бих дошъл»).", bg: "Нереално условие → щях да + сегашно (или „бих дошъл“)." } },
-    { s: "___ едно кафе, моля.", o: ["Бих искал", "Ще искам", "Исках"], ru: "Я бы хотел кофе, пожалуйста.", why: { ru: "Вежливая просьба → бих + причастие.", bg: "Учтива молба → бих + причастие." } },
-    { s: "Когато пристигнахме, филмът вече ___.", o: ["беше започнал", "започваше", "ще започне"], ru: "Когда мы пришли, фильм уже начался.", why: { ru: "Случилось раньше другого прошлого события → плюсквамперфект.", bg: "Случило се е преди друго минало събитие → минало предварително време." } },
-    { s: "Докато ___ вечеря, децата гледаха телевизия.", o: ["готвех", "сготвих", "ще сготвя"], ru: "Пока я готовил(а) ужин, дети смотрели телевизор.", why: { ru: "Два одновременных процесса («докато») → имперфект НСВ.", bg: "Два едновременни процеса („докато“) → имперфект, НСВ." } },
-    { s: "Обещах, че ___ навреме, но закъснях.", o: ["ще дойда", "щях да дойда", "дойдох"], ru: "Я обещал, что приду вовремя, но опоздал.", why: { ru: "В пересказе болгарский сохраняет будущее: «обещал, что приду» → «че ще дойда».", bg: "При предаване на чужда реч бъдещето се запазва: „обещах, че ще дойда“." } },
-    { s: "___ да ти се обадя, но забравих.", o: ["Щях", "Ще", "Бих"], ru: "Я собирался тебе позвонить, но забыл.", why: { ru: "Собирался, но не сделал → щях да.", bg: "Намерение, което не се е случило → щях да." } },
-    { s: "Всеки ден ___ по един час български.", o: ["уча", "науча", "ще науча"], ru: "Каждый день я учу болгарский по часу.", why: { ru: "Привычка («всеки ден») → настоящее НСВ.", bg: "Навик („всеки ден“) → сегашно време, НСВ." } },
-    { s: "До петък ___ проекта.", o: ["ще съм завършил", "завърших", "завършвах"], ru: "К пятнице я уже закончу проект.", why: { ru: "Будет закончено к моменту в будущем → ще съм + причастие.", bg: "Ще е завършено до момент в бъдещето → ще съм + причастие." } },
-    { s: "Извинете, ___ ли ми помогнали с куфара?", o: ["бихте", "ще", "бяхте"], ru: "Извините, не могли бы вы помочь мне с чемоданом?", why: { ru: "Вежливая просьба → бихте ли + причастие.", bg: "Учтива молба → бихте ли + причастие." } },
-    { s: "Вчера в пет часа ___ от работа и се прибрах.", o: ["тръгнах", "тръгвах", "съм тръгнал"], ru: "Вчера в пять я ушёл с работы и вернулся домой.", why: { ru: "Цепочка законченных событий в прошлом → аорист.", bg: "Поредица от завършени събития → аорист." } },
-    { s: "Още не ___ писмото – ще го прочета довечера.", o: ["съм прочел", "четях", "ще чета"], ru: "Я ещё не прочитал письмо — прочитаю вечером.", why: { ru: "Результат на сейчас («още не») → перфект.", bg: "Резултат към момента („още не“) → перфект." } }
+    { s: "Вчера за два часа ___ цялата книга.", o: ["прочетох", "четях", "съм прочел"], os: ["проче́тох", "четя́х", "съм проче́л"], t: "aorist", ru: "Вчера я за два часа прочитал(а) всю книгу.", why: { ru: "Действие закончилось в известный момент («вчера», «за два часа») → аорист.", bg: "Действието е завършено в определен момент („вчера“, „за два часа“) → аорист." } },
+    { s: "Когато ти се обади, точно ___ книга.", o: ["четях", "прочетох", "ще чета"], os: ["четя́х", "проче́тох", "ще чета́"], t: "imperfect", ru: "Когда ты позвонил(а), я как раз читал(а) книгу.", why: { ru: "Фон, который прервало другое событие → имперфект.", bg: "Фон, прекъснат от друго събитие → имперфект." } },
+    { s: "Досега ___ тази книга три пъти.", o: ["съм чел", "четях", "ще прочета"], os: ["съм чел", "четя́х", "ще прочета́"], t: "perfect", ru: "Я уже трижды читал эту книгу.", why: { ru: "Опыт до настоящего момента, время не важно («досега») → перфект.", bg: "Опит до момента, времето не е важно („досега“) → перфект." } },
+    { s: "Когато бях малка, всяко лято ___ на море.", o: ["ходех", "отидох", "ще ходя"], os: ["хо́дех", "оти́дох", "ще хо́дя"], t: "imperfect", ru: "Когда я была маленькой, каждое лето я ездила на море.", why: { ru: "Привычка в прошлом («всяко лято») → имперфект.", bg: "Навик в миналото („всяко лято“) → имперфект." } },
+    { s: "Утре ___ на работа по-рано.", o: ["ще отида", "отидох", "отивах"], os: ["ще оти́да", "оти́дох", "оти́вах"], t: "future", ru: "Завтра я пойду на работу пораньше.", why: { ru: "Будущее, одно действие → ще + СВ.", bg: "Бъдеще, едно действие → ще + СВ." } },
+    { s: "Ако имах време, ___ с теб.", o: ["щях да дойда", "ще дойда", "дойдох"], os: ["щях да до́йда", "ще до́йда", "до́йдох"], t: "fip", ru: "Если бы у меня было время, я бы пошёл с тобой.", why: { ru: "Нереальное условие → щях да + настоящее (или «бих дошъл»).", bg: "Нереално условие → щях да + сегашно (или „бих дошъл“)." } },
+    { s: "___ едно кафе, моля.", o: ["Бих искал", "Щях да искам", "Бях искал"], os: ["Бих и́скал", "Щях да и́скам", "Бях и́скал"], t: "cond", ru: "Я бы хотел кофе, пожалуйста.", why: { ru: "Вежливая просьба → бих + причастие.", bg: "Учтива молба → бих + причастие." } },
+    { s: "Когато пристигнахме, филмът вече ___.", o: ["беше започнал", "започва", "ще започне"], os: ["бе́ше запо́чнал", "запо́чва", "ще запо́чне"], t: "pluperfect", ru: "Когда мы пришли, фильм уже начался.", why: { ru: "Случилось раньше другого прошлого события → плюсквамперфект.", bg: "Случило се е преди друго минало събитие → минало предварително време." } },
+    { s: "Докато ___ вечеря, децата гледаха телевизия.", o: ["готвех", "сготвих", "ще сготвя"], os: ["го́твех", "сго́твих", "ще сго́твя"], t: "imperfect", ru: "Пока я готовил(а) ужин, дети смотрели телевизор.", why: { ru: "Два одновременных процесса («докато») → имперфект НСВ.", bg: "Два едновременни процеса („докато“) → имперфект, НСВ." } },
+    { s: "Всяка вечер баба ми ___ приказки.", o: ["разказваше", "разказа", "ще разкаже"], os: ["разка́зваше", "разка́за", "ще разка́же"], t: "imperfect", ru: "Каждый вечер бабушка рассказывала мне сказки.", why: { ru: "Повторяющееся действие в прошлом («всяка вечер») → имперфект.", bg: "Повтарящо се действие в миналото („всяка вечер“) → имперфект." } },
+    { s: "___ да ти се обадя, но забравих.", o: ["Щях", "Ще", "Бих"], os: ["Щях", "Ще", "Бих"], t: "fip", ru: "Я собирался тебе позвонить, но забыл.", why: { ru: "Собирался, но не сделал → щях да.", bg: "Намерение, което не се е случило → щях да." } },
+    { s: "Всеки ден ___ по един час български.", o: ["уча", "науча", "ще науча"], os: ["уча́", "науча́", "ще науча́"], t: "present", ru: "Каждый день я учу болгарский по часу.", why: { ru: "Привычка («всеки ден») → настоящее НСВ.", bg: "Навик („всеки ден“) → сегашно време, НСВ." } },
+    { s: "Не се притеснявай – до петък ___ проекта.", o: ["ще съм завършил", "завърших", "завършвах"], os: ["ще съм завъ́ршил", "завъ́рших", "завъ́ршвах"], t: "fp", ru: "Не волнуйся — к пятнице я уже закончу проект.", why: { ru: "Будет закончено к моменту в будущем → ще съм + причастие.", bg: "Ще е завършено до момент в бъдещето → ще съм + причастие." } },
+    { s: "Извинете, ___ ли ми помогнали с куфара?", o: ["бихте", "ще", "щяхте"], os: ["би́хте", "ще", "щя́хте"], t: "cond", ru: "Извините, не могли бы вы помочь мне с чемоданом?", why: { ru: "Вежливая просьба → бихте ли + причастие.", bg: "Учтива молба → бихте ли + причастие." } },
+    { s: "Вчера в пет часа ___ от работа и се прибрах.", o: ["тръгнах", "тръгвах", "съм тръгнал"], os: ["тръ́гнах", "тръ́гвах", "съм тръ́гнал"], t: "aorist", ru: "Вчера в пять я ушёл с работы и вернулся домой.", why: { ru: "Цепочка законченных событий в прошлом → аорист.", bg: "Поредица от завършени събития → аорист." } },
+    { s: "Още не ___ писмото – ще го прочета довечера.", o: ["съм прочел", "четях", "ще чета"], os: ["съм проче́л", "четя́х", "ще чета́"], t: "perfect", ru: "Я ещё не прочитал письмо — прочитаю вечером.", why: { ru: "Результат на сейчас («още не») → перфект.", bg: "Резултат към момента („още не“) → перфект." } }
   ];
   function genTense() {
-    if (!P.deck.length) P.deck = shuffle(TQ.map(function (_, i) { return i; }));
+    var pool = TQ.map(function (_, i) { return i; }).filter(function (i) { return tOn(TQ[i].t); });
+    if (!pool.length) return null;
+    P.deck = P.deck.filter(function (i) { return pool.indexOf(i) >= 0; });
+    if (!P.deck.length) P.deck = shuffle(pool);
     var idx = P.deck.pop(), item = TQ[idx];
-    return { mode: "tense", idx: idx, opts: shuffle(item.o), ok: item.o[0] };
+    return { mode: "tense", idx: idx, opts: shuffle(item.o.map(function (o, j) { return opt(o, item.os[j]); })), ok: item.o[0] };
   }
-  function genQ() { return P.mode === "aspect" ? genAspect() : P.mode === "tense" ? genTense() : genForms(); }
+  function genQ() { var q = P.mode === "aspect" ? genAspect() : P.mode === "tense" ? genTense() : genForms(); return q || { mode: P.mode, empty: true }; }
 
-  function blankSentence(s, fill) {
-    return esc(s).replace("___", fill ? '<span class="blank filled">' + esc(fill) + "</span>" : '<span class="blank">?</span>');
+  /* tenses that have questions in the aspect / tense modes, in the order of the list */
+  function modeTenses() {
+    var have = {};
+    (P.mode === "aspect" ? aspectItems() : TQ).forEach(function (x) { have[x.t] = 1; });
+    return TENSES.filter(function (x) { return have[x.id]; });
+  }
+  function filterUI() {
+    var all = P.tenses.length === ALL_T.length;
+    var summary = all ? t("allT") : P.tenses.length ? TENSES.filter(function (x) { return tOn(x.id); }).map(shortName).join(", ") : "—";
+    var dd = '<details class="dd"' + (P.ddOpen ? " open" : "") + '><summary><span class="dd-k">' + t("train") + ':</span> <span class="dd-v">' + esc(summary) + "</span></summary>" +
+      '<div class="dd-panel"><label class="dd-all"><input type="checkbox" data-ptall' + (all ? " checked" : "") + "> " + t("allT") + "</label>" +
+      '<div class="dd-list">' + TENSES.map(function (x) {
+        return '<label><input type="checkbox" data-pt="' + x.id + '"' + (tOn(x.id) ? " checked" : "") + "> " + shortName(x) + "</label>";
+      }).join("") + "</div></div></details>";
+    var asp = P.mode === "forms"
+      ? '<div class="seg pasp" role="group" aria-label="' + esc(t("aspL")) + '"><span class="seg-k">' + t("aspL") + ":</span>" + ["i", "p", "both"].map(function (a) {
+          return '<button data-pasp="' + a + '" aria-pressed="' + (P.asp === a) + '">' + (a === "i" ? t("impfS") : a === "p" ? t("pfS") : t("both")) + "</button>";
+        }).join("") + "</div>"
+      : '<p class="muted small">' + t("noAspInMode") + " " + t("hasT") + " " + modeTenses().map(shortName).join(", ") + ".</p>";
+    return '<div class="pr-filter">' + dd + asp + "</div>";
   }
 
   function renderPractice() {
     if (!P.q) P.q = genQ();
-    var q = P.q, done = P.ans >= 0, html = "", title = "", body = "", why = "";
+    var q = P.q, done = P.ans >= 0, title = "", body = "", why = "";
+    var head = '<div class="seg" role="group">' + ["forms", "aspect", "tense"].map(function (m) {
+        return '<button data-pmode="' + m + '" aria-pressed="' + (P.mode === m) + '">' + t({ forms: "mForms", aspect: "mAspect", tense: "mTense" }[m]) + "</button>";
+      }).join("") + "</div>" + filterUI() +
+      '<div class="pr-score"><span>✓ <b>' + P.right + " / " + P.total + "</b> " + t("right") + "</span><span>" + t("streak") + " <b>" + P.streak + "</b></span><span>" + t("best") + " <b>" + P.best + "</b></span></div>";
+    if (q.empty) {
+      $("pane-practice").innerHTML = '<div class="pr">' + head + '<div class="panel pr-card pr-empty"><p>' + t("noQ") + '</p><button class="btn" data-pallt>' + t("pickAll") + "</button></div></div>";
+      markAllBox();
+      return;
+    }
     if (q.mode === "forms") {
       var v = VERBS[q.v], tn = TBY[q.tid];
       var who = q.i === 2 ? "той" : G.PERSONS[q.i];
@@ -1657,7 +1933,7 @@ window.VERB_DATA = [
         '<div class="pr-tags"><span class="pr-tag bg">' + who + '</span><span class="pr-tag">' + shortName(tn) + '</span><span class="pr-tag ' + (q.pf ? "p" : "i") + '">' + (q.pf ? t("pfS") : t("impfS")) + "</span></div></div>";
       if (done) {
         var r = G.build(q.tid, v, q.pf, q.i, "m", false, S.lang), endP = r.pieces.filter(function (pc) { return pc.k === "end"; }).pop();
-        why = '<p class="full">' + who + " " + cellText(q.tid, v, q.pf, q.i, "m", false) + "</p>" +
+        why = '<p class="full">' + who + " " + cellText(q.tid, v, q.pf, q.i, "m", false) + sayBtn(G.joinPieces(r)) + "</p>" +
           (endP ? "<p>" + esc(endP.info) + "</p>" : "") +
           "<p><b>" + L(tn.name) + "</b> · " + (S.lang === "ru" ? "≈ " + G.RUEQ[tn.id] : L(tn.short)) + "</p>" +
           '<button class="link" data-popen="1">' + t("inBuilder") + " →</button>";
@@ -1665,51 +1941,55 @@ window.VERB_DATA = [
     } else if (q.mode === "aspect") {
       var va = VERBS[q.it.v], ex = va.ex[q.it.e], w = ex[0].split(/([А-Яа-яЍѝ]+)/);
       title = t("qAspect");
+      var okOpt = q.opts.filter(function (o) { return o.p === q.ok; })[0];
       var sent = w.map(function (x, k) {
         if (k !== q.it.k) return esc(x);
-        return done ? '<span class="blank filled">' + esc(x) + "</span>" : '<span class="blank">?</span>';
+        return done ? '<span class="blank filled">' + esc(S.stress ? okOpt.s : okOpt.p) + "</span>" : '<span class="blank">?</span>';
       }).join("");
       body = '<div class="pr-prompt"><p class="pr-sent">' + sent + '</p><p class="pr-tr">' + esc(ex[1]) + "</p></div>";
       if (done) {
-        var sg = signalsIn(ex[0]);
-        why = "<p>" + (q.it.cls === "i" ? t("whyI") : t("whyP")) + "</p>" +
-          (sg ? '<p class="pr-tags"><span class="muted">' + t("sigs") + ":</span> " + sg + "</p>" : "") +
-          '<p class="muted">' + t("orig") + '</p><p class="full">' + highlight(ex[0], va) + "</p>";
+        var reason = q.it.reason === "A" ? t("whyA") : q.it.reason === "B" ? t("whyB") : (q.it.cls === "i" ? t("whyI") : t("whyP"));
+        why = "<p>" + reason + "</p>" +
+          (q.it.sigs.length ? '<p class="pr-tags"><span class="muted">' + t("sigs") + ":</span> " + q.it.sigs.map(function (s) { return '<span class="pr-tag bg ' + q.it.cls + '">' + s + "</span>"; }).join(" ") + "</p>" : "") +
+          '<p class="muted">' + t("orig") + '</p><p class="full">' + highlight(ex[0], va) + sayBtn(ex[0]) + "</p>";
       }
     } else {
       var item = TQ[q.idx];
       title = t("qTense");
-      body = '<div class="pr-prompt"><p class="pr-sent">' + blankSentence(item.s, done ? item.o[0] : null) + '</p><p class="pr-tr">' + esc(item.ru) + "</p></div>";
+      var fill = done ? (S.stress ? item.os[0] : item.o[0]) : null;
+      body = '<div class="pr-prompt"><p class="pr-sent">' + esc(item.s).replace("___", fill ? '<span class="blank filled">' + esc(fill) + "</span>" : '<span class="blank">?</span>') + '</p><p class="pr-tr">' + esc(item.ru) + "</p></div>";
       if (done) why = "<p>" + esc(L(item.why)) + "</p>";
     }
     var opts = '<div class="pr-opts' + (q.opts.length > 2 ? " four" : "") + '">' + q.opts.map(function (o, j) {
       var cls = "", mark = "";
       if (done) {
-        if (o === q.ok) { cls = " ok"; mark = "✓"; }
+        if (o.p === q.ok) { cls = " ok"; mark = "✓"; }
         else if (j === P.ans) { cls = " bad"; mark = "✗"; }
         else cls = " dim";
       }
-      return '<button class="opt' + cls + '" data-ans="' + j + '"' + (done ? ' aria-disabled="true"' : "") + '><span class="key">' + (j + 1) + "</span><span>" + esc(o) + '</span><span class="mark">' + mark + "</span></button>";
+      return '<button class="opt' + cls + '" data-ans="' + j + '"' + (done ? ' aria-disabled="true"' : "") + '><span class="key">' + (j + 1) + "</span><span>" + esc(S.stress ? o.s : o.p) + '</span><span class="mark">' + mark + "</span></button>";
     }).join("") + "</div>";
-    var good = done && q.opts[P.ans] === q.ok;
-    html = '<div class="pr"><div class="seg" role="group">' + ["forms", "aspect", "tense"].map(function (m) {
-        return '<button data-pmode="' + m + '" aria-pressed="' + (P.mode === m) + '">' + t({ forms: "mForms", aspect: "mAspect", tense: "mTense" }[m]) + "</button>";
-      }).join("") + "</div>" +
-      '<div class="pr-score"><span>✓ <b>' + P.right + " / " + P.total + "</b> " + t("right") + "</span><span>" + t("streak") + " <b>" + P.streak + "</b></span><span>" + t("best") + " <b>" + P.best + "</b></span></div>" +
-      '<div class="panel pr-card"><span class="label">' + title + "</span>" + body + opts +
+    var good = done && q.opts[P.ans].p === q.ok;
+    $("pane-practice").innerHTML = '<div class="pr">' + head +
+      '<div class="panel pr-card"><h3 class="label">' + title + "</h3>" + body + opts +
       (done ? '<div class="pr-why"><span class="verdict ' + (good ? "ok" : "bad") + '">' + (good ? t("yes") : t("no")) + "</span>" + why + "</div>" +
         '<div class="pr-next"><button class="btn" data-pnext>' + t("next") + '</button><span class="pr-hint">' + t("keys") + "</span></div>" : "") +
       "</div></div>";
-    $("practice").innerHTML = html;
+    markAllBox();
+  }
+  function markAllBox() {
+    var box = document.querySelector("[data-ptall]");
+    if (box) box.indeterminate = P.tenses.length > 0 && P.tenses.length < ALL_T.length;
   }
   function answer(j) {
-    if (P.ans >= 0 || !P.q || j >= P.q.opts.length) return;
+    if (P.ans >= 0 || !P.q || P.q.empty || j >= P.q.opts.length) return;
     P.ans = j; P.total++;
-    if (P.q.opts[j] === P.q.ok) { P.right++; P.streak++; if (P.streak > P.best) { P.best = P.streak; store.set("best", P.best); } }
+    if (P.q.opts[j].p === P.q.ok) { P.right++; P.streak++; if (P.streak > P.best) { P.best = P.streak; store.set("best", P.best); } }
     else P.streak = 0;
     renderPractice();
   }
   function nextQ() { P.q = genQ(); P.ans = -1; renderPractice(); var c = document.querySelector(".pr-card"); if (c && c.getBoundingClientRect().top < 0) c.scrollIntoView({ block: "start" }); }
+  function filterChanged() { saveFilter(); P.deck = []; P.q = genQ(); P.ans = -1; renderPractice(); }
 
   /* ---------- Routing ---------- */
   function setHash() {
@@ -1742,7 +2022,10 @@ window.VERB_DATA = [
     var el = e.target.closest("button");
     if (!el) return;
     var d = el.dataset;
+    if (d.say !== undefined) { speak(d.say); return; }
     if (el.id === "help") { S.legend = !S.legend; renderChrome(); return; }
+    if (el.id === "stressBtn") { S.stress = !S.stress; store.set("stress", S.stress ? "1" : "0"); render(); return; }
+    if ("closenotice" in d) { $("notice").hidden = true; return; }
     if (d.lang) { S.lang = d.lang; store.set("lang", S.lang); render(); return; }
     if (d.tab) { go(function () { if (d.tab === "verbs" && S.tab === "verbs") S.verb = null; S.tab = d.tab; }); return; }
     // builder
@@ -1750,13 +2033,11 @@ window.VERB_DATA = [
     if (d.bverb) { setB(function (B) { B.verb = +d.bverb; B.picking = false; B.q = ""; }, "fade"); return; }
     if (d.bgroup) { setB(function (B) { var g = GROUPS.filter(function (x) { return x.id === d.bgroup; })[0]; if (g.t.indexOf(B.tense) < 0) B.tense = g.t[0]; }, "fade"); return; }
     if (d.btense) { setB(function (B) { B.tense = d.btense; }, "fade"); return; }
-    if (d.bperson) { setB(function (B) { B.person = +d.bperson; }); return; }
-    if (d.bpf) { setB(function (B) { B.pf = d.bpf === "1"; }, "fade"); return; }
     if (d.bgen) { setB(function (B) { B.gender = d.bgen; }); return; }
     if ("bneg" in d) { setB(function (B) { B.neg = !B.neg; }); return; }
     if (d.fcell) {
-      var fc = d.fcell.split("|"), same = S.B.open && S.B.person === +fc[0] && S.B.pf === (fc[1] === "1");
-      S.B.person = +fc[0]; S.B.pf = fc[1] === "1"; S.B.open = !same; S.B.sel = -1; S.anim = "sel"; saveB(); renderForm(); return;
+      var fc = d.fcell.split("|");
+      S.B.person = +fc[0]; S.B.pf = fc[1] === "1"; S.B.sel = -1; S.anim = "sel"; saveB(); renderForm(); return;
     }
     if (d.piece) { S.B.sel = +d.piece; renderForm(); return; }
     if (d.totense) { go(function () { S.tab = "tenses"; S.open[d.totense] = true; S.jump = d.totense; if (!TBY[d.totense].core) S.showRare = true; }); return; }
@@ -1765,11 +2046,13 @@ window.VERB_DATA = [
     if (d.toggle) { S.open[d.toggle] = !S.open[d.toggle]; renderTenses(); return; }
     if (d.jump) { S.open[d.jump] = true; if (!TBY[d.jump].core) S.showRare = true; renderTenses(); var j = $("t-" + d.jump); if (j) j.scrollIntoView({ block: "start", behavior: "smooth" }); return; }
     // practice
-    if (d.pmode) { P.mode = d.pmode; store.set("pmode", P.mode); P.q = genQ(); P.ans = -1; renderPractice(); return; }
+    if (d.pmode) { P.mode = d.pmode; store.set("pmode", P.mode); P.deck = []; P.q = genQ(); P.ans = -1; renderPractice(); return; }
+    if (d.pasp) { P.asp = d.pasp; filterChanged(); return; }
+    if ("pallt" in d) { P.tenses = ALL_T.slice(); filterChanged(); return; }
     if (d.ans !== undefined) { answer(+d.ans); return; }
     if ("pnext" in d) { nextQ(); return; }
     if ("popen" in d && P.q && P.q.mode === "forms") {
-      S.B.verb = P.q.v; S.B.tense = P.q.tid; S.B.pf = P.q.pf; S.B.person = P.q.i; S.B.neg = false; S.B.open = true; S.B.sel = -1; saveB();
+      S.B.verb = P.q.v; S.B.tense = P.q.tid; S.B.pf = P.q.pf; S.B.person = P.q.i; S.B.neg = false; S.B.sel = -1; saveB();
       go(function () { S.tab = "form"; }); return;
     }
     // verbs
@@ -1779,7 +2062,7 @@ window.VERB_DATA = [
     if ("vrare" in d) { S.vrare = !S.vrare; renderVerbs(); return; }
     if (d.cell) {
       var c = d.cell.split("|");
-      S.B.verb = S.verb; S.B.tense = c[0]; S.B.pf = c[1] === "1"; S.B.person = +c[2]; S.B.neg = false; S.B.open = true; S.B.sel = -1; saveB();
+      S.B.verb = S.verb; S.B.tense = c[0]; S.B.pf = c[1] === "1"; S.B.person = +c[2]; S.B.neg = false; S.B.sel = -1; saveB();
       go(function () { S.tab = "form"; }); return;
     }
   });
@@ -1788,12 +2071,24 @@ window.VERB_DATA = [
     if (e.target.id === "bq") { S.B.q = e.target.value; renderForm(); }
   });
   document.addEventListener("change", function (e) {
-    if (e.target.classList.contains("trbox")) {
-      S.tr = e.target.checked; store.set("tr", S.tr ? "1" : "0"); document.body.classList.toggle("no-tr", !S.tr);
+    var el = e.target, d = el.dataset || {};
+    if (el.classList.contains("trbox")) {
+      S.tr = el.checked; store.set("tr", S.tr ? "1" : "0"); document.body.classList.toggle("no-tr", !S.tr);
       Array.prototype.forEach.call(document.querySelectorAll(".trbox"), function (b) { b.checked = S.tr; });
     }
+    if ("ptall" in d) { P.tenses = el.checked ? ALL_T.slice() : []; filterChanged(); }
+    if (d.pt) {
+      P.tenses = el.checked ? P.tenses.concat([d.pt]) : P.tenses.filter(function (x) { return x !== d.pt; });
+      P.tenses = ALL_T.filter(function (x) { return P.tenses.indexOf(x) >= 0; });
+      filterChanged();
+    }
   });
-  document.addEventListener("toggle", function (e) { if (e.target.classList && e.target.classList.contains("rare-wrap")) S.showRare = e.target.open; }, true);
+  document.addEventListener("toggle", function (e) {
+    var el = e.target;
+    if (!el.classList) return;
+    if (el.classList.contains("rare-wrap")) S.showRare = el.open;
+    if (el.classList.contains("dd")) P.ddOpen = el.open;
+  }, true);
   document.addEventListener("keydown", function (e) {
     if (S.tab !== "practice" || e.altKey || e.ctrlKey || e.metaKey || /input|textarea|select/i.test(e.target.tagName)) return;
     if (P.ans < 0 && /^[1-4]$/.test(e.key)) { answer(+e.key - 1); e.preventDefault(); }
@@ -1803,6 +2098,7 @@ window.VERB_DATA = [
 
   readHash();
   render();
+  initTTS();
 })();
 
 </script>

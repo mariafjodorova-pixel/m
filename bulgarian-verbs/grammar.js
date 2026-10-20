@@ -11,13 +11,15 @@
 
   function lastYaToE(s) { var i = s.lastIndexOf("я"); return i < 0 ? s : s.slice(0, i) + "е" + s.slice(i + 1); }
 
-  function partForms(m) {
+  /* -ял → -ели in the plural (видял → видели) only where я is the old ят of I / II conjugation verbs;
+     the я of III conjugation verbs stays (забравял → забравяли). */
+  function partForms(m, keepYa) {
     if (m.slice(-2) === "ъл") {
       var s = m.slice(0, -2);
       return { m: m, f: s + "ла", n: s + "ло", pl: lastYaToE(s) + "ли" };
     }
     var pl = m + "и";
-    if (m.slice(-2) === "ял" && VOWELS.indexOf(m.charAt(m.length - 3)) < 0) pl = m.slice(0, -2) + "ели";
+    if (!keepYa && m.slice(-2) === "ял" && VOWELS.indexOf(m.charAt(m.length - 3)) < 0) pl = m.slice(0, -2) + "ели";
     return { m: m, f: m + "а", n: m + "о", pl: pl };
   }
 
@@ -32,7 +34,7 @@
         pres: [a, b + "ш", b, b + "ме", b + "те", b + "т"],
         aor: [b + "х", b, b, b + "хме", b + "хте", b + "ха"],
         imp: [b + "х", b + "ше", b + "ше", b + "хме", b + "хте", b + "ха"],
-        part: partForms(b + "л"),
+        part: partForms(b + "л", true),
         impv: x.impv || [b + "й", b + "йте"]
       };
     }
@@ -54,6 +56,66 @@
     };
   }
 
+
+  /* ---------- Stress ----------
+     The PDF gives the stressed vowel of each dictionary form (аз-form, sometimes the ти-form).
+     Everything else is derived by rule, counting vowels from the start of the word.
+     A form whose stress is not certain gets -1 and is shown without a mark. */
+  var ACUTE = "́";
+  var STRESS_IDX = {};
+  (window.VERB_STRESS || []).forEach(function (w) {
+    var plain = w.replace(/́/g, ""), k = w.indexOf(ACUTE);
+    if (k > 0) STRESS_IDX[plain] = vowelNo(plain, k - 1);
+  });
+  function vowelPos(w) { var r = []; for (var i = 0; i < w.length; i++) if (VOWELS.indexOf(w.charAt(i)) >= 0) r.push(i); return r; }
+  function vowelNo(w, charIdx) { return vowelPos(w).indexOf(charIdx); }
+  function dictStress(w) { if (STRESS_IDX[w] !== undefined) return STRESS_IDX[w]; return vowelPos(w).length === 1 ? 0 : -1; }
+  /* char index of vowel number n in w; -1 when unknown or when the word has one vowel (no mark needed) */
+  function at(w, n) { if (!w || n < 0) return -1; var v = vowelPos(w); return v.length > 1 && n < v.length ? v[n] : -1; }
+  function markStr(w, ci) { return ci >= 0 ? w.slice(0, ci + 1) + ACUTE + w.slice(ci + 1) : w; }
+  function stripStress(w) { return String(w).replace(/́/g, ""); }
+
+  /* Imperatives of stem-stressed I-conjugation verbs: stress moves to the ending only in these
+     (кажи́, вземи́, седни́…); for the rest it is uncertain and left unmarked. */
+  var IMPV_ENDING = { "кажа": 1, "покажа": 1, "разкажа": 1, "взема": 1, "седна": 1, "стана": 1, "легна": 1 };
+  /* Irregular imperatives given in verbs.js */
+  var IMPV_IRR = { "ела": "ела́", "елате": "ела́те", "вижте": "ви́жте", "дайте": "да́йте", "продай": "прода́й", "продайте": "прода́йте",
+    "влезте": "вле́зте", "излез": "изле́з", "излезте": "изле́зте", "слезте": "сле́зте" };
+
+  function stressOf(f) {
+    var none = [-1, -1, -1, -1, -1, -1];
+    var st = { inf: -1, pres: none.slice(), aor: none.slice(), imp: none.slice(), part: { m: -1, f: -1, n: -1, pl: -1 }, impv: [-1, -1] };
+    var s1 = dictStress(f.inf);
+    if (s1 < 0) return st;
+    var s2 = STRESS_IDX[f.pres[1]] !== undefined ? STRESS_IDX[f.pres[1]] : s1;
+    var nv = vowelPos(f.inf).length, g = f.group;
+    var vowelStem = /[аеиоуъюя]й$/.test(f.impv[0]) && g !== "III";
+    var endStressed = g !== "III" && s1 === nv - 1 && VOWELS.indexOf(f.inf.slice(-1)) >= 0;
+    st.inf = at(f.inf, s1);
+    // present: the stress stays on the same vowel in every person
+    st.pres = f.pres.map(function (w, i) { return at(w, i === 0 ? s1 : s2); });
+    // aorist
+    var aIdx = s1;
+    if (endStressed) aIdx = f.aor[0].slice(-2) === "ох" ? s1 - 1 : vowelPos(f.aor[0]).length - 1;
+    st.aor = f.aor.map(function (w) { return at(w, aIdx); });
+    // imperfect (only imperfective verbs have it here): same vowel as the аз-form of the present
+    if (f.imp) st.imp = f.imp.map(function (w) { return at(w, s1); });
+    // -л participle: same vowel as the aorist; participles in -ъл are left unmarked (stress may move: дошъл / дошли́)
+    if (f.part.m.slice(-2) !== "ъл") ["m", "f", "n", "pl"].forEach(function (k) { st.part[k] = at(f.part[k], aIdx); });
+    // imperative
+    if (IMPV_IRR[f.impv[0]] || IMPV_IRR[f.impv[1]] || /^(виж|дай|влез|слез)$/.test(f.impv[0])) {
+      st.impv = f.impv.map(function (w) { var x = IMPV_IRR[w]; return x ? x.indexOf(ACUTE) - 1 : -1; });
+    } else if (g === "III" || g === "II" || vowelStem || endStressed) {
+      st.impv = f.impv.map(function (w) { return at(w, s1); });
+    } else if (IMPV_ENDING[f.inf]) {
+      st.impv = [at(f.impv[0], vowelPos(f.impv[0]).length - 1), at(f.impv[1], vowelPos(f.impv[1]).length - 2)];
+    }
+    return st;
+  }
+  /* Polysyllabic auxiliaries (clitics like съм, ще, да are unstressed) */
+  var AUX_ST = { "беше": "бе́ше", "бяхме": "бя́хме", "бяхте": "бя́хте", "бяха": "бя́ха", "щеше да": "ще́ше да", "щяхме да": "щя́хме да",
+    "щяхте да": "щя́хте да", "щяха да": "щя́ха да", "бихме": "би́хме", "бихте": "би́хте", "биха": "би́ха", "няма да": "ня́ма да", "нямаше да": "ня́маше да" };
+
   var VERBS = window.VERB_DATA.map(function (r, idx) {
     var o = r[4] || {};
     return {
@@ -62,6 +124,14 @@
       ru: r[2], ex: r[3], note: o.note || null, extra: !!o.extra
     };
   });
+  VERBS.forEach(function (v) { v.impf.st = stressOf(v.impf); v.pf.st = stressOf(v.pf); });
+  /* stressed text of one simple form: key like "pres|3", "aor|0", "imp|1", "impv|0", "part|f" */
+  function stressedForm(f, key) {
+    var p = key.split("|"), w, ci;
+    if (p[0] === "part") { w = f.part[p[1]]; ci = f.st.part[p[1]]; }
+    else { w = f[p[0]] && f[p[0]][+p[1]]; ci = f.st[p[0]] ? f.st[p[0]][+p[1]] : -1; }
+    return w ? markStr(w, ci) : null;
+  }
 
   /* ---------- Tense cells ---------- */
   function aux(s) { return '<span class="aux">' + s + "</span>"; }
@@ -355,7 +425,6 @@
       name: { ru: "Повелительное наклонение", bg: "Повелително наклонение" },
       formula: { ru: "основа + -и / -ете или -й / -йте", bg: "основа + -и / -ете или -й / -йте" },
       short: { ru: "приказы, просьбы", bg: "заповеди, молби" },
-      persons: ["ти", "вие", "не! (ти)"],
       uses: {
         ru: ["Приказы, просьбы, инструкции. Свои формы есть только у «ти» и «вие».", "«Давай(те)…» — «нека / да»: «Нека да опитаме!», «Да вървим!»"],
         bg: ["Заповеди, молби, инструкции. Собствени форми има само за „ти“ и „вие“.", "За подкана: нека / да: Нека да опитаме! Да вървим!"]
@@ -427,24 +496,25 @@
   /* Returns { pieces: [{t, k, info}], na: reason } for one cell of the builder. */
   function build(tid, v, pf, i, gender, neg, lang) {
     var f = pf ? v.pf : v.impf, se = v.se, out = [], g = f.group;
-    function P(t, k, inf) { out.push({ t: t, k: k, info: inf }); }
-    function pt(w, kind) { P(w, "pt", info(kind, { i: i, w: w }, lang)); }
+    function P(t, k, inf, s) { out.push({ t: t, k: k, info: inf, s: s === undefined ? -1 : s }); }
+    function pt(w, kind) { var x = AUX_ST[w]; P(w, "pt", info(kind, { i: i, w: w }, lang), x ? x.indexOf(ACUTE) - 1 : -1); }
     function seP() { if (se) P(se, "se", info("se", { w: se }, lang)); }
-    function word(form, ends, endKind, stemKind) {
-      var s = split(form, ends);
-      P(s[0], "stem", info(stemKind || "stem", { i: i }, lang));
-      if (s[1]) P(s[1], "end", info(endKind, { i: i, e: s[1], g: g }, lang));
+    function word(form, ends, endKind, stemKind, ci) {
+      var s = split(form, ends), L = s[0].length;
+      ci = ci === undefined ? -1 : ci;
+      P(s[0], "stem", info(stemKind || "stem", { i: i }, lang), ci >= 0 && ci < L ? ci : -1);
+      if (s[1]) P(s[1], "end", info(endKind, { i: i, e: s[1], g: g }, lang), ci >= L ? ci - L : -1);
       else if (endKind === "end-present" || endKind === "end-aorist" || endKind === "end-impv") out[out.length - 1].info += " " + info(endKind, { i: i, e: "", g: g }, lang);
     }
     function participle() {
-      var w = i < 3 ? (gender === "f" ? f.part.f : f.part.m) : f.part.pl;
-      word(w, ["ъл", "ла", "ли", "л"], "end-part", "stem-part");
+      var k = i < 3 ? (gender === "f" ? "f" : "m") : "pl";
+      word(f.part[k], ["ъл", "ла", "ли", "л"], "end-part", "stem-part", f.st.part[k]);
     }
     function auxPiece(arr, kind) {
       if (se && i === 2 && kind === "aux") { seP(); pt("е", "aux"); return; }
       pt(arr[i], kind); seP();
     }
-    var presWord = function () { word(f.pres[i], PRES_END[g][i], "end-present"); };
+    var presWord = function () { word(f.pres[i], PRES_END[g][i], "end-present", undefined, f.st.pres[i]); };
 
     switch (tid) {
       case "present":
@@ -455,13 +525,13 @@
       case "aorist":
         var a2 = (i === 1 || i === 2) ? (f.aor[0].slice(-2) === "ох" ? ["е"] : [""]) : [["х"], 0, 0, ["хме"], ["хте"], ["ха"]][i];
         if (neg) { pt("не", "не"); seP(); }
-        word(f.aor[i], a2, "end-aorist", "stem-aorist");
+        word(f.aor[i], a2, "end-aorist", "stem-aorist", f.st.aor[i]);
         if (!neg) seP();
         break;
       case "imperfect":
         if (pf || !f.imp) return { na: lang === "ru" ? "Имперфект СВ почти не используется — берите НСВ." : "Имперфект от свършен вид почти не се използва – вземете НСВ." };
         if (neg) { pt("не", "не"); seP(); }
-        word(f.imp[i], IMP_END[i], "end-imperfect");
+        word(f.imp[i], IMP_END[i], "end-imperfect", undefined, f.st.imp[i]);
         if (!neg) seP();
         break;
       case "perfect":
@@ -490,16 +560,17 @@
         if (neg && pf) return { na: lang === "ru" ? "Запрет — только НСВ: «" + banned + "»." : "Забрана – само с НСВ: „" + banned + "“." };
         var iw = f.impv[i === 1 ? 0 : 1];
         if (neg) { pt("не", "не"); seP(); }
-        word(iw, i === 1 ? ["и", "й"] : ["ете", "йте"], "end-impv");
+        word(iw, i === 1 ? ["и", "й"] : ["ете", "йте"], "end-impv", undefined, f.st.impv[i === 1 ? 0 : 1]);
         if (!neg) seP();
         break;
     }
     return { pieces: out };
   }
-  function joinPieces(r) {
+  function pieceText(p, stressed) { return stressed ? markStr(p.t, p.s) : p.t; }
+  function joinPieces(r, stressed) {
     // stem + ending are written together; everything else separated by spaces
     var s = "", prev = null;
-    r.pieces.forEach(function (p) { s += (prev && !(prev.k === "stem" && p.k === "end") ? " " : "") + p.t; prev = p; });
+    r.pieces.forEach(function (p) { s += (prev && !(prev.k === "stem" && p.k === "end") ? " " : "") + pieceText(p, stressed); prev = p; });
     return s;
   }
 
@@ -544,7 +615,8 @@
   window.BG = {
     VERBS: VERBS, TENSES: TENSES, PERSONS: PERSONS, AUX: AUX,
     cells: cells, wordSet: wordSet, aux: aux,
-    build: build, joinPieces: joinPieces, PART_TENSES: PART_TENSES,
+    build: build, joinPieces: joinPieces, pieceText: pieceText, PART_TENSES: PART_TENSES,
+    stressedForm: stressedForm, markStr: markStr, stripStress: stripStress,
     RUEQ: RUEQ, STRIP: STRIP, icon: icon
   };
 })();
