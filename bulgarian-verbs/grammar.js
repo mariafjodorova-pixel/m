@@ -26,7 +26,24 @@
   /* Build every simple form of one verb from its spec (see verbs.js). */
   function conjugate(spec, x) {
     x = x || {};
+    var f = typeof spec === "object" ? fromMarked(spec) : conjugateSpec(spec, x);
+    if (x.inf) f.inf = x.inf;
+    if (x.mark) f.mark = x.mark;
+    return f;
+  }
+  /* a fully irregular verb given with stress marks (съм) */
+  function fromMarked(o) {
+    var mark = {}, plain = function (w) { return w.replace(/́/g, ""); };
+    var f = { inf: o.inf, group: o.group };
+    ["pres", "aor", "imp", "impv", "fut"].forEach(function (k) { if (o[k]) { f[k] = o[k].map(plain); mark[k] = o[k]; } });
+    f.part = { m: plain(o.part.m), f: plain(o.part.f), n: plain(o.part.n), pl: plain(o.part.pl) };
+    mark.part = o.part;
+    f.mark = mark;
+    return f;
+  }
+  function conjugateSpec(spec, x) {
     var p = spec.split("|");
+    var noImpv = x.impv === null;
     if (p.length === 1) {
       var a = p[0], b = a.slice(0, -1);
       return {
@@ -35,7 +52,7 @@
         aor: [b + "х", b, b, b + "хме", b + "хте", b + "ха"],
         imp: [b + "х", b + "ше", b + "ше", b + "хме", b + "хте", b + "ха"],
         part: partForms(b + "л", true),
-        impv: x.impv || [b + "й", b + "йте"]
+        impv: noImpv ? null : x.impv || [b + "й", b + "йте"]
       };
     }
     var s1 = p[0], s2 = p[1], a1 = p[2], pm = p[3], i1 = p[4];
@@ -51,8 +68,8 @@
       pres: [s1, s2, st + v, st + v + "м", st + v + "те", pl3],
       aor: [a1, a23, a23, a1 + "ме", a1 + "те", a1 + "а"],
       imp: imp,
-      part: partForms(pm),
-      impv: x.impv || (vowelStem ? [st + "й", st + "йте"] : [st + "и", st + "ете"])
+      part: partForms(pm, x.keepYa),
+      impv: noImpv ? null : x.impv || (vowelStem ? [st + "й", st + "йте"] : [st + "и", st + "ете"])
     };
   }
 
@@ -78,53 +95,78 @@
   /* Imperatives of stem-stressed I-conjugation verbs: stress moves to the ending only in these
      (кажи́, вземи́, седни́…); for the rest it is uncertain and left unmarked. */
   var IMPV_ENDING = { "кажа": 1, "покажа": 1, "разкажа": 1, "взема": 1, "седна": 1, "стана": 1, "легна": 1 };
+  /* II conjugation, stem-stressed: these keep the stress on the stem in the aorist, participle and imperative */
+  var II_STEM_SURE = { "видя": 1, "добавя": 1, "забравя": 1, "купя": 1, "обадя": 1, "оставя": 1, "поправя": 1,
+    "представя": 1, "приготвя": 1, "събудя": 1, "правя": 1, "направя": 1 };
   /* Irregular imperatives given in verbs.js */
   var IMPV_IRR = { "ела": "ела́", "елате": "ела́те", "вижте": "ви́жте", "дайте": "да́йте", "продай": "прода́й", "продайте": "прода́йте",
     "влезте": "вле́зте", "излез": "изле́з", "излезте": "изле́зте", "слезте": "сле́зте" };
 
   function stressOf(f) {
     var none = [-1, -1, -1, -1, -1, -1];
-    var st = { inf: -1, pres: none.slice(), aor: none.slice(), imp: none.slice(), part: { m: -1, f: -1, n: -1, pl: -1 }, impv: [-1, -1] };
+    var st = { inf: -1, pres: none.slice(), aor: none.slice(), imp: none.slice(), part: { m: -1, f: -1, n: -1, pl: -1 }, impv: [-1, -1], fut: none.slice() };
+    if (f.group === "irr") return applyMarks(f, st);
     var s1 = dictStress(f.inf);
-    if (s1 < 0) return st;
+    if (s1 < 0) return applyMarks(f, st);
     var s2 = STRESS_IDX[f.pres[1]] !== undefined ? STRESS_IDX[f.pres[1]] : s1;
     var nv = vowelPos(f.inf).length, g = f.group;
-    var vowelStem = /[аеиоуъюя]й$/.test(f.impv[0]) && g !== "III";
+    var impv = f.impv || ["", ""];
+    var vowelStem = /[аеиоуъюя]й$/.test(impv[0]) && g !== "III";
     var endStressed = g !== "III" && s1 === nv - 1 && VOWELS.indexOf(f.inf.slice(-1)) >= 0;
+    // II conjugation with stem stress: in many verbs the aorist / participle stress moves to -и́- (затвори́х?);
+    // that is lexical, so only the verbs known to keep the stem stress are marked
+    var unsure = g === "II" && !endStressed && !II_STEM_SURE[f.inf];
     st.inf = at(f.inf, s1);
     // present: the stress stays on the same vowel in every person
     st.pres = f.pres.map(function (w, i) { return at(w, i === 0 ? s1 : s2); });
     // aorist
     var aIdx = s1;
     if (endStressed) aIdx = f.aor[0].slice(-2) === "ох" ? s1 - 1 : vowelPos(f.aor[0]).length - 1;
-    st.aor = f.aor.map(function (w) { return at(w, aIdx); });
+    st.aor = f.aor.map(function (w) { return unsure ? -1 : at(w, aIdx); });
     // imperfect (only imperfective verbs have it here): same vowel as the аз-form of the present
     if (f.imp) st.imp = f.imp.map(function (w) { return at(w, s1); });
     // -л participle: same vowel as the aorist; participles in -ъл are left unmarked (stress may move: дошъл / дошли́)
-    if (f.part.m.slice(-2) !== "ъл") ["m", "f", "n", "pl"].forEach(function (k) { st.part[k] = at(f.part[k], aIdx); });
+    if (f.part.m.slice(-2) !== "ъл" && !unsure) ["m", "f", "n", "pl"].forEach(function (k) { st.part[k] = at(f.part[k], aIdx); });
     // imperative
-    if (IMPV_IRR[f.impv[0]] || IMPV_IRR[f.impv[1]] || /^(виж|дай|влез|слез)$/.test(f.impv[0])) {
+    if (!f.impv || unsure) { /* no imperative (мога), or uncertain */ }
+    else if (IMPV_IRR[f.impv[0]] || IMPV_IRR[f.impv[1]] || /^(виж|дай|влез|слез)$/.test(f.impv[0])) {
       st.impv = f.impv.map(function (w) { var x = IMPV_IRR[w]; return x ? x.indexOf(ACUTE) - 1 : -1; });
     } else if (g === "III" || g === "II" || vowelStem || endStressed) {
       st.impv = f.impv.map(function (w) { return at(w, s1); });
     } else if (IMPV_ENDING[f.inf]) {
       st.impv = [at(f.impv[0], vowelPos(f.impv[0]).length - 1), at(f.impv[1], vowelPos(f.impv[1]).length - 2)];
     }
+    return applyMarks(f, st);
+  }
+  /* explicit stress from verbs.js: an array of marked words, or null = leave unmarked */
+  function applyMarks(f, st) {
+    var mk = f.mark || {}, idx = function (w) { var k = w.indexOf(ACUTE); return k > 0 ? k - 1 : -1; };
+    Object.keys(mk).forEach(function (k) {
+      if (k === "part") {
+        ["m", "f", "n", "pl"].forEach(function (g) { st.part[g] = mk.part ? idx(mk.part[g]) : -1; });
+      } else if (st[k]) {
+        st[k] = st[k].map(function (_, j) { return mk[k] && mk[k][j] ? idx(mk[k][j]) : -1; });
+      }
+    });
     return st;
   }
   /* Polysyllabic auxiliaries (clitics like съм, ще, да are unstressed) */
   var AUX_ST = { "беше": "бе́ше", "бяхме": "бя́хме", "бяхте": "бя́хте", "бяха": "бя́ха", "щеше да": "ще́ше да", "щяхме да": "щя́хме да",
-    "щяхте да": "щя́хте да", "щяха да": "щя́ха да", "бихме": "би́хме", "бихте": "би́хте", "биха": "би́ха", "няма да": "ня́ма да", "нямаше да": "ня́маше да" };
+    "щяхте да": "щя́хте да", "щяха да": "щя́ха да", "бихме": "би́хме", "бихте": "би́хте", "биха": "би́ха", "няма да": "ня́ма да", "нямаше да": "ня́маше да",
+    "щеше": "ще́ше", "щяхме": "щя́хме", "щяхте": "щя́хте", "щяха": "щя́ха", "няма": "ня́ма", "нямаше": "ня́маше" };
 
+  var PRON = window.VERB_PRON || {};
   var VERBS = window.VERB_DATA.map(function (r, idx) {
-    var o = r[4] || {};
+    var o = r[4] || {}, impf = conjugate(r[0], o.xi), se = o.se || "";
     return {
-      id: idx, impf: conjugate(r[0], o.xi), pf: conjugate(r[1], o.xp),
-      se: o.se || "", opt: o.opt || "", tail: o.tail || "",
-      ru: r[2], ex: r[3], note: o.note || null, extra: !!o.extra
+      id: idx, impf: impf, pf: r[1] ? conjugate(r[1], o.xp) : null, single: !r[1],
+      se: se, seI: se, seP: o.sePf || se, opt: o.opt || "", tail: o.tail || "",
+      ru: r[2], ex: r[3], note: o.note || null, extra: !!o.extra,
+      only3: !!o.only3, noQ: !!o.noQ, negF: o.negW ? conjugate(o.negW) : null,
+      pron: PRON[impf.inf + (se ? " " + se : "")] || ""
     };
   });
-  VERBS.forEach(function (v) { v.impf.st = stressOf(v.impf); v.pf.st = stressOf(v.pf); });
+  VERBS.forEach(function (v) { [v.impf, v.pf, v.negF].forEach(function (f) { if (f) f.st = stressOf(f); }); });
   /* stressed text of one simple form: key like "pres|3", "aor|0", "imp|1", "impv|0", "part|f" */
   function stressedForm(f, key) {
     var p = key.split("|"), w, ci;
@@ -159,7 +201,8 @@
   /* All single-word forms, for highlighting the verb inside example sentences. */
   function wordSet(f) {
     var s = {};
-    [f.pres, f.aor, f.imp || [], f.impv, [f.part.m, f.part.f, f.part.n, f.part.pl]].forEach(function (a) { a.forEach(function (w) { s[w] = 1; }); });
+    if (!f) return s;
+    [f.pres, f.aor, f.imp || [], f.impv || [], f.fut || [], [f.part.m, f.part.f, f.part.n, f.part.pl]].forEach(function (a) { a.forEach(function (w) { s[w] = 1; }); });
     return s;
   }
 
@@ -177,7 +220,7 @@
       },
       aspect: {
         i: { ru: "Обычное настоящее время.", bg: "Нормалното сегашно време." },
-        p: { ru: "Никогда не стоит отдельно. Только после <i>да, ще, ако, когато, щом, преди да</i>: «Искам да прочета…»", bg: "Никога не стои самостоятелно. Само след <i>да, ще, ако, когато, щом, преди да</i>: Искам да прочета…" }
+        p: { ru: "Почти никогда не стоит отдельно. Обычно только после <i>да, ще, ако, когато, щом, преди да</i>: «Искам да прочета…»", bg: "Почти никога не стои самостоятелно. Обикновено само след <i>да, ще, ако, когато, щом, преди да</i>: Искам да прочета…" }
       },
       signals: ["сега", "всеки ден", "обикновено", "винаги", "често", "рядко", "никога"],
       examples: [
@@ -215,8 +258,8 @@
       neg: ["Не " + b("p", "прочетох") + " писмото.", "Я не прочитал(а) письмо."],
       q: [b("p", "Прочете") + " ли книгата?", "Ты прочитал(а) книгу?"],
       tips: {
-        ru: ["Формы «ти» и «той / тя» совпадают: ти прочете, той прочете.", "I спряжение: настоящее «чете́» (ударение в конце), аорист «че́те» (ударение в начале).", "Многие глаголы меняют основу: пиша → писах, дам → дадох, взема → взех, дойда → дойдох."],
-        bg: ["Формите за „ти“ и „той / тя“ съвпадат: ти прочете, той прочете.", "I спрежение: сегашно „чете́“ (ударение накрая), аорист „че́те“ (ударение в началото).", "Много глаголи сменят основата: пиша → писах, дам → дадох, взема → взех, дойда → дойдох."]
+        ru: ["Формы «ти» и «той / тя» совпадают: ти прочете, той прочете.", "У глаголов с ударением на окончании (чета́, донеса́) в аористе ударение отходит назад: настоящее «чете́», аорист «че́те».", "Многие глаголы меняют основу: пиша → писах, дам → дадох, взема → взех, дойда → дойдох."],
+        bg: ["Формите за „ти“ и „той / тя“ съвпадат: ти прочете, той прочете.", "При глаголите с ударение на окончанието (чета́, донеса́) в аориста ударението се мести назад: сегашно „чете́“, аорист „че́те“.", "Много глаголи сменят основата: пиша → писах, дам → дадох, взема → взех, дойда → дойдох."]
       },
       ruCompare: "Аорист ≈ русское прошедшее время. Аорист СВ = «прочитал», аорист НСВ = «читал (какое-то время)». Рода нет: «аз прочетох» = «я прочитал» и «я прочитала»."
     },
@@ -231,7 +274,7 @@
       },
       aspect: {
         i: { ru: "Обычный выбор: процесс, фон, привычка.", bg: "Обичайният избор: процес, фон, навик." },
-        p: { ru: "Редко: только в придаточных повторения: «Когато дойдеше, винаги носеше подарък» — «Когда бы он ни приходил, всегда приносил подарок».", bg: "Рядко – само в подчинени изречения за повторение: Когато дойдеше, винаги носеше подарък." }
+        p: { ru: "Редко, только в придаточных: повторение («Когато дойдеше, винаги носеше подарък» — «Когда бы он ни приходил, всегда приносил подарок») и нереальное условие («Ако дойдеше навреме…» — «Если бы он пришёл вовремя…»).", bg: "Рядко, само в подчинени изречения: за повторение (Когато дойдеше, винаги носеше подарък) и за нереално условие (Ако дойдеше навреме…)." }
       },
       signals: ["докато", "когато бях малък / малка", "всяка вечер", "по цял ден", "често", "винаги"],
       examples: [
@@ -242,8 +285,8 @@
       neg: ["Не " + b("i", "четях") + " много като дете.", "В детстве я мало читал(а)."],
       q: ["Какво " + b("i", "правеше") + " вчера в шест?", "Что ты делал(а) вчера в шесть?"],
       tips: {
-        ru: ["Формы «ти» и «той / тя» оканчиваются на <i>-ше</i> — так проще всего отличить имперфект от аориста.", "III спряжение: форма «аз» совпадает с аористом (питах). Различают контекст и формы на <i>-ше</i>.", "Сочетайте с аористом: имперфект — фон, аорист — событие, которое его прерывает."],
-        bg: ["Формите за „ти“ и „той / тя“ завършват на <i>-ше</i> – така най-лесно се различава от аориста.", "III спрежение: формата за „аз“ съвпада с аориста (питах). Различават ги контекстът и формите на <i>-ше</i>.", "Комбинирайте с аориста: имперфект за фона, аорист за събитието, което го прекъсва."]
+        ru: ["Формы «ти» и «той / тя» оканчиваются на <i>-ше</i> — так проще всего отличить имперфект от аориста.", "III спряжение: имперфект совпадает с аористом во всех формах, кроме «ти / той»: питах, питахме… Но «ти питаше» (имперфект) — «ти пита» (аорист). Остальное различают по контексту.", "Сочетайте с аористом: имперфект — фон, аорист — событие, которое его прерывает."],
+        bg: ["Формите за „ти“ и „той / тя“ завършват на <i>-ше</i> – така най-лесно се различава от аориста.", "III спрежение: имперфектът съвпада с аориста във всички форми освен „ти / той“: питах, питахме… Но „ти питаше“ (имперфект) – „ти пита“ (аорист). Останалото личи от контекста.", "Комбинирайте с аориста: имперфект за фона, аорист за събитието, което го прекъсва."]
       },
       ruCompare: "Имперфект ≈ русское прошедшее НСВ в значении процесса или повторения. В русском одна форма «читал», в болгарском две: «четох» (аорист) и «четях» (имперфект)."
     },
@@ -269,8 +312,8 @@
       neg: ["Още не " + b("p", "съм прочел") + " писмото.", "Я ещё не прочитал письмо."],
       q: [b("i", "Чел ли си") + " „Под игото“?", "Ты читал «Под игом»?"],
       tips: {
-        ru: ["«съм, си, е…» не стоят в начале предложения: «Чел съм», а не «Съм чел». С подлежащим: «Аз съм чел».", "Причастие согласуется с подлежащим: чел (м), чела (ж), чело (ср), чели (мн).", "В вопросе «ли» идёт после причастия: «Чел ли си?»", "С точным временем («вчера») нужен аорист."],
-        bg: ["„съм, си, е…“ не стоят в началото на изречението: „Чел съм“, а не „Съм чел“. С подлог: Аз съм чел.", "Причастието се съгласува с подлога: чел (м.р.), чела (ж.р.), чело (ср.р.), чели (мн.ч.).", "Във въпрос „ли“ стои след причастието: Чел ли си?", "С точно време (вчера) се използва аорист."]
+        ru: ["«съм, си, е…» не стоят в начале предложения: «Чел съм», а не «Съм чел». С подлежащим: «Аз съм чел».", "Причастие согласуется с подлежащим: чел (м), чела (ж), чело (ср), чели (мн).", "В вопросе «ли» идёт после причастия: «Чел ли си?»", "С точным временем («вчера») нужен аорист.", "В 3-м лице не теряйте «е»: «той е бил», «тя е дошла». Без «е» («той бил») это уже пересказ: «говорят, что был»."],
+        bg: ["„съм, си, е…“ не стоят в началото на изречението: „Чел съм“, а не „Съм чел“. С подлог: Аз съм чел.", "Причастието се съгласува с подлога: чел (м.р.), чела (ж.р.), чело (ср.р.), чели (мн.ч.).", "Във въпрос „ли“ стои след причастието: Чел ли си?", "С точно време (вчера) се използва аорист.", "В 3 л. не изпускайте „е“: той е бил, тя е дошла. Без „е“ (той бил) е преизказно наклонение – „казват, че бил“."]
       },
       ruCompare: "Прямого аналога в русском нет, ближе всего английский Present Perfect. «Я читал эту книгу» (опыт) → «чел съм»; «вчера я прочитал» (точное время) → аорист «прочетох»."
     },
@@ -361,8 +404,8 @@
       formula: { ru: "ще съм + причастие на -л", bg: "ще съм + минало деятелно причастие (-л)" },
       short: { ru: "сделаю к какому-то моменту", bg: "ще съм направил до…" },
       uses: {
-        ru: ["Действие, которое будет завершено до определённого момента в будущем."],
-        bg: ["Действие, което ще е завършено преди определен момент в бъдещето."]
+        ru: ["Действие, которое будет завершено до определённого момента в будущем.", "Предположение о прошлом: «Ще е забравил» — «Наверное, (он) забыл»."],
+        bg: ["Действие, което ще е завършено преди определен момент в бъдещето.", "Предположение за миналото: Ще е забравил. (= Сигурно е забравил.)"]
       },
       aspect: { i: { ru: "Редко.", bg: "Рядко." }, p: { ru: "Обычный выбор: «До петък ще съм прочел книгата».", bg: "Обичайният избор: До петък ще съм прочел книгата." } },
       signals: ["до петък", "дотогава", "когато се върнеш", "вече"],
@@ -406,7 +449,7 @@
         i: { ru: "Общее или длительное: «Бих чел повече, ако имах време» — «Я бы читал больше, будь у меня время».", bg: "Общо или продължително: Бих чел повече, ако имах време." },
         p: { ru: "Одно действие: «Би ли ми помогнал?» — «Не мог бы ты мне помочь?»", bg: "Едно действие: Би ли ми помогнал?" }
       },
-      signals: ["на твое място", "ако", "с удоволствие"],
+      signals: ["на твое място", "с удоволствие", "без теб не бих…"],
       examples: [
         [b("i", "Бих искала") + " едно кафе, моля.", "Я бы хотела кофе, пожалуйста."],
         [b("p", "Би ли ми помогнал") + "?", "Не мог бы ты мне помочь?"],
@@ -415,8 +458,8 @@
       neg: ["Не " + b("p", "бих казал") + " това.", "Я бы так не сказал."],
       q: [b("p", "Бихте ли повторили") + "?", "Не могли бы вы повторить?"],
       tips: {
-        ru: ["Причастие согласуется: бих искал (м), бих искала (ж).", "Реальное условие: «ако» + настоящее и «ще»: «Ако имам време, ще дойда» — «Если будет время, приду»."],
-        bg: ["Причастието се съгласува: бих искал (м.р.), бих искала (ж.р.).", "Реално условие: ако + сегашно и „ще“: Ако имам време, ще дойда."]
+        ru: ["Причастие согласуется: бих искал (м), бих искала (ж).", "После «ако» «бих» не ставят: «Ако имах време, бих дошъл» — в части с «ако» имперфект, «бих» — в главной.", "Реальное условие: «ако» + настоящее и «ще»: «Ако имам време, ще дойда» — «Если будет время, приду»."],
+        bg: ["Причастието се съгласува: бих искал (м.р.), бих искала (ж.р.).", "След „ако“ не се използва „бих“: Ако имах време, бих дошъл – след „ако“ е имперфект, а „бих“ е в главното изречение.", "Реално условие: ако + сегашно и „ще“: Ако имам време, ще дойда."]
       },
       ruCompare: "«бих» = русское «бы», но меняется по лицам: бих, би, бихме, бихте, биха. И «если будет время» = «ако имам време» (настоящее, без «ще»)."
     },
@@ -475,10 +518,11 @@
         : (ru ? "Неправильная форма — просто запомнить." : "Неправилна форма – запомнете я.");
       case "end-part": return ru ? "Причастие на -л: -л (м), -ла (ж), -ли (мн). Согласуется с подлежащим." : "Причастие на -л: -л (м.р.), -ла (ж.р.), -ли (мн.ч.). Съгласува се с подлога.";
       case "stem-aorist": return ru ? "Основа аориста. Может отличаться от настоящего: взема → взех, пиша → писах." : "Основа на аориста. Може да се различава от сегашната: взема → взех, пиша → писах.";
-      case "stem-part": return ru ? "Основа причастия = аорист без -х: прочетох → прочел, взех → взел." : "Основата на причастието = аорист без -х: прочетох → прочел, взех → взел.";
+      case "stem-part": return ru ? "Основа причастия = аорист без -х: правих → правил, взех → взел. У глаголов на -ох по-другому: прочетох → прочел, донесох → донесъл, дойдох → дошъл." : "Основата на причастието = аорист без -х: правих → правил, взех → взел. При глаголите на -ох е различно: прочетох → прочел, донесох → донесъл, дойдох → дошъл.";
       case "stem": return ru ? "Основа глагола." : "Основа на глагола.";
       case "ще": return ru ? "«ще» — частица будущего. Никогда не меняется." : "„ще“ – частица за бъдеще време. Не се променя.";
-      case "да": return ru ? "СВ в настоящем времени стоит только после «да» (ще, ако, когато)." : "Свършен вид в сегашно време стои само след „да“ (ще, ако, когато).";
+      case "да": return ru ? "СВ в настоящем времени стоит только после «да», «ще», «ако», «когато», «щом» и т. п." : "Свършен вид в сегашно време стои само след „да“, „ще“, „ако“, „когато“, „щом“ и др.";
+      case "да-бъд": return ru ? "«да» после «щях / няма / нямаше», дальше — глагол в настоящем времени." : "„да“ след „щях / няма / нямаше“, после – глаголът в сегашно време.";
       case "aux": return ru ? "«" + ctx.w + "» — форма глагола «съм» для " + p + "." : "„" + ctx.w + "“ – форма на „съм“ за " + p + ".";
       case "бях": return ru ? "«" + ctx.w + "» — «съм» в прошедшем для " + p + "." : "„" + ctx.w + "“ – „съм“ в минало време за " + p + ".";
       case "щях": return ru ? "«" + ctx.w + "» — прошедшее от «ща» (хотеть) для " + p + ", затем «да»." : "„" + ctx.w + "“ – минало време на „ща“ за " + p + ", после „да“.";
@@ -486,53 +530,98 @@
       case "не": return ru ? "Отрицание. Частицы (се, съм…) идут сразу после «не»." : "Отрицание. Кратките думи (се, съм…) идват веднага след „не“.";
       case "няма да": return ru ? "Отрицание будущего: «няма да» вместо «ще»." : "Отрицание за бъдеще: „няма да“ вместо „ще“.";
       case "нямаше да": return ru ? "Отрицание: «нямаше да» вместо «щях да»." : "Отрицание: „нямаше да“ вместо „щях да“.";
-      case "se": return ru ? "«" + ctx.w + "» — возвратная частица. После глагола, но перед ним после не / ще / да." : "„" + ctx.w + "“ – възвратна частица. След глагола, но пред него след не / ще / да.";
+      case "se": return ru ? "«" + ctx.w + "» — возвратная частица. Не стоит первой во фразе: «Връщам се», но «Аз се връщам», «Утре се връщам», «Не се връщам», «Ще се върна»." : "„" + ctx.w + "“ – възвратна частица. Не стои първа в изречението: Връщам се, но Аз се връщам, Утре се връщам, Не се връщам, Ще се върна.";
+      case "acc": return ru ? "«го» — краткая форма «него» (его). Не стоит первой во фразе: «Видях го», но «Аз го видях», «Не го видях», «Ще го видя»." : "„го“ – кратка форма на „него“. Не стои първа в изречението: Видях го, но Аз го видях, Не го видях, Ще го видя.";
+      case "dat": return ru ? "«му» — краткая форма «на него» (ему). Порядок кратких слов: съм / си… → кому (му) → кого (го) → е: «дал съм му го», «дал му го е»." : "„му“ – кратка форма на „на него“. Ред на кратките думи: съм / си… → на кого (му) → кого (го) → е: дал съм му го, дал му го е.";
+      case "ли": return ru ? "«ли» — вопрос. Стоит сразу после первого ударного слова: «Видя ли го?», «Ще го видиш ли?». После «не» — за первым кратким словом: «Не го ли видя?»" : "„ли“ – въпрос. Стои веднага след първата ударена дума: Видя ли го? Ще го видиш ли? След „не“ – след първата кратка дума: Не го ли видя?";
+      case "aux-e": return ru ? "«е» — «съм» для «той / тя». Среди кратких слов «е» всегда последнее: «дал му го е», «върнал се е»." : "„е“ – „съм“ за „той / тя“. Сред кратките думи „е“ винаги е последно: дал му го е, върнал се е.";
+      case "irr": return ru ? "Неправильная форма глагола «съм» — её нужно запомнить." : "Неправилна форма на „съм“ – запомнете я.";
+      case "negW": return ru ? "Отрицание «имам» — одно слово: «нямам» (не «не имам»)." : "Отрицанието на „имам“ е една дума: „нямам“ (не „не имам“).";
     }
     return "";
   }
 
   var PART_TENSES = { perfect: 1, pluperfect: 1, fp: 1, fpp: 1, cond: 1 };
+  var NA = {
+    single: { ru: "У этого глагола нет пары СВ.", bg: "Този глагол няма двойка от свършен вид." },
+    only3: { ru: "Безличный глагол: только «трябва» (3-е лицо).", bg: "Безличен глагол: само „трябва“ (3 л. ед.ч.)." },
+    impf: { ru: "Имперфект СВ почти не используется — берите НСВ.", bg: "Имперфект от свършен вид почти не се използва – вземете НСВ." },
+    impv: { ru: "Повелительное есть только для «ти» и «вие».", bg: "Повелително има само за „ти“ и „вие“." },
+    noImpv: { ru: "У этого глагола нет повелительного наклонения.", bg: "Този глагол няма повелително наклонение." },
+    q: { ru: "Такой вопрос почти не употребляется.", bg: "Такъв въпрос почти не се използва." },
+    qImpv: { ru: "У повелительного наклонения нет вопроса.", bg: "Повелителното наклонение няма въпрос." },
+    qSum: { ru: "С «съм» «ли» ставится после слова, о котором спрашивают: «Готов ли си?», «Вкъщи ли си?»", bg: "При „съм“ „ли“ стои след думата, за която питаме: Готов ли си? Вкъщи ли си?" }
+  };
 
-  /* Returns { pieces: [{t, k, info}], na: reason } for one cell of the builder. */
-  function build(tid, v, pf, i, gender, neg, lang) {
-    var f = pf ? v.pf : v.impf, se = v.se, out = [], g = f.group;
-    function P(t, k, inf, s) { out.push({ t: t, k: k, info: inf, s: s === undefined ? -1 : s }); }
+  /* Returns { pieces: [{t, k, info, s}], na: reason } for one cell of the builder.
+     o.q: a question with "ли"; o.pr: short pronouns, "a" = го, "d" = му, "ad" = му го.
+     Without them the table convention is used (the subject is implied: "съм виждал").
+     With them the result is a phrase without a subject, in real word order ("виждал съм го"). */
+  function build(tid, v, pf, i, gender, neg, lang, o) {
+    o = o || {};
+    var f = pf ? v.pf : v.impf, L = function (x) { return x[lang] || x.ru; };
+    if (!f) return { na: L(NA.single) };
+    if (v.only3 && i !== 2) return { na: L(NA.only3) };
+    var se = pf ? v.seP : v.seI, out = [], g = f.group, irr = g === "irr";
+    function mk(t, k, inf, s) { return { t: t, k: k, info: inf, s: s === undefined ? -1 : s }; }
+    function P(t, k, inf, s) { out.push(mk(t, k, inf, s)); }
+    function take(fn) { var keep = out; out = []; fn(); var r = out; out = keep; return r; }
     function pt(w, kind) { var x = AUX_ST[w]; P(w, "pt", info(kind, { i: i, w: w }, lang), x ? x.indexOf(ACUTE) - 1 : -1); }
+    function ptS(w, kind) { return take(function () { pt(w, kind); }); }
     function seP() { if (se) P(se, "se", info("se", { w: se }, lang)); }
     function word(form, ends, endKind, stemKind, ci) {
-      var s = split(form, ends), L = s[0].length;
       ci = ci === undefined ? -1 : ci;
-      P(s[0], "stem", info(stemKind || "stem", { i: i }, lang), ci >= 0 && ci < L ? ci : -1);
-      if (s[1]) P(s[1], "end", info(endKind, { i: i, e: s[1], g: g }, lang), ci >= L ? ci - L : -1);
+      if (irr) { P(form, "stem", info("irr", { i: i }, lang), ci); return; }
+      var s = split(form, ends), n = s[0].length;
+      P(s[0], "stem", info(stemKind || "stem", { i: i }, lang), ci >= 0 && ci < n ? ci : -1);
+      if (s[1]) P(s[1], "end", info(endKind, { i: i, e: s[1], g: g }, lang), ci >= n ? ci - n : -1);
       else if (endKind === "end-present" || endKind === "end-aorist" || endKind === "end-impv") out[out.length - 1].info += " " + info(endKind, { i: i, e: "", g: g }, lang);
     }
     function participle() {
-      var k = i < 3 ? (gender === "f" ? "f" : "m") : "pl";
-      word(f.part[k], ["ъл", "ла", "ли", "л"], "end-part", "stem-part", f.st.part[k]);
+      var k = v.only3 ? "n" : i < 3 ? (gender === "f" ? "f" : "m") : "pl";
+      word(f.part[k], ["ъл", "ла", "ло", "ли", "л"], "end-part", "stem-part", f.st.part[k]);
     }
     function auxPiece(arr, kind) {
       if (se && i === 2 && kind === "aux") { seP(); pt("е", "aux"); return; }
       pt(arr[i], kind); seP();
     }
-    var presWord = function () { word(f.pres[i], PRES_END[g][i], "end-present", undefined, f.st.pres[i]); };
+    // имам: the negative is one word (нямам, нямах), not "не имам"
+    var negW = neg && v.negF && !pf && (tid === "present" || tid === "aorist" || tid === "imperfect");
+    var nf = negW ? v.negF : f;
+    function presWord() { word(nf.pres[i], PRES_END[nf.group] ? PRES_END[nf.group][i] : [], "end-present", negW ? "negW" : undefined, nf.st.pres[i]); }
+    function futWord() { if (f.fut) word(f.fut[i], [], "end-present", undefined, f.st.fut[i]); else presWord(); }
+    function aorWord() {
+      var a2 = (i === 1 || i === 2) ? (nf.aor[0].slice(-2) === "ох" ? ["е"] : [""]) : [["х"], 0, 0, ["хме"], ["хте"], ["ха"]][i];
+      word(nf.aor[i], a2, "end-aorist", negW ? "negW" : "stem-aorist", nf.st.aor[i]);
+    }
+    function impWord() { word(nf.imp[i], IMP_END[i], "end-imperfect", negW ? "negW" : undefined, nf.st.imp[i]); }
+    function impvWord() { var k = i === 1 ? 0 : 1; word(f.impv[k], i === 1 ? ["и", "й"] : ["ете", "йте"], "end-impv", undefined, f.st.impv[k]); }
+
+    if (tid === "imperfect" && (pf || !f.imp)) return { na: L(NA.impf) };
+    if (tid === "impv") {
+      if (i !== 1 && i !== 4) return { na: L(NA.impv) };
+      if (!f.impv) return { na: L(NA.noImpv) };
+      var banned = "не " + (v.seI ? v.seI + " " : "") + (v.impf.impv ? v.impf.impv[i === 1 ? 0 : 1] : "");
+      if (neg && pf) return { na: lang === "ru" ? "Запрет обычно выражают НСВ: «" + banned + "». СВ после «не» — только предостережение: «Внимавай, да не паднеш!»" : "Забраната обикновено е с НСВ: „" + banned + "“. СВ след „не“ – само за предупреждение: Внимавай, да не паднеш!" };
+    }
+    if (o.q || o.pr) return sentence();
 
     switch (tid) {
       case "present":
         if (pf) { pt("да", "да"); if (neg) pt("не", "не"); seP(); presWord(); }
+        else if (negW) { presWord(); seP(); }
         else if (neg) { pt("не", "не"); seP(); presWord(); }
         else { presWord(); seP(); }
         break;
       case "aorist":
-        var a2 = (i === 1 || i === 2) ? (f.aor[0].slice(-2) === "ох" ? ["е"] : [""]) : [["х"], 0, 0, ["хме"], ["хте"], ["ха"]][i];
-        if (neg) { pt("не", "не"); seP(); }
-        word(f.aor[i], a2, "end-aorist", "stem-aorist", f.st.aor[i]);
-        if (!neg) seP();
+        if (neg && !negW) { pt("не", "не"); seP(); }
+        aorWord();
+        if (!neg || negW) seP();
         break;
       case "imperfect":
-        if (pf || !f.imp) return { na: lang === "ru" ? "Имперфект СВ почти не используется — берите НСВ." : "Имперфект от свършен вид почти не се използва – вземете НСВ." };
-        if (neg) { pt("не", "не"); seP(); }
-        word(f.imp[i], IMP_END[i], "end-imperfect", undefined, f.st.imp[i]);
-        if (!neg) seP();
+        if (neg && !negW) { pt("не", "не"); seP(); }
+        impWord();
+        if (!neg || negW) seP();
         break;
       case "perfect":
         if (neg) pt("не", "не");
@@ -542,10 +631,10 @@
         else { pt(BYAH[i], "бях"); seP(); }
         participle(); break;
       case "future":
-        neg ? pt("няма да", "няма да") : pt("ще", "ще"); seP(); presWord(); break;
+        neg ? pt("няма да", "няма да") : pt("ще", "ще"); seP(); futWord(); break;
       case "fip":
         if (neg) pt("нямаше да", "нямаше да"); else pt(SHTYAH[i] + " да", "щях");
-        seP(); presWord(); break;
+        seP(); futWord(); break;
       case "fp":
         neg ? pt("няма да", "няма да") : pt("ще", "ще"); auxPiece(AUX, "aux"); participle(); break;
       case "fpp":
@@ -555,22 +644,83 @@
         if (neg) pt("не", "не");
         pt(BIH[i], "бих"); seP(); participle(); break;
       case "impv":
-        if (i !== 1 && i !== 4) return { na: lang === "ru" ? "Повелительное есть только для «ти» и «вие»." : "Повелително има само за „ти“ и „вие“." };
-        var banned = "не " + (se ? se + " " : "") + v.impf.impv[i === 1 ? 0 : 1];
-        if (neg && pf) return { na: lang === "ru" ? "Запрет — только НСВ: «" + banned + "»." : "Забрана – само с НСВ: „" + banned + "“." };
-        var iw = f.impv[i === 1 ? 0 : 1];
         if (neg) { pt("не", "не"); seP(); }
-        word(iw, i === 1 ? ["и", "й"] : ["ете", "йте"], "end-impv", undefined, f.st.impv[i === 1 ? 0 : 1]);
+        impvWord();
         if (!neg) seP();
         break;
     }
     return { pieces: out };
+
+    /* A phrase without a subject. Short words (aux съм, му, го / се, е) form one group in this order;
+       the group never starts the phrase: after the verb when the verb is first ("видях го"),
+       otherwise before it ("не го видях", "ще го видя"). "ли" follows the first stressed word;
+       after "не" it follows the first short word ("не го ли видя?"). */
+    function sentence() {
+      if (o.q && v.noQ) return { na: L(NA.qSum) };
+      if (o.q && tid === "impv") return { na: L(NA.qImpv) };
+      if (o.q && (tid === "fp" || tid === "fpp" || (tid === "present" && pf && neg))) return { na: L(NA.q) };
+      var hasAux = tid === "perfect" || tid === "fp" || tid === "fpp", pr = o.pr || "";
+      var C = [];
+      if (hasAux && i !== 2) C = C.concat(ptS(AUX[i], "aux"));
+      if (pr.indexOf("d") >= 0) C.push(mk("му", "cl", info("dat", {}, lang)));
+      else if (se === "си") C = C.concat(take(seP));
+      if (pr.indexOf("a") >= 0) C.push(mk("го", "cl", info("acc", {}, lang)));
+      else if (se === "се") C = C.concat(take(seP));
+      if (hasAux && i === 2) C = C.concat(ptS("е", "aux-e"));
+      var c1 = C.slice(0, 1), cr = C.slice(1), LI = [mk("ли", "pt", info("ли", {}, lang))], NE = ptS("не", "не");
+      var V = take(tid === "present" || tid === "future" || tid === "fip" ? (tid === "present" ? presWord : futWord)
+        : tid === "aorist" ? aorWord : tid === "imperfect" ? impWord : tid === "impv" ? impvWord : participle);
+      var R = [];
+      function add() { for (var a = 0; a < arguments.length; a++) R = R.concat(arguments[a]); }
+      function negQ(first, rest) { if (C.length) add(NE, c1, LI, cr, first, rest); else add(NE, first, LI, rest); }
+      var H;
+      switch (tid) {
+        case "present": case "aorist": case "imperfect": case "impv":
+          if (tid === "present" && pf) { add(ptS("да", "да"), neg ? NE : [], C, V); if (o.q) add(LI); }
+          else if (neg && !negW) { if (o.q) negQ(V, []); else add(NE, C, V); }
+          else if (o.q) add(V, LI, C);
+          else add(V, C);
+          break;
+        case "perfect":
+          if (neg) { if (o.q) negQ(V, []); else add(NE, C, V); }
+          else if (o.q) add(V, LI, C);
+          else add(V, C);
+          break;
+        case "pluperfect":
+          H = ptS(BYAH[i], "бях");
+          if (neg) { if (o.q) negQ(H, V); else add(NE, C, H, V); }
+          else if (o.q) add(H, LI, C, V);
+          else add(H, C, V);
+          break;
+        case "cond":
+          H = ptS(BIH[i], "бих");
+          if (neg) { if (o.q) add(NE, H, LI, C, V); else add(NE, H, C, V); }
+          else if (o.q) add(H, LI, C, V);
+          else add(H, C, V);
+          break;
+        case "future":
+          if (neg) { if (o.q) add(ptS("няма", "няма да"), LI, ptS("да", "да-бъд"), C, V); else add(ptS("няма да", "няма да"), C, V); }
+          else { add(ptS("ще", "ще"), C, V); if (o.q) add(LI); }
+          break;
+        case "fip":
+          if (neg) { if (o.q) add(ptS("нямаше", "нямаше да"), LI, ptS("да", "да-бъд"), C, V); else add(ptS("нямаше да", "нямаше да"), C, V); }
+          else if (o.q) add(ptS(SHTYAH[i], "щях"), LI, ptS("да", "да-бъд"), C, V);
+          else add(ptS(SHTYAH[i] + " да", "щях"), C, V);
+          break;
+        case "fp":
+          add(neg ? ptS("няма да", "няма да") : ptS("ще", "ще"), C, V); break;
+        case "fpp":
+          add(neg ? ptS("нямаше да", "нямаше да") : ptS(SHTYAH[i] + " да", "щях"), C, V); break;
+      }
+      if (o.q) R.push(mk("?", "q", ""));
+      return { pieces: R };
+    }
   }
   function pieceText(p, stressed) { return stressed ? markStr(p.t, p.s) : p.t; }
   function joinPieces(r, stressed) {
     // stem + ending are written together; everything else separated by spaces
     var s = "", prev = null;
-    r.pieces.forEach(function (p) { s += (prev && !(prev.k === "stem" && p.k === "end") ? " " : "") + pieceText(p, stressed); prev = p; });
+    r.pieces.forEach(function (p) { s += (prev && !(prev.k === "stem" && p.k === "end") && p.k !== "q" ? " " : "") + pieceText(p, stressed); prev = p; });
     return s;
   }
 
