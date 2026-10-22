@@ -632,7 +632,7 @@
     P.last = key;
     if (key.charAt(0) === "a") {
       var a = AQ[+key.slice(1)];
-      return { mode: "aspect", aq: a, opts: shuffle(a.o.map(function (o, j) { return opt(o, a.os[j]); })), ok: a.o[0], acc: [a.o[0]] };
+      return { mode: "aspect", aq: a, opts: shuffle(a.o.map(function (o, j) { return opt(o, a.os[j]); })), ok: a.o[0], acc: [a.o[0]].concat(a.alt || []) };
     }
     var it = aspectItems()[+key.slice(1)], v = VERBS[it.v], w = v.ex[it.e][0].split(/([А-Яа-яЍѝ]+)/), orig = w[it.k];
     return { mode: "aspect", it: it, opts: shuffle([opt(orig, cap(it.origS || orig, orig)), opt(cap(it.other, orig), cap(it.otherS, orig))]), ok: orig, acc: [orig] };
