@@ -42,6 +42,7 @@
       noQ: "Под этот выбор нет упражнений.", pickAll: "Выбрать все времена",
       noAspInMode: "Вид в этом режиме выбирает задание, поэтому переключателя вида здесь нет.",
       hasT: "Вопросы этого режима есть только для времён:",
+      pickT: "Или выберите время и прочитайте о нём",
       say: "Произнести", ttsNo: "Озвучка недоступна: в этом браузере нет болгарского голоса.", close: "Закрыть",
       ttsH: "Озвучка", ttsOff: "Только голос системы", ttsGoogle: "Google (без ключа)", ttsEleven: "ElevenLabs (свой ключ)",
       ttsPrivacy: "Онлайн-озвучка отправляет озвучиваемый болгарский текст выбранному сервису. Ключ хранится только в этом браузере.",
@@ -89,6 +90,7 @@
       noQ: "Няма упражнения за този избор.", pickAll: "Избери всички времена",
       noAspInMode: "В този режим видът е част от задачата, затова тук няма превключвател за вид.",
       hasT: "В този режим има въпроси само за времената:",
+      pickT: "Или изберете време и прочетете за него",
       say: "Произнеси", ttsNo: "Озвучаването не е достъпно: в този браузър няма български глас.", close: "Затвори",
       ttsH: "Озвучаване", ttsOff: "Само гласът на системата", ttsGoogle: "Google (без ключ)", ttsEleven: "ElevenLabs (собствен ключ)",
       ttsPrivacy: "Онлайн озвучаването изпраща българския текст на избраната услуга. Ключът се пази само в този браузър.",
@@ -130,7 +132,7 @@
     lang: store.get("lang") === "bg" ? "bg" : "ru",
     tab: "form", verb: null, query: "", tr: store.get("tr") !== "0", legend: false,
     stress: store.get("stress") !== "0",
-    open: {}, showRare: false, vperson: 0, vrare: false,
+    tsel: "present", vperson: 0, vrare: false,
     B: { verb: DEFAULT_VERB, tense: "present", person: 0, pf: false, gender: "m", neg: false, ask: false, pr: "", sel: -1, picking: false, q: "" },
     vfilter: store.get("vfilter") === "fav" ? "fav" : "all",
     anim: null, prev: null
@@ -465,12 +467,12 @@
     return '<div class="strip-wrap"><table class="strip">' + head + rows + "</table></div>" + (s.after ? '<p class="after">' + L(s.after) + "</p>" : "");
   }
   function tenseCard(tn) {
-    var open = !!S.open[tn.id], e = tn.examples[0];
+    var open = true, e = tn.examples[0];
     var h = '<article class="tcard" id="t-' + tn.id + '">' +
       '<header class="tc-h">' + G.icon(tn.id) + '<h3 class="tn">' + L(tn.name) + "</h3>" +
       '<span class="tc-sub">' + (S.lang === "ru" ? '<span class="bg">' + tn.name.bg + "</span> · ≈ " + G.RUEQ[tn.id] : L(tn.short)) + "</span></header>" +
       '<p class="formula">' + t("formula") + ": <b>" + L(tn.formula) + "</b></p>" + strip(tn) + quote(e[0], e[1]) +
-      '<div class="tc-links"><button class="link" data-tobuilder="' + tn.id + '">' + t("openBuilder") + '</button><button class="link" data-toggle="' + tn.id + '" aria-expanded="' + open + '">' + (open ? t("less") + " ▴" : t("more") + " ▾") + "</button></div>";
+      '<div class="tc-links"><button class="link" data-tobuilder="' + tn.id + '">' + t("openBuilder") + "</button></div>";
     if (open) {
       h += '<div class="tc-more">' +
         '<div><h4 class="label">' + t("when") + '</h4><ul class="clean">' + L(tn.uses).map(function (u) { return "<li>" + u + "</li>"; }).join("") + "</ul></div>" +
@@ -501,10 +503,15 @@
       "<tr><td>" + (ru ? "Причастие" : "Причастие") + "</td><td>" + (ru ? "аорист без -х + -л; -ох → -ъл. Мн. ч.: я → е." : "аорист без -х + -л; -ох → -ъл. Мн.ч.: я → е.") + ' <span class="bg">правих → правил · донесох → донесъл · видял → видели</span></td></tr>' +
       "<tr><td>" + (ru ? "Спряжение" : "Спрежение") + "</td><td>" + (ru ? "по форме «ти»:" : "по формата за „ти“:") + ' <span class="bg">-еш → I · -иш → II · -аш / -яш → III</span></td></tr>' +
       "</tbody></table></details>";
-    $("pane-tenses").innerHTML = '<div class="ttop">' + choose + aspect + "</div>" +
-      '<div class="tcards">' + CORE.map(tenseCard).join("") + "</div>" +
-      '<details class="rare-wrap"' + (S.showRare ? " open" : "") + "><summary>" + t("rareT") + " (" + RARE.length + ')</summary><div class="tcards">' + RARE.map(tenseCard).join("") + "</div></details>" +
-      stems;
+    // one tense at a time: pick it here, read about it below
+    var picker = '<div class="panel" id="tpick"><h3 class="label">' + t("pickT") + "</h3>" + GROUPS.map(function (g) {
+      return '<div class="tgroup"><span class="t-k">' + L(g.name) + '</span><div class="tlist">' + g.t.map(function (id) {
+        var x = TBY[id];
+        return '<button class="tbtn' + (x.core ? "" : " rare") + '" data-tsel="' + id + '" aria-pressed="' + (id === S.tsel) + '">' + G.icon(id) + "<span>" + shortName(x) + "</span></button>";
+      }).join("") + "</div></div>";
+    }).join("") + "</div>";
+    $("pane-tenses").innerHTML = '<div class="ttop">' + choose + aspect + "</div>" + picker +
+      '<div class="tcards tsolo">' + tenseCard(TBY[S.tsel]) + "</div>" + stems;
   }
 
   /* ---------- Глаголы ---------- */
@@ -897,7 +904,7 @@
     if ((m = /^verb-(\d+)$/.exec(h)) && VERBS[+m[1]]) { S.tab = "verbs"; S.verb = +m[1]; }
     else if (h === "verbs") { S.tab = "verbs"; S.verb = null; }
     else if (h === "tenses") S.tab = "tenses";
-    else if ((m = /^t-(\w+)$/.exec(h)) && TBY[m[1]]) { S.tab = "tenses"; S.open[m[1]] = true; S.jump = m[1]; }
+    else if ((m = /^t-(\w+)$/.exec(h)) && TBY[m[1]]) { S.tab = "tenses"; S.tsel = m[1]; S.jump = m[1]; }
     else if (h === "form") S.tab = "form";
     else if (h === "practice") S.tab = "practice";
   }
@@ -953,11 +960,11 @@
       S.B.person = +fc[0]; S.B.pf = fc[1] === "1"; S.B.sel = -1; S.anim = "sel"; saveB(); renderForm(); return;
     }
     if (d.piece) { S.B.sel = +d.piece; renderForm(); return; }
-    if (d.totense) { go(function () { S.tab = "tenses"; S.open[d.totense] = true; S.jump = d.totense; if (!TBY[d.totense].core) S.showRare = true; }); return; }
+    if (d.totense) { go(function () { S.tab = "tenses"; S.tsel = d.totense; S.jump = d.totense; }); return; }
     // tenses
     if (d.tobuilder) { S.B.tense = d.tobuilder; S.B.sel = -1; saveB(); go(function () { S.tab = "form"; }); return; }
-    if (d.toggle) { S.open[d.toggle] = !S.open[d.toggle]; renderTenses(); return; }
-    if (d.jump) { S.open[d.jump] = true; if (!TBY[d.jump].core) S.showRare = true; renderTenses(); var j = $("t-" + d.jump); if (j) j.scrollIntoView({ block: "start", behavior: "smooth" }); return; }
+    if (d.tsel) { S.tsel = d.tsel; renderTenses(); return; }
+    if (d.jump) { S.tsel = d.jump; renderTenses(); var j = $("t-" + d.jump); if (j) j.scrollIntoView({ block: "start", behavior: "smooth" }); return; }
     // practice
     if (d.pmode) { P.mode = d.pmode; store.set("pmode", P.mode); P.deck = []; P.q = genQ(); P.ans = -1; renderPractice(); return; }
     if (d.pasp) { P.asp = d.pasp; filterChanged(); return; }
@@ -1007,7 +1014,6 @@
   document.addEventListener("toggle", function (e) {
     var el = e.target;
     if (!el.classList) return;
-    if (el.classList.contains("rare-wrap")) S.showRare = el.open;
     if (el.classList.contains("dd")) P.ddOpen = el.open;
   }, true);
   document.addEventListener("keydown", function (e) {
