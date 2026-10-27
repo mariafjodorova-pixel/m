@@ -81,6 +81,9 @@ header.top { padding-block: var(--s3) var(--s2); }
 .legend, .notice { margin-top: var(--s2); background: var(--surface); border-radius: var(--r); padding: var(--s3); display: grid; gap: var(--s2); font-size: var(--t-s); }
 .notice { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding-block: var(--s2); }
 .notice .link { min-height: 36px; text-decoration: none; }
+.tts-set { display: grid; gap: var(--s2); padding-top: var(--s2); border-top: 1px solid var(--line); }
+.seg.ttsseg { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.seg.ttsseg button { white-space: normal; padding: var(--s1) var(--s2); }
 .legend .row { display: flex; gap: var(--s2); align-items: baseline; }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
 .dot.i { background: var(--impf); }

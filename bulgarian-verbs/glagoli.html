@@ -84,6 +84,9 @@ header.top { padding-block: var(--s3) var(--s2); }
 .legend, .notice { margin-top: var(--s2); background: var(--surface); border-radius: var(--r); padding: var(--s3); display: grid; gap: var(--s2); font-size: var(--t-s); }
 .notice { display: flex; align-items: center; justify-content: space-between; gap: var(--s3); padding-block: var(--s2); }
 .notice .link { min-height: 36px; text-decoration: none; }
+.tts-set { display: grid; gap: var(--s2); padding-top: var(--s2); border-top: 1px solid var(--line); }
+.seg.ttsseg { grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.seg.ttsseg button { white-space: normal; padding: var(--s1) var(--s2); }
 .legend .row { display: flex; gap: var(--s2); align-items: baseline; }
 .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
 .dot.i { background: var(--impf); }
@@ -1880,6 +1883,10 @@ window.ASPECT_Q = [
       noAspInMode: "Вид в этом режиме выбирает задание, поэтому переключателя вида здесь нет.",
       hasT: "Вопросы этого режима есть только для времён:",
       say: "Произнести", ttsNo: "Озвучка недоступна: в этом браузере нет болгарского голоса.", close: "Закрыть",
+      ttsH: "Озвучка", ttsOff: "Только голос системы", ttsGoogle: "Google (без ключа)", ttsEleven: "ElevenLabs (свой ключ)",
+      ttsPrivacy: "Онлайн-озвучка отправляет озвучиваемый болгарский текст выбранному сервису. Ключ хранится только в этом браузере.",
+      ttsKey: "API-ключ ElevenLabs", ttsVoice: "ID голоса (необязательно)", ttsNeedKey: "Вставьте ключ ElevenLabs, чтобы включить озвучку.",
+      ttsOn: "Онлайн-озвучка включена", ttsFail: "Не получилось озвучить онлайн. Проверьте интернет и ключ.", ttsSet: "Настроить озвучку",
       ttsMac: "Mac / iPhone: Настройки → Универсальный доступ → Устная речь → Системный голос → Управлять голосами → Болгарский (Daria).",
       ttsWin: "Windows: Параметры → Время и язык → Язык и регион → добавьте болгарский и установите речь; затем перезапустите браузер.",
       ttsAnd: "Android: Настройки → Язык → Синтез речи (Google) → установите болгарский.",
@@ -1923,6 +1930,10 @@ window.ASPECT_Q = [
       noAspInMode: "В този режим видът е част от задачата, затова тук няма превключвател за вид.",
       hasT: "В този режим има въпроси само за времената:",
       say: "Произнеси", ttsNo: "Озвучаването не е достъпно: в този браузър няма български глас.", close: "Затвори",
+      ttsH: "Озвучаване", ttsOff: "Само гласът на системата", ttsGoogle: "Google (без ключ)", ttsEleven: "ElevenLabs (собствен ключ)",
+      ttsPrivacy: "Онлайн озвучаването изпраща българския текст на избраната услуга. Ключът се пази само в този браузър.",
+      ttsKey: "API ключ на ElevenLabs", ttsVoice: "ID на глас (по желание)", ttsNeedKey: "Поставете ключ на ElevenLabs, за да включите озвучаването.",
+      ttsOn: "Онлайн озвучаването е включено", ttsFail: "Не се получи онлайн озвучаване. Проверете връзката и ключа.", ttsSet: "Настройки на озвучаването",
       ttsMac: "Mac / iPhone: Настройки → Достъпност → Изговорено съдържание → Системен глас → Управление на гласовете → Български (Daria).",
       ttsWin: "Windows: Настройки → Час и език → Език и регион → добавете български и инсталирайте говор; след това рестартирайте браузъра.",
       ttsAnd: "Android: Настройки → Език → Синтез на реч (Google) → инсталирайте български.",
@@ -2025,18 +2036,72 @@ window.ASPECT_Q = [
   }
 
   /* ---------- Speech (built-in browser voice, bg-BG) ---------- */
-  var TTS = { ok: null, voice: null };
+  var TTS = { ok: null, voice: null, online: store.get("ttsOnline") || "", audio: null, cache: {}, fail: 0 };
+  if (["google", "eleven"].indexOf(TTS.online) < 0) TTS.online = "";
+  var EL_VOICE = "21m00Tcm4TlvDq8ikWAM"; // a default ElevenLabs voice; any voice id can be pasted in the settings
+  function onlineReady() { return TTS.online === "google" || (TTS.online === "eleven" && !!store.get("elKey")); }
+  function ttsUpdate() { TTS.ok = !!TTS.voice || onlineReady(); }
+  ttsUpdate();
   function plainText(html) { return G.stripStress(String(html).replace(/<[^>]*>/g, "")).replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&lt;/g, "<").replace(/&gt;/g, ">"); }
   function sayBtn(text) {
     if (!TTS.ok) return "";
     return '<button class="tts" data-say="' + esc(plainText(text)) + '" aria-label="' + esc(t("say")) + '" title="' + esc(t("say")) + '">🔊</button>';
   }
-  function speak(text) {
+  function speakBrowser(text) {
     try {
       var u = new SpeechSynthesisUtterance(text);
       u.lang = "bg-BG"; if (TTS.voice) u.voice = TTS.voice; u.rate = 0.9;
       window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
     } catch (e) { /* ignore */ }
+  }
+  function stopAudio() { if (TTS.audio) { try { TTS.audio.pause(); } catch (e) { /* ignore */ } TTS.audio = null; } }
+  function playUrls(urls) {
+    stopAudio();
+    var i = 0;
+    (function next() {
+      if (i >= urls.length) return;
+      var a = new Audio(urls[i++]); TTS.audio = a;
+      a.onended = next; a.onerror = ttsFailed;
+      var pr = a.play(); if (pr && pr.catch) pr.catch(ttsFailed);
+    })();
+  }
+  function ttsFailed() { showNotice(t("ttsFail")); }
+  /* Google: the unofficial translate endpoint takes ~200 characters at a time */
+  function chunks(text) {
+    var out = [], cur = "";
+    text.split(/(?<=[.!?…])\s+/).forEach(function (sent) {
+      while (sent.length > 180) { var cut = sent.lastIndexOf(" ", 180); if (cut < 40) cut = 180; if (cur) { out.push(cur); cur = ""; } out.push(sent.slice(0, cut)); sent = sent.slice(cut).trim(); }
+      if ((cur + " " + sent).trim().length > 180) { out.push(cur); cur = sent; } else cur = (cur + " " + sent).trim();
+    });
+    if (cur) out.push(cur);
+    return out;
+  }
+  function speakGoogle(text) {
+    playUrls(chunks(text).map(function (c) { return "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=bg&q=" + encodeURIComponent(c); }));
+  }
+  function speakEleven(text) {
+    var key = store.get("elKey"), voice = store.get("elVoice") || EL_VOICE, ck = voice + "|" + text;
+    if (TTS.cache[ck]) { playUrls([TTS.cache[ck]]); return; }
+    fetch("https://api.elevenlabs.io/v1/text-to-speech/" + encodeURIComponent(voice) + "?output_format=mp3_44100_128", {
+      method: "POST", headers: { "xi-api-key": key, "Content-Type": "application/json", "Accept": "audio/mpeg" },
+      body: JSON.stringify({ text: text, model_id: "eleven_multilingual_v2", language_code: "bg" })
+    }).then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.blob(); })
+      .then(function (blob) { TTS.cache[ck] = URL.createObjectURL(blob); playUrls([TTS.cache[ck]]); })
+      .catch(ttsFailed);
+  }
+  function speak(text) {
+    if (TTS.voice) speakBrowser(text);
+    else if (TTS.online === "google") speakGoogle(text);
+    else if (TTS.online === "eleven") speakEleven(text);
+  }
+  /* settings: the "?" panel */
+  function ttsPanel() {
+    var m = TTS.online, rows = '<div class="seg ttsseg" role="group" aria-label="' + esc(t("ttsH")) + '">' +
+      [["", "ttsOff"], ["google", "ttsGoogle"], ["eleven", "ttsEleven"]].map(function (x) { return '<button data-ttsmode="' + x[0] + '" aria-pressed="' + (m === x[0]) + '">' + t(x[1]) + "</button>"; }).join("") + "</div>";
+    if (m === "eleven") rows += '<input id="elKey" class="search" type="password" autocomplete="off" spellcheck="false" placeholder="' + esc(t("ttsKey")) + '" value="' + esc(store.get("elKey") || "") + '">' +
+      '<input id="elVoice" class="search" type="text" autocomplete="off" spellcheck="false" placeholder="' + esc(t("ttsVoice")) + '" value="' + esc(store.get("elVoice") || "") + '">';
+    var status = TTS.voice ? "" : m === "eleven" && !store.get("elKey") ? t("ttsNeedKey") : m ? t("ttsOn") : "";
+    return '<div class="tts-set"><h4 class="label">' + t("ttsH") + "</h4>" + rows + (status ? '<p class="small">' + esc(status) + "</p>" : "") + (m ? '<p class="muted small">' + t("ttsPrivacy") + "</p>" : "") + "</div>";
   }
   function ttsOsKey() {
     var ua = navigator.userAgent || "";
@@ -2049,14 +2114,15 @@ window.ASPECT_Q = [
       var vs = [];
       try { vs = window.speechSynthesis ? window.speechSynthesis.getVoices() : []; } catch (e) { vs = []; }
       var bg = vs.filter(function (x) { return /^bg([-_]|$)/i.test(x.lang); })[0];
-      if (bg) { decided = true; TTS.ok = true; TTS.voice = bg; render(); return; }
+      if (bg) { decided = true; TTS.voice = bg; ttsUpdate(); render(); return; }
       if (final) {
-        decided = true; TTS.ok = false;
-        if (store.get("ttsHint") !== "1") { store.set("ttsHint", "1"); showNotice(t("ttsNo") + " " + t(ttsOsKey())); }
+        decided = true; ttsUpdate();
+        if (TTS.ok) render();
+        else if (store.get("ttsHint") !== "1") { store.set("ttsHint", "1"); showNotice(t("ttsNo") + " " + t(ttsOsKey()), true); }
       }
     }
     // a voice installed while the page is open: look again when the tab gets focus back
-    function recheck() { if (!TTS.ok && window.speechSynthesis) { decided = false; check(false); if (!TTS.ok) decided = true; } }
+    function recheck() { if (!TTS.voice && window.speechSynthesis) { decided = false; check(false); if (!TTS.voice) decided = true; } }
     window.addEventListener("focus", recheck);
     document.addEventListener("visibilitychange", function () { if (!document.hidden) recheck(); });
     if (window.speechSynthesis) {
@@ -2065,11 +2131,12 @@ window.ASPECT_Q = [
     }
     setTimeout(function () { check(true); }, 2500);
   }
-  function showNotice(text) {
+  function showNotice(text, withSettings) {
     var n = $("notice");
-    n.innerHTML = "<span>" + esc(text) + '</span><button class="link" data-closenotice aria-label="' + esc(t("close")) + '">✕</button>';
+    n.innerHTML = "<span>" + esc(text) + "</span>" + (withSettings ? '<button class="link" data-ttsset>' + t("ttsSet") + "</button>" : "") + '<button class="link" data-closenotice aria-label="' + esc(t("close")) + '">✕</button>';
     n.hidden = false;
   }
+
 
   function quote(bg, ru) { return '<div class="quote"><span class="bgt">' + bg + sayBtn(bg) + '</span><span class="tr">' + esc(ru) + "</span></div>"; }
   function trToggle() { return '<label class="trt"><input type="checkbox" class="trbox"' + (S.tr ? " checked" : "") + "> " + t("tr") + "</label>"; }
@@ -2101,7 +2168,7 @@ window.ASPECT_Q = [
     sb.querySelector(".lbl").textContent = t("stress");
     $("help").setAttribute("aria-expanded", String(S.legend));
     $("legend").hidden = !S.legend;
-    $("legend").innerHTML = '<div class="row"><i class="dot i"></i><span><b class="i">' + t("impfS") + "</b> " + t("legI") + '</span></div><div class="row"><i class="dot p"></i><span><b class="p">' + t("pfS") + "</b> " + t("legP") + '</span></div><div class="row"><i class="dot h"></i><span>' + t("legH") + '</span></div><p class="muted">' + t("legTap") + "</p>";
+    $("legend").innerHTML = '<div class="row"><i class="dot i"></i><span><b class="i">' + t("impfS") + "</b> " + t("legI") + '</span></div><div class="row"><i class="dot p"></i><span><b class="p">' + t("pfS") + "</b> " + t("legP") + '</span></div><div class="row"><i class="dot h"></i><span>' + t("legH") + '</span></div><p class="muted">' + t("legTap") + "</p>" + ttsPanel();
     ["form", "tenses", "verbs", "practice"].forEach(function (k) {
       $("tab-btn-" + k).querySelector("span").textContent = t({ form: "tForm", tenses: "tTenses", verbs: "tVerbs", practice: "tPractice" }[k]);
       $("pane-" + k).hidden = S.tab !== k;
@@ -2692,6 +2759,10 @@ window.ASPECT_Q = [
     if (!el) return;
     var d = el.dataset;
     if (d.say !== undefined) { speak(d.say); return; }
+    if (d.ttsmode !== undefined) {
+      TTS.online = d.ttsmode; store.set("ttsOnline", TTS.online); stopAudio(); ttsUpdate(); render(); return;
+    }
+    if ("ttsset" in d) { S.legend = true; $("notice").hidden = true; renderChrome(); var ts = document.querySelector(".tts-set"); if (ts) ts.scrollIntoView({ block: "center" }); return; }
     if (d.fav !== undefined) { toggleFav(VERBS[+d.fav]); render(); return; }
     if (d.vfilt) { S.vfilter = d.vfilt; store.set("vfilter", S.vfilter); renderVerbs(); return; }
     if (d.letter) {
@@ -2757,6 +2828,10 @@ window.ASPECT_Q = [
   });
   document.addEventListener("change", function (e) {
     var el = e.target, d = el.dataset || {};
+    if (el.id === "elKey" || el.id === "elVoice") {
+      store.set(el.id, el.value.trim()); ttsUpdate(); var was = TTS.ok; render(); if (was) { /* buttons may have appeared */ }
+      return;
+    }
     if (el.classList.contains("trbox")) {
       S.tr = el.checked; store.set("tr", S.tr ? "1" : "0"); document.body.classList.toggle("no-tr", !S.tr);
       Array.prototype.forEach.call(document.querySelectorAll(".trbox"), function (b) { b.checked = S.tr; });
