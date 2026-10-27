@@ -43,6 +43,10 @@
       noAspInMode: "Вид в этом режиме выбирает задание, поэтому переключателя вида здесь нет.",
       hasT: "Вопросы этого режима есть только для времён:",
       say: "Произнести", ttsNo: "Озвучка недоступна: в этом браузере нет болгарского голоса.", close: "Закрыть",
+      ttsMac: "Mac / iPhone: Настройки → Универсальный доступ → Устная речь → Системный голос → Управлять голосами → Болгарский (Daria).",
+      ttsWin: "Windows: Параметры → Время и язык → Язык и регион → добавьте болгарский и установите речь; затем перезапустите браузер.",
+      ttsAnd: "Android: Настройки → Язык → Синтез речи (Google) → установите болгарский.",
+      ttsAny: "Нужен голос болгарского языка в системе; после установки перезапустите браузер, кнопки 🔊 появятся сами.",
       irr: "неправ.", noPair: "без пары", impers: "безл.",
       qBtn: "вопрос", qTitle: "Вопрос с «ли»", prNone: "без", prL: "Краткие местоимения",
       sentNote: "Фразы без подлежащего. С подлежащим краткие слова встают перед глаголом: «Аз го видях», «Аз съм го виждал», «Ти видя ли го?»",
@@ -82,6 +86,10 @@
       noAspInMode: "В този режим видът е част от задачата, затова тук няма превключвател за вид.",
       hasT: "В този режим има въпроси само за времената:",
       say: "Произнеси", ttsNo: "Озвучаването не е достъпно: в този браузър няма български глас.", close: "Затвори",
+      ttsMac: "Mac / iPhone: Настройки → Достъпност → Изговорено съдържание → Системен глас → Управление на гласовете → Български (Daria).",
+      ttsWin: "Windows: Настройки → Час и език → Език и регион → добавете български и инсталирайте говор; след това рестартирайте браузъра.",
+      ttsAnd: "Android: Настройки → Език → Синтез на реч (Google) → инсталирайте български.",
+      ttsAny: "Нужен е български глас в системата; след инсталиране рестартирайте браузъра – бутоните 🔊 ще се появят сами.",
       irr: "неправ.", noPair: "без двойка", impers: "безл.",
       qBtn: "въпрос", qTitle: "Въпрос с „ли“", prNone: "без", prL: "Кратки местоимения",
       sentNote: "Изрази без подлог. С подлог кратките думи са пред глагола: Аз го видях, Аз съм го виждал, Ти видя ли го?",
@@ -193,6 +201,10 @@
       window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
     } catch (e) { /* ignore */ }
   }
+  function ttsOsKey() {
+    var ua = navigator.userAgent || "";
+    return /Android/i.test(ua) ? "ttsAnd" : /iPhone|iPad|Macintosh|Mac OS/i.test(ua) ? "ttsMac" : /Windows/i.test(ua) ? "ttsWin" : "ttsAny";
+  }
   function initTTS() {
     var decided = false;
     function check(final) {
@@ -203,9 +215,13 @@
       if (bg) { decided = true; TTS.ok = true; TTS.voice = bg; render(); return; }
       if (final) {
         decided = true; TTS.ok = false;
-        if (store.get("ttsHint") !== "1") { store.set("ttsHint", "1"); showNotice(t("ttsNo")); }
+        if (store.get("ttsHint") !== "1") { store.set("ttsHint", "1"); showNotice(t("ttsNo") + " " + t(ttsOsKey())); }
       }
     }
+    // a voice installed while the page is open: look again when the tab gets focus back
+    function recheck() { if (!TTS.ok && window.speechSynthesis) { decided = false; check(false); if (!TTS.ok) decided = true; } }
+    window.addEventListener("focus", recheck);
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) recheck(); });
     if (window.speechSynthesis) {
       try { window.speechSynthesis.addEventListener("voiceschanged", function () { check(false); }); } catch (e) { /* ignore */ }
       check(false);
