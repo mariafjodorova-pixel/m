@@ -1,0 +1,581 @@
+<title>RELAYTO AI for HR Benefits</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* Layout: sticky nav, hero with a feature index, six alternating feature rows each paired with a small live mock, dark closing band. */
+  :root {
+    --font-display: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
+    --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    --bg: #F5F8FC;
+    --band: #EBF1F9;
+    --surface: #FFFFFF;
+    --ink: #0F1B2D;
+    --muted: #55657C;
+    --line: #DCE4EF;
+    --accent: #2563EB;
+    --accent-ink: #1E40AF;
+    --accent-soft: #EAF1FE;
+    --fill: #2563EB;
+    --fill-ink: #FFFFFF;
+    --pop: #F5B83D;
+    --cta-bg: #0F1B2D;
+    --cta-fg: #F5F8FC;
+    --cta-muted: #B7C4D8;
+    --shadow: 0 1px 2px rgba(15, 27, 45, .06), 0 8px 24px -12px rgba(15, 27, 45, .18);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1220; --band: #0F192C; --surface: #131D30; --ink: #E6ECF5; --muted: #9AABC4;
+      --line: #25324A; --accent: #7DA8FF; --accent-ink: #A9C4FF; --accent-soft: #172A4D;
+      --fill: #3B73F0; --fill-ink: #FFFFFF; --pop: #F5B83D;
+      --cta-bg: #16264A; --cta-fg: #E6ECF5; --cta-muted: #A9B9D2;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .6);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B1220; --band: #0F192C; --surface: #131D30; --ink: #E6ECF5; --muted: #9AABC4;
+    --line: #25324A; --accent: #7DA8FF; --accent-ink: #A9C4FF; --accent-soft: #172A4D;
+    --fill: #3B73F0; --fill-ink: #FFFFFF; --pop: #F5B83D;
+    --cta-bg: #16264A; --cta-fg: #E6ECF5; --cta-muted: #A9B9D2;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 8px 24px -12px rgba(0, 0, 0, .6);
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+    background: var(--bg); z-index: 30;
+  }
+  h1, h2, h3, h4, p, ul, ol { margin: 0; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; letter-spacing: -.015em; }
+  ul, ol { padding: 0; list-style: none; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+  .wrap {
+    width: 100%; max-width: 1200px; margin-inline: auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .eyebrow {
+    font-size: .78rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* Header */
+  .site-header {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: var(--bg); border-bottom: 1px solid var(--line);
+  }
+  .site-header .wrap { display: flex; align-items: center; gap: 24px; height: 64px; }
+  .brand { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: -.01em; text-decoration: none; white-space: nowrap; }
+  .brand span { color: var(--accent); }
+  .nav { display: none; gap: 4px; margin-left: auto; }
+  .nav a {
+    text-decoration: none; font-size: .88rem; font-weight: 500; color: var(--muted);
+    padding: 8px 12px; border-radius: 999px;
+  }
+  .nav a:hover { color: var(--ink); }
+  .nav a[aria-current="true"] { color: var(--accent-ink); background: var(--accent-soft); }
+  .site-header .btn { margin-left: auto; }
+  @media (min-width: 1040px) {
+    .nav { display: flex; }
+    .site-header .btn { margin-left: 8px; }
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; text-decoration: none;
+    background: var(--fill); color: var(--fill-ink); font-weight: 600; font-size: .92rem;
+    padding: 10px 18px; border-radius: 999px; border: 0; white-space: nowrap;
+    transition: filter .15s ease, transform .15s ease;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:active { transform: translateY(1px); }
+  .btn.lg { padding: 14px 26px; font-size: 1rem; }
+
+  /* Hero */
+  .hero { padding-block: clamp(40px, 7vw, 88px) clamp(48px, 7vw, 96px); }
+  .hero-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(32px, 5vw, 72px); align-items: center; }
+  .hero h1 { font-size: clamp(2.5rem, 6.4vw, 4.6rem); line-height: 1.02; font-weight: 700; margin-top: 16px; }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero .lede { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.4; margin-top: 24px; font-weight: 500; max-width: 30ch; }
+  .hero .sub { color: var(--muted); margin-top: 16px; max-width: 52ch; font-size: 1.05rem; }
+  .index {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow);
+    padding: 8px;
+  }
+  .index h2 { font-family: var(--font-body); font-size: .78rem; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--muted); padding: 14px 14px 8px; }
+  .index a {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 13px 14px; border-radius: 9px; text-decoration: none; font-weight: 500;
+  }
+  .index a + a { border-top: 1px solid var(--line); border-radius: 0; }
+  .index a:hover { background: var(--accent-soft); }
+  .index a:hover { border-radius: 9px; }
+  .index svg { flex: none; color: var(--accent); }
+  @media (max-width: 860px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
+
+  /* Feature rows */
+  .feature { padding-block: clamp(48px, 7vw, 96px); border-top: 1px solid var(--line); }
+  .feature:nth-of-type(even) { background: var(--band); }
+  .feature-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: clamp(28px, 5vw, 72px); align-items: center; }
+  .feature.flip .copy { order: 2; }
+  .copy { min-width: 0; }
+  .copy h2 { font-size: clamp(1.8rem, 3.6vw, 2.7rem); line-height: 1.08; font-weight: 700; margin-top: 12px; }
+  .copy p { color: var(--muted); margin-top: 18px; max-width: 46ch; font-size: 1.05rem; }
+  .visual { min-width: 0; }
+  @media (max-width: 860px) {
+    .feature-grid { grid-template-columns: minmax(0, 1fr); }
+    .feature.flip .copy { order: 0; }
+  }
+
+  /* Mock UI shared */
+  .mock {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow);
+    padding: clamp(14px, 2.4vw, 22px); min-width: 0;
+  }
+  .tag { font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .chip {
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    border-radius: 999px; padding: 6px 14px; font-size: .88rem; font-weight: 500;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .chip:hover { border-color: var(--accent); }
+  .chip[aria-pressed="true"], .chip[aria-selected="true"] { background: var(--fill); border-color: var(--fill); color: var(--fill-ink); }
+  .check { color: var(--accent); flex: none; }
+
+  /* 1. Microsite generator */
+  .ms { display: grid; gap: 14px; }
+  .ms-prompt { background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; display: grid; gap: 4px; }
+  .ms-prompt p { font-size: .95rem; color: var(--ink); }
+  .ms-arrow { justify-self: center; color: var(--muted); }
+  .ms-site { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: var(--bg); }
+  .ms-bar { display: flex; gap: 5px; padding: 9px 12px; border-bottom: 1px solid var(--line); background: var(--surface); }
+  .ms-bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  .ms-hero { padding: 18px 16px 14px; display: grid; gap: 8px; }
+  .ms-hero b { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.1; }
+  .ms-hero span { height: 7px; border-radius: 4px; background: var(--line); display: block; }
+  .ms-hero span:nth-of-type(1) { width: 78%; }
+  .ms-hero span:nth-of-type(2) { width: 56%; }
+  .ms-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 0 16px 16px; }
+  .ms-tiles div { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 8px; font-size: .74rem; font-weight: 600; text-align: center; overflow-wrap: anywhere; }
+  .ms-tiles div::before { content: ""; display: block; width: 18px; height: 18px; border-radius: 5px; background: var(--accent-soft); border: 1px solid var(--accent); margin: 0 auto 7px; }
+  .ms-steps { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ms-steps li { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; font-size: .84rem; font-weight: 500; }
+  .ms-steps li:last-child { background: var(--fill); color: var(--fill-ink); border-color: var(--fill); }
+  @media (max-width: 420px) { .ms-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+  /* 2. Chat */
+  .chat { display: grid; gap: 12px; }
+  .bubble { max-width: 88%; padding: 11px 14px; border-radius: 14px; font-size: .95rem; line-height: 1.5; }
+  .bubble.q { justify-self: end; background: var(--fill); color: var(--fill-ink); border-bottom-right-radius: 4px; }
+  .bubble.a { background: var(--bg); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  .sources { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .sources span { display: inline-flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 500; color: var(--accent-ink); background: var(--accent-soft); border-radius: 6px; padding: 4px 9px; }
+  .chat-input { display: flex; align-items: center; justify-content: space-between; gap: 10px; border: 1px solid var(--line); border-radius: 999px; padding: 10px 10px 10px 16px; color: var(--muted); font-size: .92rem; }
+  .chat-input i { width: 28px; height: 28px; border-radius: 50%; background: var(--fill); display: grid; place-items: center; color: var(--fill-ink); flex: none; }
+
+  /* 3. Narration */
+  .nar { display: grid; gap: 16px; }
+  .slide { aspect-ratio: 16 / 8; max-width: 100%; border-radius: 10px; background: var(--accent-soft); border: 1px solid var(--line); padding: 5% 6%; display: grid; align-content: center; gap: 10px; }
+  .slide b { font-family: var(--font-display); font-size: clamp(1.1rem, 2.4vw, 1.5rem); line-height: 1.1; }
+  .slide span { display: block; height: 7px; border-radius: 4px; background: var(--line); }
+  .slide span:nth-of-type(1) { width: 70%; }
+  .slide span:nth-of-type(2) { width: 48%; }
+  .player { display: flex; align-items: center; gap: 12px; }
+  .play { flex: none; width: 42px; height: 42px; border-radius: 50%; background: var(--fill); color: var(--fill-ink); display: grid; place-items: center; }
+  .wave { flex: 1; min-width: 0; display: flex; align-items: center; gap: 2px; height: 40px; }
+  .wave i { flex: 1; min-width: 2px; border-radius: 2px; background: var(--line); }
+  .wave i.on { background: var(--accent); }
+  .time { font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .speeds { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+  .speeds .tag { margin-right: 4px; }
+
+  /* 4. App builder: flashcards */
+  .cards { display: grid; gap: 14px; justify-items: stretch; }
+  .cards-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .flash {
+    width: 100%; min-height: 190px; border-radius: 12px; border: 1px solid var(--line); background: var(--accent-soft);
+    padding: 22px; display: grid; align-content: center; justify-items: center; gap: 10px; text-align: center;
+    transition: background .2s ease;
+  }
+  .flash:hover { border-color: var(--accent); }
+  .flash .term { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 3.4vw, 2rem); line-height: 1.1; }
+  .flash .def { font-size: 1.02rem; line-height: 1.5; max-width: 34ch; }
+  .flash .hint { font-size: .8rem; color: var(--muted); }
+  .flash[data-side="back"] { background: var(--surface); }
+  .cards-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
+  .dots { display: flex; gap: 6px; }
+  .dots i { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+  .dots i.on { background: var(--accent); }
+
+  /* 5. Translation */
+  .tr { display: grid; gap: 16px; }
+  .langs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tr-out { background: var(--accent-soft); border-radius: 12px; padding: clamp(18px, 3vw, 28px); display: grid; gap: 8px; min-height: 130px; align-content: center; }
+  .tr-out p { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.4rem, 3.4vw, 2.1rem); line-height: 1.12; text-wrap: balance; }
+  .tr-note { font-size: .84rem; color: var(--muted); }
+
+  /* 6. Navigation */
+  .navmock { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 16px; }
+  .navlist { display: grid; gap: 4px; align-content: start; }
+  .navlist button { text-align: left; width: 100%; border: 0; background: transparent; padding: 9px 12px; border-radius: 8px; font-size: .92rem; font-weight: 500; color: var(--muted); }
+  .navlist button:hover { background: var(--accent-soft); color: var(--ink); }
+  .navlist button[aria-current="true"] { background: var(--fill); color: var(--fill-ink); }
+  .navpanel { border-left: 1px solid var(--line); padding-left: 16px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+  .navpanel h3 { font-size: 1.3rem; line-height: 1.15; }
+  .navpanel p { color: var(--muted); font-size: .95rem; }
+  .navpanel .lines span { display: block; height: 7px; border-radius: 4px; background: var(--line); margin-top: 8px; }
+  .navpanel .lines span:nth-child(2) { width: 80%; }
+  .navpanel .lines span:nth-child(3) { width: 55%; }
+  @media (max-width: 480px) {
+    .navmock { grid-template-columns: minmax(0, 1fr); }
+    .navpanel { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); padding-top: 14px; }
+  }
+
+  /* Closing */
+  .closing { background: var(--cta-bg); color: var(--cta-fg); padding-block: clamp(56px, 8vw, 110px); }
+  .closing h2 { font-size: clamp(1.9rem, 4.4vw, 3.2rem); line-height: 1.08; font-weight: 700; max-width: 22ch; }
+  .closing .btn { margin-top: 32px; background: var(--pop); color: #0F1B2D; }
+  .site-footer { padding-block: 28px 36px; color: var(--muted); font-size: .84rem; }
+  .site-footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="#top">RELAYTO <span>AI</span></a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#microsite">Microsite Generator</a>
+      <a href="#chat">Chat</a>
+      <a href="#narration">Narration</a>
+      <a href="#app-builder">App Builder</a>
+      <a href="#translation">Translation</a>
+      <a href="#navigation">Navigation</a>
+    </nav>
+    <a class="btn" href="https://relayto.com" target="_blank" rel="noopener">Talk to us</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">For HR teams and brokers</p>
+        <h1>RELAYTO AI <em>for HR benefits</em></h1>
+        <p class="lede">Your benefits content, made easier to find, understand and use.</p>
+        <p class="sub">RELAYTO AI helps you turn benefit guides, presentations and files into something employees actually engage with. Here is what it can do.</p>
+      </div>
+      <nav class="index" aria-label="What RELAYTO AI can do">
+        <h2>What it can do</h2>
+        <a href="#microsite">AI Microsite Generator <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a href="#chat">AI Chat <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a href="#narration">AI Narration <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a href="#app-builder">AI App Builder <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a href="#translation">AI Translation <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+        <a href="#navigation">AI Navigation <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      </nav>
+    </div>
+  </section>
+
+  <!-- AI Microsite Generator -->
+  <section class="feature" id="microsite" data-spy>
+    <div class="wrap feature-grid">
+      <div class="copy">
+        <p class="eyebrow">AI Microsite Generator</p>
+        <h2>Build your benefit guide without writing code.</h2>
+        <p>Tell RELAYTO AI what you need and it builds the microsite for you. Benefit guides, wellness resources, educational materials and more. You don’t need a designer or a developer. You review it, adjust it, and publish.</p>
+      </div>
+      <div class="visual">
+        <div class="mock ms" role="img" aria-label="Example: a short request becomes a benefit guide microsite, followed by the steps review, adjust and publish.">
+          <div class="ms-prompt"><span class="tag">You ask</span><p>Build an open enrollment guide with medical, dental, vision and wellbeing sections.</p></div>
+          <svg class="ms-arrow" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3v13M5 11l5 5 5-5"/></svg>
+          <div class="ms-site">
+            <div class="ms-bar"><i></i><i></i><i></i></div>
+            <div class="ms-hero"><b>Your benefits guide</b><span></span><span></span></div>
+            <div class="ms-tiles"><div>Medical</div><div>Dental</div><div>Vision</div><div>Wellbeing</div></div>
+          </div>
+          <ul class="ms-steps">
+            <li><svg class="check" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7"/></svg>Review</li>
+            <li><svg class="check" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7"/></svg>Adjust</li>
+            <li>Publish</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Chat -->
+  <section class="feature flip" id="chat" data-spy>
+    <div class="wrap feature-grid">
+      <div class="copy">
+        <p class="eyebrow">AI Chat</p>
+        <h2>Let employees ask questions and get answers from your content.</h2>
+        <p>Employees type a question in their own words and get an answer taken from your content only. Every answer links back to the pages it came from, so people can check the source themselves. You decide what goes in, and the answers stay within it.</p>
+      </div>
+      <div class="visual">
+        <div class="mock chat" role="img" aria-label="Example: an employee asks whether a partner can be added to a plan, and the answer cites two pages of the guide.">
+          <div class="bubble q">Can I add my partner to my plan outside open enrollment?</div>
+          <div class="bubble a">
+            Yes, if you have a qualifying life event, such as getting married. Tell HR within the window shown in the guide.
+            <div class="sources">
+              <span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 1.5h4l2 2v7H3zM7 1.5v2h2"/></svg>Medical plans, page 6</span>
+              <span><svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 1.5h4l2 2v7H3zM7 1.5v2h2"/></svg>Life events, page 14</span>
+            </div>
+          </div>
+          <div class="chat-input"><span>Ask about your benefits</span><i><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11.5v-9M3 6.5l4-4 4 4"/></svg></i></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Narration -->
+  <section class="feature" id="narration" data-spy>
+    <div class="wrap feature-grid">
+      <div class="copy">
+        <p class="eyebrow">AI Narration</p>
+        <h2>Add a voiceover to your presentations.</h2>
+        <p>Generate a voiceover for your presentation without a microphone or a recording session. Employees can listen at their own pace, which works well for open enrollment walk-throughs.</p>
+      </div>
+      <div class="visual">
+        <div class="mock nar">
+          <div class="slide" role="img" aria-label="Example presentation slide titled Open enrollment walk-through"><b>Open enrollment walk-through</b><span></span><span></span></div>
+          <div class="player">
+            <div class="play" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4.5 2.5v11l9-5.5z"/></svg></div>
+            <div class="wave" id="wave" aria-hidden="true"></div>
+            <span class="time">1:12 / 3:40</span>
+          </div>
+          <div class="speeds" role="group" aria-label="Example listening speeds">
+            <span class="tag">Listen at</span>
+            <button class="chip" type="button" aria-pressed="false">0.75x</button>
+            <button class="chip" type="button" aria-pressed="true">1x</button>
+            <button class="chip" type="button" aria-pressed="false">1.25x</button>
+            <button class="chip" type="button" aria-pressed="false">1.5x</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI App Builder -->
+  <section class="feature flip" id="app-builder" data-spy>
+    <div class="wrap feature-grid">
+      <div class="copy">
+        <p class="eyebrow">AI App Builder</p>
+        <h2>Turn your content into interactive tools.</h2>
+        <p>Generate small apps that help people learn by doing. Decision support tools, BMI or water intake calculators, flashcards with benefits terminology, and more. Employees explore their options in their own time and understand them better.</p>
+      </div>
+      <div class="visual">
+        <div class="mock cards">
+          <div class="cards-top"><span class="tag">Flashcards, benefits terms</span><span class="tag" id="card-count">1 of 4</span></div>
+          <button class="flash" id="flash" type="button" data-side="front" aria-live="polite">
+            <span class="term" id="flash-term">Premium</span>
+            <span class="hint" id="flash-hint">Tap to see the meaning</span>
+          </button>
+          <div class="cards-actions">
+            <div class="dots" id="dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i></div>
+            <button class="chip" id="flash-next" type="button">Next card</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Translation -->
+  <section class="feature" id="translation" data-spy>
+    <div class="wrap feature-grid">
+      <div class="copy">
+        <p class="eyebrow">AI Translation</p>
+        <h2>Reach every employee in their own language.</h2>
+        <p>Translate your PowerPoint and InDesign files into more than 80 languages. Everyone gets the same information in the language they are most comfortable with.</p>
+      </div>
+      <div class="visual">
+        <div class="mock tr">
+          <div class="langs" role="tablist" aria-label="Example languages">
+            <button class="chip" type="button" role="tab" aria-selected="true" data-lang="en">English</button>
+            <button class="chip" type="button" role="tab" aria-selected="false" data-lang="es">Español</button>
+            <button class="chip" type="button" role="tab" aria-selected="false" data-lang="de">Deutsch</button>
+            <button class="chip" type="button" role="tab" aria-selected="false" data-lang="fr">Français</button>
+            <button class="chip" type="button" role="tab" aria-selected="false" data-lang="pl">Polski</button>
+            <button class="chip" type="button" role="tab" aria-selected="false" data-lang="pt">Português</button>
+            <button class="chip" type="button" role="tab" aria-selected="false" data-lang="it">Italiano</button>
+          </div>
+          <div class="tr-out" role="tabpanel" aria-live="polite">
+            <span class="tag">Slide title</span>
+            <p id="tr-text" lang="en">Your benefits guide</p>
+          </div>
+          <p class="tr-note">Seven shown here. More than 80 languages are available.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Navigation -->
+  <section class="feature flip" id="navigation" data-spy>
+    <div class="wrap feature-grid">
+      <div class="copy">
+        <p class="eyebrow">AI Navigation</p>
+        <h2>Help people get to what matters to them, fast.</h2>
+        <p>AI builds the navigation for you, so employees can jump to any section and find the information they care about most. No scrolling through a long guide to find one answer.</p>
+      </div>
+      <div class="visual">
+        <div class="mock navmock">
+          <div class="navlist" id="navlist">
+            <span class="tag" style="padding: 0 12px 6px">Jump to</span>
+            <button type="button" aria-current="true">Medical plans</button>
+            <button type="button" aria-current="false">Dental and vision</button>
+            <button type="button" aria-current="false">Wellbeing</button>
+            <button type="button" aria-current="false">Retirement</button>
+            <button type="button" aria-current="false">Time off</button>
+            <button type="button" aria-current="false">Who to contact</button>
+          </div>
+          <div class="navpanel" aria-live="polite">
+            <h3 id="nav-title">Medical plans</h3>
+            <p id="nav-desc">Compare your plan options side by side.</p>
+            <div class="lines" aria-hidden="true"><span></span><span></span><span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <h2>Want to see how this would look with your own benefits content? We’re happy to show you.</h2>
+      <a class="btn lg" href="https://relayto.com" target="_blank" rel="noopener">See it with your content</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>RELAYTO AI for HR benefits</span>
+    <span>Screens shown are illustrative examples.</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Waveform bars, deterministic heights; the first third is "played".
+  var wave = document.getElementById('wave');
+  if (wave) {
+    var n = 44, html = '';
+    for (var i = 0; i < n; i++) {
+      var h = 18 + Math.round(Math.abs(Math.sin(i * 1.7) * Math.cos(i * 0.45)) * 82);
+      html += '<i class="' + (i < n * 0.33 ? 'on' : '') + '" style="height:' + h + '%"></i>';
+    }
+    wave.innerHTML = html;
+  }
+
+  // Narration speed chips
+  var speeds = document.querySelectorAll('.speeds .chip');
+  speeds.forEach(function (b) {
+    b.addEventListener('click', function () {
+      speeds.forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+    });
+  });
+
+  // Flashcards
+  var cards = [
+    ['Premium', 'The amount you pay each pay period to keep your coverage active.'],
+    ['Deductible', 'What you pay for covered care before your plan starts to share the cost.'],
+    ['Copay', 'A fixed amount you pay for a visit or a prescription.'],
+    ['Out-of-pocket maximum', 'The most you pay in a plan year for covered care. After that, the plan pays.']
+  ];
+  var idx = 0;
+  var flash = document.getElementById('flash');
+  var termEl = document.getElementById('flash-term');
+  var hintEl = document.getElementById('flash-hint');
+  var countEl = document.getElementById('card-count');
+  var dots = document.querySelectorAll('#dots i');
+  function renderCard(side) {
+    flash.setAttribute('data-side', side);
+    if (side === 'front') {
+      termEl.className = 'term'; termEl.textContent = cards[idx][0];
+      hintEl.textContent = 'Tap to see the meaning';
+    } else {
+      termEl.className = 'def'; termEl.textContent = cards[idx][1];
+      hintEl.textContent = cards[idx][0];
+    }
+    countEl.textContent = (idx + 1) + ' of ' + cards.length;
+    dots.forEach(function (d, i) { d.className = i === idx ? 'on' : ''; });
+  }
+  flash.addEventListener('click', function () {
+    renderCard(flash.getAttribute('data-side') === 'front' ? 'back' : 'front');
+  });
+  document.getElementById('flash-next').addEventListener('click', function () {
+    idx = (idx + 1) % cards.length; renderCard('front');
+  });
+
+  // Translation
+  var phrases = {
+    en: 'Your benefits guide',
+    es: 'Tu guía de beneficios',
+    de: 'Ihr Leitfaden zu den Leistungen',
+    fr: 'Votre guide des avantages sociaux',
+    pl: 'Twój przewodnik po benefitach',
+    pt: 'O seu guia de benefícios',
+    it: 'La tua guida ai benefit'
+  };
+  var tabs = document.querySelectorAll('.langs .chip');
+  var trText = document.getElementById('tr-text');
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      tabs.forEach(function (o) { o.setAttribute('aria-selected', o === t ? 'true' : 'false'); });
+      var l = t.getAttribute('data-lang');
+      trText.textContent = phrases[l]; trText.setAttribute('lang', l);
+    });
+  });
+
+  // Navigation mock
+  var sections = [
+    ['Medical plans', 'Compare your plan options side by side.'],
+    ['Dental and vision', 'What is covered and how to find a provider.'],
+    ['Wellbeing', 'Mental health support and wellness programs.'],
+    ['Retirement', 'How saving works and who to ask.'],
+    ['Time off', 'Holiday, sick and parental leave.'],
+    ['Who to contact', 'The right person for each question.']
+  ];
+  var navBtns = document.querySelectorAll('#navlist button');
+  navBtns.forEach(function (b, i) {
+    b.addEventListener('click', function () {
+      navBtns.forEach(function (o) { o.setAttribute('aria-current', o === b ? 'true' : 'false'); });
+      document.getElementById('nav-title').textContent = sections[i][0];
+      document.getElementById('nav-desc').textContent = sections[i][1];
+    });
+  });
+
+  // Header scroll-spy
+  var links = {};
+  document.querySelectorAll('.nav a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+  function setActive(id) {
+    Object.keys(links).forEach(function (k) {
+      if (k === id) links[k].setAttribute('aria-current', 'true'); else links[k].removeAttribute('aria-current');
+    });
+  }
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) setActive(e.target.id); });
+    }, { rootMargin: '-35% 0px -55% 0px' });
+    document.querySelectorAll('[data-spy]').forEach(function (s) { io.observe(s); });
+  }
+})();
+</script>
