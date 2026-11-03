@@ -61,8 +61,7 @@
 
     .wrap {
         max-width: 1280px;
-        margin: 0 auto;
-        container-type: inline-size
+        margin: 0 auto
     }
 
     .page,
@@ -86,7 +85,7 @@
     }
 
     /* Wide layout: use the horizontal space instead of one tall column */
-    @container (min-width: 980px) {
+    @media (min-width: 1000px) {
         .page {
             gap: 28px
         }
