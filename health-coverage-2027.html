@@ -1,0 +1,1205 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+    /* Layout: single readable column; a calculator card up top, full rate tables below in tabs */
+    :root {
+        --bg: #f6f7f9;
+        --surface: #ffffff;
+        --ink: #1b2230;
+        --muted: #5b6575;
+        --line: #dde2ea;
+        --accent: #1f4e79;
+        --accent-soft: #e7eef6;
+        --good: #1d6b4a;
+        --good-soft: #e5f3ec;
+        --display: "Fraunces", Georgia, "Times New Roman", serif;
+        --body: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+            --bg: #12161d;
+            --surface: #1a2029;
+            --ink: #e8ecf2;
+            --muted: #9aa6b6;
+            --line: #2c3542;
+            --accent: #8db8e6;
+            --accent-soft: #1f2c3c;
+            --good: #7fd1a8;
+            --good-soft: #18302a;
+            color-scheme: dark
+        }
+    }
+
+    :root[data-theme="dark"] {
+        --bg: #12161d;
+        --surface: #1a2029;
+        --ink: #e8ecf2;
+        --muted: #9aa6b6;
+        --line: #2c3542;
+        --accent: #8db8e6;
+        --accent-soft: #1f2c3c;
+        --good: #7fd1a8;
+        --good-soft: #18302a;
+        color-scheme: dark
+    }
+
+    * {
+        box-sizing: border-box
+    }
+
+    body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: var(--body);
+        font-size: 16px;
+        line-height: 1.55;
+        padding-left: max(16px, env(safe-area-inset-left, 0px));
+        padding-right: max(16px, env(safe-area-inset-right, 0px));
+        padding-block: 32px 48px
+    }
+
+    .wrap {
+        max-width: 1280px;
+        margin: 0 auto;
+        container-type: inline-size
+    }
+
+    .page,
+    .col {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        min-width: 0
+    }
+
+    .top {
+        display: flex;
+        flex-direction: column;
+        gap: 24px
+    }
+
+    .main {
+        display: flex;
+        flex-direction: column;
+        gap: 24px
+    }
+
+    /* Wide layout: use the horizontal space instead of one tall column */
+    @container (min-width: 980px) {
+        .page {
+            gap: 28px
+        }
+
+        .top {
+            display: grid;
+            grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+            gap: 32px;
+            align-items: center
+        }
+
+        .main {
+            display: grid;
+            grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+            gap: 28px;
+            align-items: start
+        }
+
+        .col.sticky {
+            position: sticky;
+            top: 16px
+        }
+
+        .tablebox {
+            max-height: min(70vh, 720px)
+        }
+    }
+
+    h1,
+    h2 {
+        font-family: var(--display);
+        font-weight: 650;
+        text-wrap: balance;
+        margin: 0;
+        line-height: 1.15
+    }
+
+    h1 {
+        font-size: clamp(1.8rem, 4.5vw, 2.5rem)
+    }
+
+    h2 {
+        font-size: 1.4rem
+    }
+
+    .eyebrow {
+        font-size: .78rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--accent);
+        font-weight: 700;
+        margin: 0 0 6px
+    }
+
+    p {
+        margin: 0;
+        max-width: 65ch
+    }
+
+    .lead {
+        color: var(--muted);
+        font-size: 1.08rem;
+        margin-top: 10px;
+        max-width: 60ch
+    }
+
+    .card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 22px
+    }
+
+    .steps {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px
+    }
+
+    .step {
+        display: flex;
+        flex-direction: column;
+        gap: 4px
+    }
+
+    .step b {
+        font-size: .95rem
+    }
+
+    .step span {
+        color: var(--muted);
+        font-size: .93rem
+    }
+
+    .stepnum {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: var(--accent-soft);
+        color: var(--accent);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: .85rem
+    }
+
+    @media (max-width:640px) {
+        .steps {
+            grid-template-columns: 1fr
+        }
+    }
+
+    .calc {
+        display: flex;
+        flex-direction: column;
+        gap: 18px
+    }
+
+    .fields {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        gap: 14px
+    }
+
+    @media (max-width:560px) {
+        .fields {
+            grid-template-columns: 1fr
+        }
+    }
+
+    label {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-weight: 600;
+        font-size: .92rem
+    }
+
+    select {
+        width: 100%;
+        min-width: 0;
+        font: inherit;
+        padding: 10px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink)
+    }
+
+    select:focus-visible,
+    button:focus-visible {
+        outline: 3px solid var(--accent);
+        outline-offset: 2px
+    }
+
+    .results {
+        display: grid;
+        gap: 14px
+    }
+
+    .plan {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px
+    }
+
+    .plan h3 {
+        margin: 0;
+        font-size: 1rem
+    }
+
+    .plan .tag {
+        font-size: .8rem;
+        color: var(--muted);
+        font-weight: 400
+    }
+
+    .math {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+        font-variant-numeric: tabular-nums
+    }
+
+    .math div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: var(--bg)
+    }
+
+    .math small {
+        color: var(--muted);
+        font-size: .8rem
+    }
+
+    .math strong {
+        font-size: 1.3rem
+    }
+
+    .math .you {
+        background: var(--good-soft)
+    }
+
+    .math .you strong {
+        color: var(--good)
+    }
+
+    @media (max-width:480px) {
+        .math {
+            grid-template-columns: 1fr
+        }
+    }
+
+    .tabs {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap
+    }
+
+    .tabs button {
+        font: inherit;
+        font-weight: 600;
+        font-size: .92rem;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        cursor: pointer
+    }
+
+    .tabs button[aria-selected="true"] {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--surface)
+    }
+
+    .tablebox {
+        overflow: auto;
+        max-height: 480px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--surface)
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-variant-numeric: tabular-nums;
+        font-size: .93rem
+    }
+
+    th,
+    td {
+        padding: 8px 10px;
+        text-align: right;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap
+    }
+
+    th:first-child,
+    td:first-child {
+        text-align: left
+    }
+
+    thead th {
+        white-space: normal;
+        vertical-align: bottom;
+        position: sticky;
+        top: 0;
+        background: var(--accent-soft);
+        color: var(--ink);
+        font-size: .82rem
+    }
+
+    td.you {
+        color: var(--good);
+        font-weight: 700
+    }
+
+    tr.hl td {
+        background: var(--accent-soft)
+    }
+
+    .note {
+        color: var(--muted);
+        font-size: .9rem
+    }
+
+    ul.notes {
+        margin: 0;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        color: var(--ink)
+    }
+
+    @media (prefers-reduced-motion:no-preference) {
+        .plan {
+            transition: border-color .2s
+        }
+    }
+</style>
+
+<div class="wrap"><div class="page">
+    <div class="top">
+    <header>
+        <p class="eyebrow">Shattuck-St. Mary's School · 2027 health coverage</p>
+        <h1>What your health coverage could cost in 2027</h1>
+        <p class="lead">Shattuck gives you a monthly allowance to buy your own health plan. Your allowance is based on your age and where you live. Use the tool below to see an example of what you would pay each month.</p>
+    </header>
+
+    <section class="card">
+        <div class="steps">
+            <div class="step">
+                <div class="stepnum">1</div><b>Find your rating area</b><span>Minnesota sets prices by county. Pick the county you live in.</span>
+            </div>
+            <div class="step">
+                <div class="stepnum">2</div><b>Pick your age</b><span>Plans cost more as you get older, and your allowance grows with your age.</span>
+            </div>
+            <div class="step">
+                <div class="stepnum">3</div><b>See your cost</b><span>Plan price minus Shattuck's allowance equals what you pay.</span>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <div class="main">
+    <div class="col">
+    <section class="card calc" aria-labelledby="calc-h">
+        <h2 id="calc-h">Estimate your monthly cost</h2>
+        <div class="fields">
+            <label for="area">Where do you live?
+                <select id="area">
+                    <option value="RA3">Rice County, including Faribault (Rating Area 3)</option>
+                    <option value="RA1">Steele, Dodge, Olmsted or Wabasha County (Rating Area 1)</option>
+                    <option value="RA8">Twin Cities metro: Hennepin, Dakota or Ramsey County (Rating Area 8)</option>
+                </select>
+            </label>
+            <label for="age">Your age
+                <select id="age"></select>
+            </label>
+        </div>
+        <div class="results" id="results" aria-live="polite"></div>
+        <p class="note">Employee-only coverage, monthly amounts, 2027 rates. If the plan costs less than your allowance, you pay $0.</p>
+    </section>
+
+    <section class="card" aria-labelledby="good-h" style="display:flex;flex-direction:column;gap:12px">
+        <h2 id="good-h">Good to know</h2>
+        <ul class="notes">
+            <li>These are examples using the lowest-cost Bronze plans. You can choose any plan available where you live. If you pick a plan that costs more than your allowance, you pay the difference.</li>
+            <li>The Blue Plus Bronze HSA plans can be paired with a Health Savings Account (HSA), which lets you set aside money tax-free for medical costs.</li>
+            <li>Your allowance does not roll over. If your plan costs less than your allowance, the unused amount is not paid to you.</li>
+            <li>These examples are for you only. Adding a spouse or children changes both the plan price and your allowance. Contact HR for family examples.</li>
+            <li>Rates are 2027 Minnesota individual-market rates for non-tobacco users.</li>
+        </ul>
+    </section>
+    </div>
+
+    <div class="col sticky">
+    <section aria-labelledby="tbl-h" style="display:flex;flex-direction:column;gap:14px">
+        <h2 id="tbl-h">Full rate tables by area</h2>
+        <div class="tabs" role="tablist" id="tabs">
+            <button role="tab" id="tab-RA3" data-ra="RA3" aria-selected="true">Rice County (Area 3)</button>
+            <button role="tab" id="tab-RA1" data-ra="RA1" aria-selected="false">Steele, Dodge, Olmsted, Wabasha (Area 1)</button>
+            <button role="tab" id="tab-RA8" data-ra="RA8" aria-selected="false">Twin Cities metro (Area 8)</button>
+        </div>
+        <p class="note" id="tblnote"></p>
+        <div class="tablebox">
+            <table id="tbl"></table>
+        </div>
+    </section>
+    </div>
+    </div>
+</div></div>
+
+<script>
+    const DATA = {
+        "RA1": [{
+            "age": "Under 21",
+            "low": 400.86,
+            "allow": 430.44,
+            "bcbs": 425.65
+        }, {
+            "age": "21",
+            "low": 450.4,
+            "allow": 430.44,
+            "bcbs": 478.26
+        }, {
+            "age": "22",
+            "low": 450.4,
+            "allow": 430.44,
+            "bcbs": 478.26
+        }, {
+            "age": "23",
+            "low": 450.4,
+            "allow": 430.44,
+            "bcbs": 478.26
+        }, {
+            "age": "24",
+            "low": 450.4,
+            "allow": 430.44,
+            "bcbs": 478.26
+        }, {
+            "age": "25",
+            "low": 452.2,
+            "allow": 432.16,
+            "bcbs": 480.18
+        }, {
+            "age": "26",
+            "low": 461.21,
+            "allow": 440.77,
+            "bcbs": 489.74
+        }, {
+            "age": "27",
+            "low": 472.02,
+            "allow": 451.1,
+            "bcbs": 501.22
+        }, {
+            "age": "28",
+            "low": 489.58,
+            "allow": 467.88,
+            "bcbs": 519.87
+        }, {
+            "age": "29",
+            "low": 504,
+            "allow": 481.66,
+            "bcbs": 535.18
+        }, {
+            "age": "30",
+            "low": 511.2,
+            "allow": 488.55,
+            "bcbs": 542.83
+        }, {
+            "age": "31",
+            "low": 522.01,
+            "allow": 498.88,
+            "bcbs": 554.31
+        }, {
+            "age": "32",
+            "low": 532.82,
+            "allow": 509.21,
+            "bcbs": 565.79
+        }, {
+            "age": "33",
+            "low": 539.58,
+            "allow": 515.66,
+            "bcbs": 572.96
+        }, {
+            "age": "34",
+            "low": 546.79,
+            "allow": 522.55,
+            "bcbs": 580.61
+        }, {
+            "age": "35",
+            "low": 550.39,
+            "allow": 526,
+            "bcbs": 584.44
+        }, {
+            "age": "36",
+            "low": 553.99,
+            "allow": 529.43,
+            "bcbs": 588.26
+        }, {
+            "age": "37",
+            "low": 557.59,
+            "allow": 532.88,
+            "bcbs": 592.09
+        }, {
+            "age": "38",
+            "low": 561.2,
+            "allow": 536.33,
+            "bcbs": 595.92
+        }, {
+            "age": "39",
+            "low": 568.4,
+            "allow": 543.21,
+            "bcbs": 603.57
+        }, {
+            "age": "40",
+            "low": 575.61,
+            "allow": 550.1,
+            "bcbs": 611.22
+        }, {
+            "age": "41",
+            "low": 586.42,
+            "allow": 560.43,
+            "bcbs": 622.7
+        }, {
+            "age": "42",
+            "low": 596.78,
+            "allow": 570.33,
+            "bcbs": 633.7
+        }, {
+            "age": "43",
+            "low": 611.19,
+            "allow": 584.1,
+            "bcbs": 649
+        }, {
+            "age": "44",
+            "low": 629.21,
+            "allow": 601.32,
+            "bcbs": 668.13
+        }, {
+            "age": "45",
+            "low": 650.38,
+            "allow": 621.55,
+            "bcbs": 690.61
+        }, {
+            "age": "46",
+            "low": 675.6,
+            "allow": 645.65,
+            "bcbs": 717.39
+        }, {
+            "age": "47",
+            "low": 703.97,
+            "allow": 672.78,
+            "bcbs": 747.53
+        }, {
+            "age": "48",
+            "low": 736.4,
+            "allow": 703.76,
+            "bcbs": 781.96
+        }, {
+            "age": "49",
+            "low": 768.38,
+            "allow": 734.33,
+            "bcbs": 815.92
+        }, {
+            "age": "50",
+            "low": 804.41,
+            "allow": 768.76,
+            "bcbs": 854.18
+        }, {
+            "age": "51",
+            "low": 840,
+            "allow": 802.76,
+            "bcbs": 891.96
+        }, {
+            "age": "52",
+            "low": 879.18,
+            "allow": 840.21,
+            "bcbs": 933.57
+        }, {
+            "age": "53",
+            "low": 918.82,
+            "allow": 878.09,
+            "bcbs": 975.66
+        }, {
+            "age": "54",
+            "low": 961.6,
+            "allow": 918.98,
+            "bcbs": 1021.09
+        }, {
+            "age": "55",
+            "low": 1004.39,
+            "allow": 959.88,
+            "bcbs": 1066.53
+        }, {
+            "age": "56",
+            "low": 1050.78,
+            "allow": 1004.21,
+            "bcbs": 1115.79
+        }, {
+            "age": "57",
+            "low": 1097.62,
+            "allow": 1048.98,
+            "bcbs": 1165.53
+        }, {
+            "age": "58",
+            "low": 1147.62,
+            "allow": 1096.75,
+            "bcbs": 1218.61
+        }, {
+            "age": "59",
+            "low": 1172.39,
+            "allow": 1120.43,
+            "bcbs": 1244.92
+        }, {
+            "age": "60",
+            "low": 1222.38,
+            "allow": 1168.21,
+            "bcbs": 1298.01
+        }, {
+            "age": "61",
+            "low": 1265.62,
+            "allow": 1209.53,
+            "bcbs": 1343.92
+        }, {
+            "age": "62",
+            "low": 1294,
+            "allow": 1236.65,
+            "bcbs": 1374.05
+        }, {
+            "age": "63",
+            "low": 1329.58,
+            "allow": 1270.65,
+            "bcbs": 1411.83
+        }, {
+            "age": "64+",
+            "low": 1351.2,
+            "allow": 1291.3,
+            "bcbs": 1434.78
+        }, {
+            "age": "Oldest / youngest allowance",
+            "low": 3,
+            "allow": "Meets 3:1",
+            "bcbs": null
+        }],
+        "RA3": [{
+            "age": "Under 21",
+            "low": 371.69,
+            "allow": 425.2,
+            "bcbs": 420.47
+        }, {
+            "age": "21",
+            "low": 417.63,
+            "allow": 425.2,
+            "bcbs": 472.44
+        }, {
+            "age": "22",
+            "low": 417.63,
+            "allow": 425.2,
+            "bcbs": 472.44
+        }, {
+            "age": "23",
+            "low": 417.63,
+            "allow": 425.2,
+            "bcbs": 472.44
+        }, {
+            "age": "24",
+            "low": 417.63,
+            "allow": 425.2,
+            "bcbs": 472.44
+        }, {
+            "age": "25",
+            "low": 419.3,
+            "allow": 426.9,
+            "bcbs": 474.33
+        }, {
+            "age": "26",
+            "low": 427.65,
+            "allow": 435.4,
+            "bcbs": 483.78
+        }, {
+            "age": "27",
+            "low": 437.67,
+            "allow": 445.61,
+            "bcbs": 495.12
+        }, {
+            "age": "28",
+            "low": 453.96,
+            "allow": 462.19,
+            "bcbs": 513.54
+        }, {
+            "age": "29",
+            "low": 467.33,
+            "allow": 475.79,
+            "bcbs": 528.66
+        }, {
+            "age": "30",
+            "low": 474.01,
+            "allow": 482.6,
+            "bcbs": 536.22
+        }, {
+            "age": "31",
+            "low": 484.03,
+            "allow": 492.8,
+            "bcbs": 547.56
+        }, {
+            "age": "32",
+            "low": 494.05,
+            "allow": 503.01,
+            "bcbs": 558.9
+        }, {
+            "age": "33",
+            "low": 500.32,
+            "allow": 509.38,
+            "bcbs": 565.98
+        }, {
+            "age": "34",
+            "low": 507,
+            "allow": 516.19,
+            "bcbs": 573.54
+        }, {
+            "age": "35",
+            "low": 510.34,
+            "allow": 519.59,
+            "bcbs": 577.32
+        }, {
+            "age": "36",
+            "low": 513.68,
+            "allow": 522.99,
+            "bcbs": 581.1
+        }, {
+            "age": "37",
+            "low": 517.02,
+            "allow": 526.39,
+            "bcbs": 584.88
+        }, {
+            "age": "38",
+            "low": 520.36,
+            "allow": 529.79,
+            "bcbs": 588.66
+        }, {
+            "age": "39",
+            "low": 527.05,
+            "allow": 536.6,
+            "bcbs": 596.22
+        }, {
+            "age": "40",
+            "low": 533.73,
+            "allow": 543.4,
+            "bcbs": 603.78
+        }, {
+            "age": "41",
+            "low": 543.75,
+            "allow": 553.61,
+            "bcbs": 615.12
+        }, {
+            "age": "42",
+            "low": 553.36,
+            "allow": 563.38,
+            "bcbs": 625.98
+        }, {
+            "age": "43",
+            "low": 566.72,
+            "allow": 576.99,
+            "bcbs": 641.1
+        }, {
+            "age": "44",
+            "low": 583.43,
+            "allow": 594,
+            "bcbs": 660
+        }, {
+            "age": "45",
+            "low": 603.06,
+            "allow": 613.99,
+            "bcbs": 682.21
+        }, {
+            "age": "46",
+            "low": 626.44,
+            "allow": 637.79,
+            "bcbs": 708.66
+        }, {
+            "age": "47",
+            "low": 652.75,
+            "allow": 664.59,
+            "bcbs": 738.43
+        }, {
+            "age": "48",
+            "low": 682.82,
+            "allow": 695.2,
+            "bcbs": 772.44
+        }, {
+            "age": "49",
+            "low": 712.47,
+            "allow": 725.38,
+            "bcbs": 805.98
+        }, {
+            "age": "50",
+            "low": 745.88,
+            "allow": 759.4,
+            "bcbs": 843.78
+        }, {
+            "age": "51",
+            "low": 778.88,
+            "allow": 792.99,
+            "bcbs": 881.1
+        }, {
+            "age": "52",
+            "low": 815.21,
+            "allow": 829.99,
+            "bcbs": 922.21
+        }, {
+            "age": "53",
+            "low": 851.96,
+            "allow": 867.4,
+            "bcbs": 963.78
+        }, {
+            "age": "54",
+            "low": 891.64,
+            "allow": 907.79,
+            "bcbs": 1008.66
+        }, {
+            "age": "55",
+            "low": 931.31,
+            "allow": 948.19,
+            "bcbs": 1053.54
+        }, {
+            "age": "56",
+            "low": 974.33,
+            "allow": 991.99,
+            "bcbs": 1102.21
+        }, {
+            "age": "57",
+            "low": 1017.76,
+            "allow": 1036.21,
+            "bcbs": 1151.34
+        }, {
+            "age": "58",
+            "low": 1064.12,
+            "allow": 1083.4,
+            "bcbs": 1203.78
+        }, {
+            "age": "59",
+            "low": 1087.09,
+            "allow": 1106.78,
+            "bcbs": 1229.76
+        }, {
+            "age": "60",
+            "low": 1133.44,
+            "allow": 1153.99,
+            "bcbs": 1282.21
+        }, {
+            "age": "61",
+            "low": 1173.54,
+            "allow": 1194.8,
+            "bcbs": 1327.56
+        }, {
+            "age": "62",
+            "low": 1199.85,
+            "allow": 1221.59,
+            "bcbs": 1357.32
+        }, {
+            "age": "63",
+            "low": 1232.84,
+            "allow": 1255.19,
+            "bcbs": 1394.65
+        }, {
+            "age": "64+",
+            "low": 1252.89,
+            "allow": 1275.59,
+            "bcbs": 1417.32
+        }, {
+            "age": "Oldest / youngest allowance",
+            "low": 3,
+            "allow": "Meets 3:1",
+            "bcbs": null
+        }],
+        "RA8": [{
+            "age": "Under 21",
+            "low": 265.86,
+            "allow": 301.81
+        }, {
+            "age": "21",
+            "low": 298.72,
+            "allow": 301.81
+        }, {
+            "age": "22",
+            "low": 298.72,
+            "allow": 301.81
+        }, {
+            "age": "23",
+            "low": 298.72,
+            "allow": 301.81
+        }, {
+            "age": "24",
+            "low": 298.72,
+            "allow": 301.81
+        }, {
+            "age": "25",
+            "low": 299.91,
+            "allow": 303.02
+        }, {
+            "age": "26",
+            "low": 305.89,
+            "allow": 309.05
+        }, {
+            "age": "27",
+            "low": 313.06,
+            "allow": 316.3
+        }, {
+            "age": "28",
+            "low": 324.71,
+            "allow": 328.07
+        }, {
+            "age": "29",
+            "low": 334.27,
+            "allow": 337.73
+        }, {
+            "age": "30",
+            "low": 339.05,
+            "allow": 342.56
+        }, {
+            "age": "31",
+            "low": 346.22,
+            "allow": 349.79
+        }, {
+            "age": "32",
+            "low": 353.39,
+            "allow": 357.04
+        }, {
+            "age": "33",
+            "low": 357.87,
+            "allow": 361.57
+        }, {
+            "age": "34",
+            "low": 362.65,
+            "allow": 366.4
+        }, {
+            "age": "35",
+            "low": 365.04,
+            "allow": 368.81
+        }, {
+            "age": "36",
+            "low": 367.43,
+            "allow": 371.22
+        }, {
+            "age": "37",
+            "low": 369.82,
+            "allow": 373.64
+        }, {
+            "age": "38",
+            "low": 372.2,
+            "allow": 376.06
+        }, {
+            "age": "39",
+            "low": 376.98,
+            "allow": 380.88
+        }, {
+            "age": "40",
+            "low": 381.76,
+            "allow": 385.71
+        }, {
+            "age": "41",
+            "low": 388.93,
+            "allow": 392.96
+        }, {
+            "age": "42",
+            "low": 395.8,
+            "allow": 399.9
+        }, {
+            "age": "43",
+            "low": 405.36,
+            "allow": 409.55
+        }, {
+            "age": "44",
+            "low": 417.31,
+            "allow": 421.63
+        }, {
+            "age": "45",
+            "low": 431.35,
+            "allow": 435.82
+        }, {
+            "age": "46",
+            "low": 448.08,
+            "allow": 452.72
+        }, {
+            "age": "47",
+            "low": 466.9,
+            "allow": 471.73
+        }, {
+            "age": "48",
+            "low": 488.41,
+            "allow": 493.46
+        }, {
+            "age": "49",
+            "low": 509.62,
+            "allow": 514.89
+        }, {
+            "age": "50",
+            "low": 533.51,
+            "allow": 539.03
+        }, {
+            "age": "51",
+            "low": 557.11,
+            "allow": 562.88
+        }, {
+            "age": "52",
+            "low": 583.1,
+            "allow": 589.13
+        }, {
+            "age": "53",
+            "low": 609.39,
+            "allow": 615.69
+        }, {
+            "age": "54",
+            "low": 637.77,
+            "allow": 644.36
+        }, {
+            "age": "55",
+            "low": 666.15,
+            "allow": 673.04
+        }, {
+            "age": "56",
+            "low": 696.91,
+            "allow": 704.12
+        }, {
+            "age": "57",
+            "low": 727.98,
+            "allow": 735.51
+        }, {
+            "age": "58",
+            "low": 761.14,
+            "allow": 769.01
+        }, {
+            "age": "59",
+            "low": 777.57,
+            "allow": 785.61
+        }, {
+            "age": "60",
+            "low": 810.73,
+            "allow": 819.11
+        }, {
+            "age": "61",
+            "low": 839.4,
+            "allow": 848.09
+        }, {
+            "age": "62",
+            "low": 858.22,
+            "allow": 867.1
+        }, {
+            "age": "63",
+            "low": 881.82,
+            "allow": 890.95
+        }, {
+            "age": "64+",
+            "low": 896.16,
+            "allow": 905.42
+        }, {
+            "age": "Oldest / youngest allowance",
+            "low": 3,
+            "allow": "Meets 3:1"
+        }]
+    };
+    const PLANS = {
+        RA1: {
+            low: "Medica Solo Bronze A",
+            bcbs: "Blue Plus Southeast MN Bronze HSA"
+        },
+        RA3: {
+            low: "Medica Solo Bronze A",
+            bcbs: "Blue Plus Southeast MN Bronze HSA"
+        },
+        RA8: {
+            low: "Blue Plus Metro MN Bronze HSA"
+        }
+    };
+    const fmt = n => "$" + n.toLocaleString("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+    const net = (p, a) => Math.max(0, p - a);
+    const areaSel = document.getElementById("area"),
+        ageSel = document.getElementById("age");
+    DATA.RA3.forEach(r => {
+        const o = document.createElement("option");
+        o.value = r.age;
+        o.textContent = r.age;
+        ageSel.appendChild(o);
+    });
+    ageSel.value = "40";
+
+    function planCard(name, tag, prem, allow) {
+        return `<div class="plan"><h3>${name} <span class="tag">${tag}</span></h3>
+  <div class="math"><div><small>Plan price</small><strong>${fmt(prem)}</strong></div>
+  <div><small>Shattuck pays</small><strong>${fmt(Math.min(allow,prem))}</strong></div>
+  <div class="you"><small>You pay</small><strong>${fmt(net(prem,allow))}</strong></div></div></div>`;
+    }
+
+    function renderCalc() {
+        const ra = areaSel.value,
+            row = DATA[ra].find(r => r.age === ageSel.value),
+            p = PLANS[ra];
+        let html = planCard(p.low, ra === "RA8" ? "Lowest-cost Bronze · Blue Cross" : "Lowest-cost Bronze", row.low, row.allow);
+        if (row.bcbs) html += planCard(p.bcbs, "Blue Cross Bronze with HSA", row.bcbs, row.allow);
+        document.getElementById("results").innerHTML = html;
+    }
+
+    function renderTable(ra) {
+        const p = PLANS[ra],
+            two = !!p.bcbs,
+            sel = ageSel.value;
+        document.getElementById("tblnote").textContent = two ?
+            `Allowance is the same for both plans. Plans shown: ${p.low} (lowest cost) and ${p.bcbs}.` :
+            `Plan shown: ${p.low}, the lowest-cost Bronze plan in this area.`;
+        let h = `<thead><tr><th>Age</th><th>Shattuck allowance</th><th>${two?"Lowest-cost Bronze":"Bronze plan price"}</th><th>You pay</th>${two?"<th>Blue Cross Bronze HSA</th><th>You pay</th>":""}</tr></thead><tbody>`;
+        DATA[ra].forEach(r => {
+            if (typeof r.allow === "string") { // ratio check row, not a price row
+                h += `<tr><td>${r.age}</td><td colspan="${two?5:3}" style="text-align:left">${r.allow}</td></tr>`;
+                return;
+            }
+            h += `<tr class="${r.age===sel?"hl":""}"><td>${r.age}</td><td>${fmt(r.allow)}</td><td>${fmt(r.low)}</td><td class="you">${fmt(net(r.low,r.allow))}</td>${two?`<td>${fmt(r.bcbs)}</td><td class="you">${fmt(net(r.bcbs,r.allow))}</td>`:""}</tr>`;
+        });
+        document.getElementById("tbl").innerHTML = h + "</tbody>";
+    }
+    let tabRA = "RA3";
+
+    function selectTab(ra) {
+        tabRA = ra;
+        document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.ra === ra ? "true" : "false"));
+        renderTable(ra);
+    }
+    document.getElementById("tabs").addEventListener("click", e => {
+        const b = e.target.closest("button");
+        if (b) selectTab(b.dataset.ra);
+    });
+    areaSel.addEventListener("change", () => {
+        renderCalc();
+        selectTab(areaSel.value);
+    });
+    ageSel.addEventListener("change", () => {
+        renderCalc();
+        renderTable(tabRA);
+    });
+    renderCalc();
+    selectTab("RA3");
+</script>
