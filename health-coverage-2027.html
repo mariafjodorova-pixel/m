@@ -61,8 +61,17 @@
     }
 
     .wrap {
-        max-width: 1440px;
+        max-width: 1600px;
         margin: 0 auto
+    }
+
+    /* Makes a content-sized host expand to the available width (up to max-width) */
+    .wrap::before {
+        content: "";
+        display: block;
+        height: 0;
+        width: 1600px;
+        max-width: 100%
     }
 
     .page,
@@ -86,45 +95,51 @@
     }
 
     /* Wide layout: use the horizontal space instead of one tall column */
-    @media (min-width: 1000px) {
-        .page {
+    /* is-wide */
+    .wrap.is-wide .page {
             gap: 28px
         }
 
-        .top {
+    
+    .wrap.is-wide .top {
             display: grid;
             grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
             gap: 32px;
             align-items: center
         }
 
-        .main {
+    
+    .wrap.is-wide .main {
             display: grid;
             grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
             gap: 28px;
             align-items: start
         }
 
-        .main .tablebox {
+    
+    .wrap.is-wide .main .tablebox {
             max-height: 390px
         }
 
-        .main .tabs button {
+    
+    .wrap.is-wide .main .tabs button {
             padding: 7px 11px;
             font-size: .86rem
         }
 
-        .card ul.notes {
+    
+    .wrap.is-wide .card ul.notes {
             display: block;
             column-count: 2;
             column-gap: 40px
         }
 
-        .card ul.notes li {
+    
+    .wrap.is-wide .card ul.notes li {
             break-inside: avoid;
             margin-bottom: 8px
         }
-    }
+
 
     h1,
     h2 {
@@ -204,11 +219,11 @@
         font-size: .85rem
     }
 
-    @media (max-width:640px) {
-        .steps {
+    /* is-sm */
+    .wrap.is-sm .steps {
             grid-template-columns: 1fr
         }
-    }
+
 
     .calc {
         display: flex;
@@ -222,11 +237,11 @@
         gap: 14px
     }
 
-    @media (max-width:560px) {
-        .fields {
+    /* is-xs */
+    .wrap.is-xs .fields {
             grid-template-columns: 1fr
         }
-    }
+
 
     label {
         display: flex;
@@ -311,27 +326,31 @@
         color: var(--good)
     }
 
-    @media (max-width:480px) {
-        .math {
+    /* is-xxs */
+    .wrap.is-xxs .math {
             gap: 6px
         }
 
-        .math div {
+    
+    .wrap.is-xxs .math div {
             padding: 8px
         }
 
-        .math small {
+    
+    .wrap.is-xxs .math small {
             font-size: .74rem
         }
 
-        .math strong {
+    
+    .wrap.is-xxs .math strong {
             font-size: 1.02rem
         }
 
-        .plan {
+    
+    .wrap.is-xxs .plan {
             padding: 12px
         }
-    }
+
 
     .tabs {
         display: flex;
@@ -419,55 +438,59 @@
     }
 
     /* Phones */
-    @media (max-width:560px) {
-        body {
-            padding-block: 20px 32px
-        }
-
-        .card {
+    /* is-xs */
+    .wrap.is-xs .card {
             padding: 16px
         }
 
-        .page,
-        .col,
-        .top,
-        .main {
+    
+    .wrap.is-xs .page,
+        .wrap.is-xs .col,
+        .wrap.is-xs .top,
+        .wrap.is-xs .main {
             gap: 18px
         }
 
-        .step {
+    
+    .wrap.is-xs .step {
             flex-direction: row;
             flex-wrap: wrap;
             align-items: center;
             column-gap: 10px
         }
 
-        .step .stepnum {
+    
+    .wrap.is-xs .step .stepnum {
             flex: none
         }
 
-        .step span {
+    
+    .wrap.is-xs .step span {
             flex-basis: 100%
         }
 
-        .tabs button {
+    
+    .wrap.is-xs .tabs button {
             flex: 1 1 100%;
             text-align: left
         }
 
-        th,
-        td {
+    
+    .wrap.is-xs th,
+        .wrap.is-xs td {
             padding: 8px
         }
 
-        table {
+    
+    .wrap.is-xs table {
             font-size: .86rem
         }
 
-        .tablebox {
+    
+    .wrap.is-xs .tablebox {
             max-height: 420px
         }
-    }
+
 
     @media (prefers-reduced-motion:no-preference) {
         .plan {
@@ -1280,4 +1303,18 @@
     });
     renderCalc();
     selectTab("RA3");
+
+    // Adapt the layout to the width of the container this page is placed in
+    (function() {
+        const wrap = document.querySelector(".wrap");
+        const sizes = [["is-wide", w => w >= 900], ["is-sm", w => w <= 640], ["is-xs", w => w <= 560], ["is-xxs", w => w <= 480]];
+
+        function fit() {
+            const w = wrap.getBoundingClientRect().width;
+            sizes.forEach(([c, test]) => wrap.classList.toggle(c, test(w)));
+        }
+        fit();
+        if ("ResizeObserver" in window) new ResizeObserver(fit).observe(wrap);
+        else window.addEventListener("resize", fit);
+    })();
 </script>
