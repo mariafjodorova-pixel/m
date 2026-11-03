@@ -61,7 +61,7 @@
     }
 
     .wrap {
-        max-width: 1280px;
+        max-width: 1440px;
         margin: 0 auto
     }
 
@@ -105,13 +105,24 @@
             align-items: start
         }
 
-        .col.sticky {
-            position: sticky;
-            top: 16px
+        .main .tablebox {
+            max-height: 390px
         }
 
-        .tablebox {
-            max-height: min(70vh, 720px)
+        .main .tabs button {
+            padding: 7px 11px;
+            font-size: .86rem
+        }
+
+        .card ul.notes {
+            display: block;
+            column-count: 2;
+            column-gap: 40px
+        }
+
+        .card ul.notes li {
+            break-inside: avoid;
+            margin-bottom: 8px
         }
     }
 
@@ -508,19 +519,9 @@
         <p class="note">Employee-only coverage, monthly amounts, 2027 rates. If the plan costs less than your allowance, you pay $0.</p>
     </section>
 
-    <section class="card" aria-labelledby="good-h" style="display:flex;flex-direction:column;gap:12px">
-        <h2 id="good-h">Good to know</h2>
-        <ul class="notes">
-            <li>These are examples using the lowest-cost Bronze plans. You can choose any plan available where you live. If you pick a plan that costs more than your allowance, you pay the difference.</li>
-            <li>The Blue Plus Bronze HSA plans can be paired with a Health Savings Account (HSA), which lets you set aside money tax-free for medical costs.</li>
-            <li>Your allowance does not roll over. If your plan costs less than your allowance, the unused amount is not paid to you.</li>
-            <li>These examples are for you only. Adding a spouse or children changes both the plan price and your allowance. Contact HR for family examples.</li>
-            <li>Rates are 2027 Minnesota individual-market rates for non-tobacco users.</li>
-        </ul>
-    </section>
     </div>
 
-    <div class="col sticky">
+    <div class="col">
     <section aria-labelledby="tbl-h" style="display:flex;flex-direction:column;gap:14px">
         <h2 id="tbl-h">Full rate tables by area</h2>
         <div class="tabs" role="tablist" id="tabs">
@@ -535,6 +536,16 @@
     </section>
     </div>
     </div>
+    <section class="card" aria-labelledby="good-h" style="display:flex;flex-direction:column;gap:12px">
+        <h2 id="good-h">Good to know</h2>
+        <ul class="notes">
+            <li>These are examples using the lowest-cost Bronze plans. You can choose any plan available where you live. If you pick a plan that costs more than your allowance, you pay the difference.</li>
+            <li>The Blue Plus Bronze HSA plans can be paired with a Health Savings Account (HSA), which lets you set aside money tax-free for medical costs.</li>
+            <li>Your allowance does not roll over. If your plan costs less than your allowance, the unused amount is not paid to you.</li>
+            <li>These examples are for you only. Adding a spouse or children changes both the plan price and your allowance. Contact HR for family examples.</li>
+            <li>Rates are 2027 Minnesota individual-market rates for non-tobacco users.</li>
+        </ul>
+    </section>
 </div></div>
 
 <script>
