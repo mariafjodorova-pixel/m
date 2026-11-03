@@ -123,6 +123,10 @@
         }
 
     
+    .wrap.is-wide .fields {
+        grid-template-columns: 1fr
+    }
+
     .wrap.is-wide .main .tablebox {
             max-height: 390px
         }
@@ -239,7 +243,7 @@
 
     .fields {
         display: grid;
-        grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr) 112px;
         gap: 14px
     }
 
@@ -1249,7 +1253,7 @@
     const net = (p, a) => Math.max(0, p - a);
     const areaSel = document.getElementById("area"),
         ageSel = document.getElementById("age");
-    DATA.RA3.forEach(r => {
+    DATA.RA3.filter(r => typeof r.allow !== "string").forEach(r => {
         const o = document.createElement("option");
         o.value = r.age;
         o.textContent = r.age;
@@ -1289,8 +1293,25 @@
             h += `<tr class="${r.age===sel?"hl":""}"><td>${r.age}</td><td>${fmt(r.allow)}</td><td>${fmt(r.low)}</td><td class="you">${fmt(net(r.low,r.allow))}</td>${two?`<td>${fmt(r.bcbs)}</td><td class="you">${fmt(net(r.bcbs,r.allow))}</td>`:""}</tr>`;
         });
         document.getElementById("tbl").innerHTML = h + "</tbody>";
+        scrollToAge(false);
     }
     let tabRA = "RA3";
+
+    // Scroll the rate table (inside its own box only) so the selected age row is in view
+    function scrollToAge(smooth) {
+        const box = document.querySelector(".tablebox"),
+            row = box && box.querySelector("tr.hl");
+        if (!row) return;
+        const head = box.querySelector("thead"),
+            headH = head ? head.offsetHeight : 0;
+        const delta = row.getBoundingClientRect().top - box.getBoundingClientRect().top;
+        const top = box.scrollTop + delta - headH - (box.clientHeight - headH - row.offsetHeight) / 2;
+        const reduce = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+        box.scrollTo({
+            top: Math.max(0, top),
+            behavior: smooth && !reduce ? "smooth" : "auto"
+        });
+    }
 
     function selectTab(ra) {
         tabRA = ra;
@@ -1308,6 +1329,7 @@
     ageSel.addEventListener("change", () => {
         renderCalc();
         renderTable(tabRA);
+        scrollToAge(true);
     });
     renderCalc();
     selectTab("RA3");
