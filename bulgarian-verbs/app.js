@@ -43,6 +43,7 @@
       noAspInMode: "Вид в этом режиме выбирает задание, поэтому переключателя вида здесь нет.",
       hasT: "Вопросы этого режима есть только для времён:",
       pickT: "Или выберите время и прочитайте о нём",
+      exTense: "Примеры в этом времени", exModel: "Примеры времени", exNone: "В списке нет предложения с этим глаголом в выбранном времени. Вот примеры времени с другими глаголами.",
       say: "Произнести", ttsNo: "Озвучка недоступна: в этом браузере нет болгарского голоса.", close: "Закрыть",
       ttsH: "Озвучка", ttsOff: "Только голос системы", ttsGoogle: "Google (без ключа)", ttsEleven: "ElevenLabs (свой ключ)",
       ttsPrivacy: "Онлайн-озвучка отправляет озвучиваемый болгарский текст выбранному сервису. Ключ хранится только в этом браузере.",
@@ -91,6 +92,7 @@
       noAspInMode: "В този режим видът е част от задачата, затова тук няма превключвател за вид.",
       hasT: "В този режим има въпроси само за времената:",
       pickT: "Или изберете време и прочетете за него",
+      exTense: "Примери в това време", exModel: "Примери за времето", exNone: "В списъка няма изречение с този глагол в избраното време. Ето примери за времето с други глаголи.",
       say: "Произнеси", ttsNo: "Озвучаването не е достъпно: в този браузър няма български глас.", close: "Затвори",
       ttsH: "Озвучаване", ttsOff: "Само гласът на системата", ttsGoogle: "Google (без ключ)", ttsEleven: "ElevenLabs (собствен ключ)",
       ttsPrivacy: "Онлайн озвучаването изпраща българския текст на избраната услуга. Ключът се пази само в този браузър.",
@@ -302,10 +304,48 @@
 
   function quote(bg, ru) { return '<div class="quote"><span class="bgt">' + bg + sayBtn(bg) + '</span><span class="tr">' + esc(ru) + "</span></div>"; }
   function trToggle() { return '<label class="trt"><input type="checkbox" class="trbox"' + (S.tr ? " checked" : "") + "> " + t("tr") + "</label>"; }
-  function examplesPanel(v) {
-    if (!v.ex || !v.ex.length) return "";
-    return '<div class="panel ex b-ex"><div class="ex-head"><h3 class="label">' + t("examples") + "</h3>" + trToggle() + "</div>" +
-      v.ex.map(function (e) { return quote(highlight(e[0], v), e[1]); }).join("") + "</div>";
+  function examplesPanel(v, tid) {
+    if (!tid) {
+      if (!v.ex || !v.ex.length) return "";
+      return '<div class="panel ex b-ex"><div class="ex-head"><h3 class="label">' + t("examples") + "</h3>" + trToggle() + "</div>" +
+        v.ex.map(function (e) { return quote(highlight(e[0], v), e[1]); }).join("") + "</div>";
+    }
+    // the builder: sentences of this verb whose verb form is in the chosen tense; otherwise model sentences of the tense
+    var tn = TBY[tid], own = (v.ex || []).filter(function (e) { return exampleTenses(e[0], v).indexOf(tid) >= 0; });
+    if (own.length) {
+      return '<div class="panel ex b-ex"><div class="ex-head"><h3 class="label">' + t("exTense") + "</h3>" + trToggle() + "</div>" +
+        own.map(function (e) { return quote(highlight(e[0], v), e[1]); }).join("") + "</div>";
+    }
+    return '<div class="panel ex b-ex"><div class="ex-head"><h3 class="label">' + t("exModel") + " · " + shortName(tn) + "</h3>" + trToggle() + "</div>" +
+      '<p class="muted small">' + t("exNone") + "</p>" +
+      tn.examples.map(function (e) { return quote(e[0], e[1]); }).join("") + "</div>";
+  }
+  /* the tenses in which the verb of the pair stands in a sentence (by the words before it) */
+  function exampleTenses(text, v) {
+    var w = text.split(/([А-Яа-яЍѝ]+)/), found = [];
+    for (var k = 1; k < w.length; k += 2) {
+      var lw = w[k].toLowerCase();
+      [v.impf, v.pf].forEach(function (f, a) {
+        if (!f) return;
+        var keys = keysOf(f, lw);
+        if (!keys.length) return;
+        var prev = before(w, k, false), fut = prev[0] === "ще" || prev[0] === "да" || prev[0] === "няма" || prev[0] === "нямаше";
+        var kinds = keys.map(function (k) { return k.split("|")[0]; });
+        // the same word is both present and aorist (връща, вдига): aorist only when the sentence is clearly about the past
+        var pastWord = /(^| )(вчера|снощи|миналата|миналия|миналото|преди|тогава|веднъж|някога)( |$)/.test(clauseOf(w, k));
+        keys.forEach(function (key) {
+          var kind = key.split("|")[0];
+          if ((kind === "aor" || kind === "imp") && (prev[0] === "ще" || prev[0] === "да")) return;
+          if (kind === "impv" && (prev[0] === "ще" || prev[0] === "да")) return;
+          if (kind === "aor" && kinds.indexOf("pres") >= 0 && !pastWord) return;
+          if (kind === "impv" && kinds.indexOf("pres") >= 0 && prev[0] !== "не" && w[k + 1] && /^[!]/.test(w[k + 1]) === false && prev.length && prev[0] !== "не") { /* an imperative form that is also a present form: only if it opens the clause */ if (prev.length) return; }
+          if (kind === "pres" && a === 1 && !(prev[0] === "ще" || prev[0] === "да" || TRIG[prev[0]])) return;
+          var tn = tenseOfBlank(key, prev);
+          if (tn && found.indexOf(tn) < 0) found.push(tn);
+        });
+      });
+    }
+    return found;
   }
 
   function cellText(tid, v, pf, i, gender, neg, o) {
@@ -443,7 +483,7 @@
       (o ? '<p class="t-note">' + t("sentNote") + "</p>" : "") +
       '<div class="b-meta"><span><b>' + L(tn.name) + "</b> · " + (S.lang === "ru" ? "≈ " + G.RUEQ[tn.id] : L(tn.short)) + '</span><button class="link" data-totense="' + tn.id + '">' + t("aboutTense") + "</button></div></div>";
 
-    $("pane-form").innerHTML = '<div class="builder"><div class="b-col left">' + verb + ctl + examplesPanel(v) + '</div><div class="b-col right">' + table + "</div></div>";
+    $("pane-form").innerHTML = '<div class="builder"><div class="b-col left">' + verb + ctl + examplesPanel(v, B.tense) + '</div><div class="b-col right">' + table + "</div></div>";
     if (B.picking) { var q = $("bq"); q.focus(); q.setSelectionRange(q.value.length, q.value.length); }
   }
 
