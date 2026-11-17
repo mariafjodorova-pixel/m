@@ -35,18 +35,10 @@
   }
 
   body { background: var(--bg); color: var(--fg); font-family: var(--font); }
-  .page {
-    max-width: 760px; margin: 0 auto;
-    padding-block: 24px 40px;
-    padding-left: max(16px, env(safe-area-inset-left, 0px));
-    padding-right: max(16px, env(safe-area-inset-right, 0px));
-  }
-  h1 { font-size: 20px; line-height: 1.25; font-weight: 600; margin: 0 0 4px; text-wrap: balance; }
-  .sub { margin: 0 0 20px; color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 62ch; }
+  .page { margin: 0; padding: 0; }
 
   .chart { position: relative; }
-  .scroll { overflow-x: auto; }
-  svg { display: block; width: 100%; min-width: 600px; height: auto; font-family: var(--font); }
+  svg { display: block; width: 100%; height: auto; font-family: var(--font); }
   svg text { fill: var(--fg); font-size: 12.5px; }
   .axis-title { font-weight: 600; }
   .muted { fill: var(--muted); }
@@ -66,38 +58,17 @@
   .tip.on { opacity: 1; }
   .tip b { font-weight: 600; display: block; }
 
-  details { margin-top: 20px; border-top: 1px solid var(--rule); padding-top: 12px; }
-  summary { cursor: pointer; font-size: 13px; font-weight: 500; }
-  .tbl { overflow-x: auto; margin-top: 10px; }
-  table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
-  th, td { text-align: left; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--rule); white-space: nowrap; }
-  th { font-weight: 600; color: var(--muted); font-size: 12px; }
-  td:nth-child(n+2), th:nth-child(n+2) { text-align: right; }
-  .note { color: var(--muted); font-size: 12px; margin: 10px 0 0; }
 </style>
 
 <style>html{color-scheme:light dark}body{margin:0}</style>
 </head>
 <body>
 <main class="page">
-  <h1>Extra jobs by sector</h1>
-  <p class="sub">Extra jobs against their share of each sector's 2025 employment. Bubble area shows 2025 employment. Sectors in the shaded corner are above average on both measures.</p>
 
   <div class="chart" id="chart">
-    <div class="scroll"><svg id="svg" role="img" aria-label="Bubble chart of extra jobs in thousands against extra jobs as a share of each sector's 2025 total, for twelve manufacturing sectors. Transportation equipment is highest on both axes."></svg></div>
+    <div><svg id="svg" role="img" aria-label="Bubble chart of extra jobs in thousands against extra jobs as a share of each sector's 2025 total, for twelve manufacturing sectors. Transportation equipment is highest on both axes."></svg></div>
     <div class="tip" id="tip" role="status"></div>
   </div>
-
-  <details>
-    <summary>View as table</summary>
-    <div class="tbl">
-      <table>
-        <thead><tr><th>Sector</th><th>Extra jobs (thousand)</th><th>Share of 2025 total (%)</th></tr></thead>
-        <tbody id="rows"></tbody>
-      </table>
-    </div>
-    <p class="note">Values are read off the original chart by eye, so treat them as approximate.</p>
-  </details>
 </main>
 
 <script>
@@ -215,14 +186,6 @@
     d.lab.forEach(function (t, i) {
       el("text", { x: cx + d.dx, y: cy + d.dy + i * 14, "text-anchor": d.a, "pointer-events": "none" }, null, t);
     });
-  });
-
-  // Table fallback.
-  var rows = document.getElementById("rows");
-  D.slice().sort(function (a, b) { return b.y - a.y; }).forEach(function (d) {
-    var tr = document.createElement("tr");
-    tr.innerHTML = "<td>" + d.n + "</td><td>~" + d.y + "</td><td>~" + d.x.toFixed(1) + "</td>";
-    rows.appendChild(tr);
   });
 })();
 </script>
