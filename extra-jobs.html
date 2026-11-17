@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Extra Jobs by Sector</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one bubble chart, drawn to scale in SVG, with a table fallback underneath. */
+  :root {
+    --bg: #ffffff;
+    --fg: #101820;
+    --muted: #5b6672;
+    --axis: #1a232c;
+    --band: #eceff2;
+    --dash: #1a232c;
+    --bubble: #10bff0;
+    --ring: #ffffff;
+    --tip-bg: #101820;
+    --tip-fg: #f4f7f9;
+    --rule: #dde2e7;
+    --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0e1419; --fg: #eef2f5; --muted: #98a4af; --axis: #c5ced6; --band: #1a232b;
+      --dash: #c5ced6; --bubble: #19c3f3; --ring: #0e1419; --tip-bg: #eef2f5; --tip-fg: #0e1419;
+      --rule: #27323b; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0e1419; --fg: #eef2f5; --muted: #98a4af; --axis: #c5ced6; --band: #1a232b;
+    --dash: #c5ced6; --bubble: #19c3f3; --ring: #0e1419; --tip-bg: #eef2f5; --tip-fg: #0e1419;
+    --rule: #27323b; color-scheme: dark;
+  }
+
+  body { background: var(--bg); color: var(--fg); font-family: var(--font); }
+  .page {
+    max-width: 760px; margin: 0 auto;
+    padding-block: 24px 40px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  h1 { font-size: 20px; line-height: 1.25; font-weight: 600; margin: 0 0 4px; text-wrap: balance; }
+  .sub { margin: 0 0 20px; color: var(--muted); font-size: 13px; line-height: 1.5; max-width: 62ch; }
+
+  .chart { position: relative; }
+  .scroll { overflow-x: auto; }
+  svg { display: block; width: 100%; min-width: 600px; height: auto; font-family: var(--font); }
+  svg text { fill: var(--fg); font-size: 12.5px; }
+  .axis-title { font-weight: 600; }
+  .muted { fill: var(--muted); }
+  .ital { font-style: italic; }
+  .bubble { fill: var(--bubble); stroke: var(--ring); stroke-width: 2; cursor: pointer; outline: none; }
+  .bubble:hover, .bubble:focus-visible { stroke: var(--fg); stroke-width: 2.5; }
+  .leader { stroke: var(--axis); stroke-width: 1; fill: none; }
+  .avg { stroke: var(--dash); stroke-width: 1; stroke-dasharray: 3 3; fill: none; }
+
+  .tip {
+    position: absolute; pointer-events: none; z-index: 5;
+    background: var(--tip-bg); color: var(--tip-fg);
+    font-size: 12px; line-height: 1.45; padding: 7px 10px; border-radius: 6px;
+    white-space: nowrap; opacity: 0; transition: opacity .08s;
+    font-variant-numeric: tabular-nums;
+  }
+  .tip.on { opacity: 1; }
+  .tip b { font-weight: 600; display: block; }
+
+  details { margin-top: 20px; border-top: 1px solid var(--rule); padding-top: 12px; }
+  summary { cursor: pointer; font-size: 13px; font-weight: 500; }
+  .tbl { overflow-x: auto; margin-top: 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+  th { font-weight: 600; color: var(--muted); font-size: 12px; }
+  td:nth-child(n+2), th:nth-child(n+2) { text-align: right; }
+  .note { color: var(--muted); font-size: 12px; margin: 10px 0 0; }
+</style>
+
+<style>html{color-scheme:light dark}body{margin:0}</style>
+</head>
+<body>
+<main class="page">
+  <h1>Extra jobs by sector</h1>
+  <p class="sub">Extra jobs against their share of each sector's 2025 employment. Bubble area shows 2025 employment. Sectors in the shaded corner are above average on both measures.</p>
+
+  <div class="chart" id="chart">
+    <div class="scroll"><svg id="svg" role="img" aria-label="Bubble chart of extra jobs in thousands against extra jobs as a share of each sector's 2025 total, for twelve manufacturing sectors. Transportation equipment is highest on both axes."></svg></div>
+    <div class="tip" id="tip" role="status"></div>
+  </div>
+
+  <details>
+    <summary>View as table</summary>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>Sector</th><th>Extra jobs (thousand)</th><th>Share of 2025 total (%)</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p class="note">Values are read off the original chart by eye, so treat them as approximate.</p>
+  </details>
+</main>
+
+<script>
+(function () {
+  var NS = "http://www.w3.org/2000/svg";
+  // Plot geometry: 20 px per % on x (0 to 27.5), 1 px per thousand jobs on y (0 to 500).
+  var M = { l: 76, r: 24, t: 18, b: 62 }, PW = 550, PH = 500;
+  var W = M.l + PW + M.r, H = M.t + PH + M.b;
+  var X = function (v) { return M.l + v * 20; };
+  var Y = function (v) { return M.t + PH - v; };
+  var AVG_X = 11.2, AVG_Y = 157;
+
+  // x = share %, y = extra jobs (thousand), r = bubble radius in px (area scales with employment).
+  // lab: label lines, dx/dy offsets from the bubble centre, anchor. ld: optional leader [dx1,dy1,dx2,dy2].
+  var D = [
+    { n: "Transportation equipment", x: 25.2, y: 440, r: 34, lab: ["Transportation", "equipment"], dx: -36, dy: 35, a: "end" },
+    { n: "Furniture/miscellaneous others", x: 21.0, y: 203, r: 24, lab: ["Furniture/", "miscellaneous", "others"], dx: 58, dy: -39, a: "middle" },
+    { n: "Metals", x: 12.0, y: 216, r: 35, lab: ["Metals"], dx: 46, dy: -30, a: "middle" },
+    { n: "Wood/paper", x: 12.8, y: 144, r: 26, lab: ["Wood/", "paper"], dx: 28, dy: 40, a: "middle" },
+    { n: "Plastics/rubber", x: 17.8, y: 128, r: 21, lab: ["Plastics/rubber"], dx: 22, dy: 29, a: "start" },
+    { n: "Electronics", x: 8.2, y: 118, r: 31, lab: ["Electronics"], dx: 0, dy: -37, a: "middle" },
+    { n: "Chemicals", x: 5.6, y: 52, r: 24, lab: ["Chemicals"], dx: 7, dy: -30, a: "middle" },
+    { n: "Textiles/apparel", x: 9.1, y: 30, r: 13, lab: ["Textiles/", "apparel"], dx: 0, dy: -33, a: "middle" },
+    { n: "Food/beverages", x: 2.2, y: 58, r: 38, lab: ["Food/beverages"], dx: -21, dy: -64, a: "start", ld: [-2, -60, -2, -37] },
+    { n: "Machinery", x: 2.8, y: 34, r: 27, lab: ["Machinery"], dx: -5, dy: -69, a: "start", ld: [15, -65, 15, -12] },
+    { n: "Nonmetallic minerals", x: 2.2, y: 14, r: 14, lab: ["Nonmetallic minerals"], dx: 49, dy: 6, a: "start", ld: [14, 2, 46, 2] },
+    { n: "Petroleum/coal", x: 0.6, y: 4, r: 7, lab: ["Petroleum/coal"], dx: -2, dy: -136, a: "start", ld: [0, -130, 0, -7] }
+  ];
+  // Draw big bubbles first so small ones sit on top where they overlap.
+  var order = D.slice().sort(function (a, b) { return b.r - a.r; });
+
+  var svg = document.getElementById("svg");
+  svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+
+  function el(tag, attrs, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    (parent || svg).appendChild(e);
+    return e;
+  }
+
+  // Shaded corner: above both averages.
+  el("rect", { x: X(AVG_X), y: Y(500), width: X(27.5) - X(AVG_X), height: Y(AVG_Y) - Y(500), fill: "var(--band)" });
+
+  // Axes and ticks.
+  el("path", { d: "M" + X(0) + " " + Y(500) + "V" + Y(0) + "H" + X(27.5), class: "leader", fill: "none" });
+  [0, 5, 10, 15, 20, 25].forEach(function (v) {
+    el("line", { x1: X(v), x2: X(v), y1: Y(0), y2: Y(0) + 5, class: "leader" });
+    el("text", { x: X(v), y: Y(0) + 20, "text-anchor": "middle", class: "muted" }, null, v);
+  });
+  [100, 200, 300, 400, 500].forEach(function (v) {
+    el("line", { x1: X(0) - 5, x2: X(0), y1: Y(v), y2: Y(v), class: "leader" });
+    el("text", { x: X(0) - 9, y: Y(v) + 4, "text-anchor": "end", class: "muted" }, null, v);
+  });
+  el("text", { x: X(0) - 9, y: Y(0) + 4, "text-anchor": "end", class: "muted" }, null, "0");
+  el("text", { x: X(13.75), y: Y(0) + 48, "text-anchor": "middle", class: "axis-title" }, null, "Extra jobs as share of sector’s 2025 total, %");
+  var yt = el("text", { "text-anchor": "end", class: "axis-title" });
+  [["Extra", 0], ["jobs,", 15], ["thousand", 30]].forEach(function (p) {
+    var t = el("tspan", { x: X(0) - 12, y: Y(262) + p[1] }, yt, p[0]);
+    if (p[0] === "thousand") t.setAttribute("font-style", "italic");
+  });
+
+  // Average lines.
+  el("line", { x1: X(AVG_X), x2: X(AVG_X), y1: Y(500) + 2, y2: Y(0), class: "avg" });
+  el("line", { x1: X(0), x2: X(27.5) - 8, y1: Y(AVG_Y), y2: Y(AVG_Y), class: "avg" });
+  el("path", { d: "M" + (X(AVG_X) - 4) + " " + (Y(500) + 2) + "h8l-4 7z", fill: "var(--dash)" });
+  el("path", { d: "M" + (X(27.5) - 8) + " " + (Y(AVG_Y) - 4) + "v8l7-4z", fill: "var(--dash)" });
+  el("text", { x: X(AVG_X) + 11, y: Y(500) + 11, class: "ital", "font-size": "12" }, null, "Average");
+  el("text", { x: X(27.5) - 12, y: Y(AVG_Y) - 6, "text-anchor": "end", class: "ital" }, null, "Average");
+
+  // Size legend.
+  var lx = M.l + 20, ly = M.t + 8, lw = 198, lh = 118;
+  el("rect", { x: lx, y: ly, width: lw, height: lh, fill: "var(--bg)", stroke: "var(--axis)", "stroke-width": 1 });
+  el("text", { x: lx + 11, y: ly + 22, "font-size": "12" }, null, "Circle size = employment, 2025");
+  var lcx = lx + 48, lbase = ly + lh - 12;
+  [[36, "2.5 million"], [22.8, "1 million"], [7.2, "100,000"]].forEach(function (c) {
+    el("circle", { cx: lcx, cy: lbase - c[0], r: c[0], fill: "none", stroke: "var(--axis)", "stroke-width": 1, "stroke-dasharray": "2 2" });
+    el("line", { x1: lcx, x2: lx + 82, y1: lbase - 2 * c[0], y2: lbase - 2 * c[0], class: "leader" });
+    el("text", { x: lx + 86, y: lbase - 2 * c[0] + 4 }, null, c[1]);
+  });
+
+  // Bubbles, then labels on top.
+  var tip = document.getElementById("tip"), chart = document.getElementById("chart");
+  function show(d, evt, node) {
+    tip.innerHTML = "<b>" + d.n + "</b>" +
+      "Extra jobs: ~" + d.y + " thousand<br>Share of 2025 total: ~" + d.x.toFixed(1) + "%";
+    var cr = chart.getBoundingClientRect();
+    var br = node.getBoundingClientRect();
+    var px = evt && evt.clientX != null && evt.type.indexOf("pointer") === 0 ? evt.clientX : br.left + br.width / 2;
+    var py = evt && evt.clientY != null && evt.type.indexOf("pointer") === 0 ? evt.clientY : br.top;
+    var left = px - cr.left + 14, top = py - cr.top + 14;
+    tip.classList.add("on");
+    var tw = tip.offsetWidth;
+    if (left + tw > cr.width) left = px - cr.left - tw - 14;
+    tip.style.left = Math.max(0, left) + "px";
+    tip.style.top = top + "px";
+  }
+  function hide() { tip.classList.remove("on"); }
+
+  order.forEach(function (d) {
+    var c = el("circle", {
+      cx: X(d.x), cy: Y(d.y), r: d.r, class: "bubble", tabindex: 0,
+      "aria-label": d.n + ": about " + d.y + " thousand extra jobs, " + d.x.toFixed(1) + " percent of 2025 total"
+    });
+    c.addEventListener("pointermove", function (e) { show(d, e, c); });
+    c.addEventListener("pointerleave", hide);
+    c.addEventListener("focus", function (e) { show(d, e, c); });
+    c.addEventListener("blur", hide);
+  });
+
+  D.forEach(function (d) {
+    var cx = X(d.x), cy = Y(d.y);
+    if (d.ld) el("line", { x1: cx + d.ld[0], y1: cy + d.ld[1], x2: cx + d.ld[2], y2: cy + d.ld[3], class: "leader" });
+    d.lab.forEach(function (t, i) {
+      el("text", { x: cx + d.dx, y: cy + d.dy + i * 14, "text-anchor": d.a, "pointer-events": "none" }, null, t);
+    });
+  });
+
+  // Table fallback.
+  var rows = document.getElementById("rows");
+  D.slice().sort(function (a, b) { return b.y - a.y; }).forEach(function (d) {
+    var tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + d.n + "</td><td>~" + d.y + "</td><td>~" + d.x.toFixed(1) + "</td>";
+    rows.appendChild(tr);
+  });
+})();
+</script>
+
+</body>
+</html>
