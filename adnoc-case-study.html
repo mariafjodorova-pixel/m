@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>investors.adnoc.ae · RELAYTO × ADNOC case study</title>
+    <meta name="description" content="How ADNOC Group Investor Relations and RELAYTO moved from static investor pages to a live, no-code investor hub: the situation before, the problem and the solution.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+    <script type="application/rt-components+json" id="rt-components">
+        {
+  "version": 1,
+  "components": {
+    "stat": {
+      "label": "Key figure", "title": "label", "repeat": true,
+      "fields": [
+        {"name": "figure", "label": "Figure", "type": "text", "maxLength": 8},
+        {"name": "unit", "label": "Unit", "type": "text", "maxLength": 16},
+        {"name": "label", "label": "Label", "type": "text", "maxLength": 70}
+      ]
+    },
+    "fact": {
+      "label": "Fact", "title": "key", "repeat": true,
+      "fields": [
+        {"name": "key", "label": "Label", "type": "text", "maxLength": 24},
+        {"name": "value", "label": "Value", "type": "text", "multiline": true}
+      ]
+    },
+    "challenge": {
+      "label": "Challenge", "title": "name", "repeat": true,
+      "fields": [
+        {"name": "name", "label": "Name", "type": "text", "maxLength": 28},
+        {"name": "line", "label": "One line", "type": "text", "multiline": true}
+      ]
+    },
+    "compare": {
+      "label": "Before and after",
+      "fields": [
+        {"name": "before", "label": "Before picture", "type": "image"},
+        {"name": "beforeLabel", "label": "Before: label", "type": "text", "maxLength": 20},
+        {"name": "beforeUrl", "label": "Before: address and date", "type": "text", "maxLength": 60},
+        {"name": "after", "label": "After picture", "type": "image"},
+        {"name": "afterLabel", "label": "After: label", "type": "text", "maxLength": 20},
+        {"name": "afterUrl", "label": "After: address and date", "type": "text", "maxLength": 60}
+      ]
+    },
+    "shift": {
+      "label": "Change", "title": "to", "repeat": true,
+      "fields": [
+        {"name": "from", "label": "From", "type": "text", "multiline": true},
+        {"name": "to", "label": "To", "type": "text", "multiline": true}
+      ]
+    },
+    "step": {
+      "label": "Screen step", "title": "name", "repeat": true,
+      "fields": [
+        {"name": "n", "label": "Number", "type": "text", "maxLength": 2},
+        {"name": "name", "label": "Name", "type": "text", "maxLength": 32},
+        {"name": "image", "label": "Screenshot", "type": "image"}
+      ]
+    },
+    "chapter": {
+      "label": "Site chapter", "title": "name", "repeat": true,
+      "fields": [
+        {"name": "image", "label": "Screenshot", "type": "image"},
+        {"name": "name", "label": "Name", "type": "text", "maxLength": 32},
+        {"name": "line", "label": "One line", "type": "text", "multiline": true}
+      ]
+    },
+    "feed": {
+      "label": "Live feed", "title": "name", "repeat": true,
+      "fields": [
+        {"name": "image", "label": "Screenshot", "type": "image"},
+        {"name": "name", "label": "Name", "type": "text", "maxLength": 40},
+        {"name": "line", "label": "One line", "type": "text", "multiline": true}
+      ]
+    },
+    "check": {
+      "label": "Control", "title": "name", "repeat": true,
+      "fields": [
+        {"name": "name", "label": "Name", "type": "text", "maxLength": 48},
+        {"name": "line", "label": "One line", "type": "text", "multiline": true}
+      ]
+    },
+    "stage": {
+      "label": "Workflow step", "title": "name", "repeat": true,
+      "fields": [
+        {"name": "when", "label": "Step number", "type": "text", "maxLength": 4},
+        {"name": "name", "label": "Step name", "type": "text", "maxLength": 40},
+        {"name": "key", "label": "Highlight", "type": "toggle", "target": ":scope", "class": "is-key"}
+      ]
+    },
+    "pace": {
+      "label": "Milestone", "title": "when", "repeat": true,
+      "fields": [
+        {"name": "when", "label": "When", "type": "text", "maxLength": 24},
+        {"name": "what", "label": "What", "type": "text", "multiline": true}
+      ]
+    },
+    "point": {
+      "label": "Point", "title": "name", "repeat": true,
+      "fields": [
+        {"name": "name", "label": "Name", "type": "text", "maxLength": 48},
+        {"name": "line", "label": "One line", "type": "text", "multiline": true}
+      ]
+    },
+    "outcome": {
+      "label": "Outcome", "title": "area", "repeat": true,
+      "fields": [
+        {"name": "area", "label": "Area", "type": "text", "maxLength": 24},
+        {"name": "figure", "label": "Figure", "type": "text", "maxLength": 18},
+        {"name": "line", "label": "One line", "type": "text", "multiline": true},
+        {"name": "image", "label": "Picture", "type": "image"},
+        {"name": "indicative", "label": "Indicative figure (adds the * note)", "type": "toggle", "target": ":scope", "class": "is-indicative"}
+      ]
+    },
+    "geo-row": {
+      "label": "Comparison row", "title": "label", "repeat": true,
+      "fields": [
+        {"name": "label", "label": "Check", "type": "text", "maxLength": 40},
+        {"name": "before", "label": "Before", "type": "text", "maxLength": 60},
+        {"name": "after", "label": "investors.adnoc.ae", "type": "text", "maxLength": 80}
+      ]
+    },
+    "ora": {
+      "label": "Agent-readiness note", "title": "name", "repeat": true,
+      "fields": [
+        {"name": "name", "label": "Name", "type": "text", "maxLength": 48},
+        {"name": "line", "label": "One line", "type": "text", "multiline": true}
+      ]
+    },
+    "way": {
+      "label": "Offer", "title": "name", "repeat": true,
+      "fields": [
+        {"name": "name", "label": "Name", "type": "text", "maxLength": 40},
+        {"name": "line", "label": "One line", "type": "text", "multiline": true}
+      ]
+    },
+    "cta": {
+      "label": "Call to action",
+      "fields": [
+        {"name": "label", "label": "Button label", "type": "text", "maxLength": 32},
+        {"name": "href", "label": "Button link", "type": "url", "target": ":scope", "attr": "href"}
+      ]
+    }
+  }
+}
+</script>
+    <link rel="stylesheet" href="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/deck.css">
+    <style>
+        /* short version: six points per slide in a 2 x 3 grid */
+        .s-brief .challenges {
+            grid-template-rows: repeat(3, 1fr)
+        }
+
+        /* solution cards: every description takes two lines, so figures and pictures line up across cards */
+        .s-out .out__line {
+            min-height: 2.76em
+        }
+
+        /* slide arrows: centred vertically on the left and right edges */
+        .chrome {
+            top: 0
+        }
+
+        .chrome__pdf {
+            position: absolute;
+            right: 22px;
+            bottom: 12px
+        }
+
+        .chrome__prev,
+        .chrome__next {
+            position: absolute;
+            top: 50%;
+            width: 56px;
+            height: 56px;
+            margin-top: -28px;
+            transition: background .2s, opacity .25s
+        }
+
+        .chrome__prev {
+            left: 22px
+        }
+
+        .chrome__next {
+            right: 22px
+        }
+
+        .chrome__prev:hover,
+        .chrome__next:hover {
+            transform: none
+        }
+
+        .chrome__prev svg,
+        .chrome__next svg {
+            width: 24px;
+            height: 24px
+        }
+
+        /* white buttons stay readable on the paper and on the cover screenshot */
+        .chrome__btn {
+            background: rgba(255, 255, 255, .92)
+        }
+
+        .chrome__btn:hover {
+            background: #fff
+        }
+
+        .chrome__btn.is-off {
+            opacity: .25;
+            pointer-events: none
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="deck swiper">
+        <div class="swiper-wrapper">
+
+            <!-- 1 · Cover -->
+            <section class="slide swiper-slide s-cover" aria-label="Cover">
+                <div class="frame">
+                    <div class="lockup" data-anim>
+                        <img class="lockup__relayto" src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/brand/relayto-logo.svg" alt="RELAYTO" width="270" height="37">
+                        <span class="lockup__x" aria-hidden="true">×</span>
+                        <img class="lockup__adnoc" src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/brand/adnoc-logo.svg" alt="ADNOC" width="76" height="114">
+                    </div>
+                    <p class="cover__date" data-anim>November 2026</p>
+                    <p class="eyebrow cover__eyebrow" data-anim>Case study · Investor relations</p>
+                    <h1 class="cover__title" data-anim><span class="site">investors.adnoc.ae</span>: the Group's investor story, live and on brand</h1>
+                    <p class="cover__foot" data-anim>Built on RELAYTO with <strong>ADNOC Group Investor Relations</strong>. The first draft took 2 days, and the IR team has edited the site ever since.</p>
+                    <div class="cover__stage cut">
+                        <div class="cover__shutter"><img src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/img/cover.jpg" alt="The investors.adnoc.ae home page" width="2000" height="1150"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 1 · Before the project -->
+            <section class="slide swiper-slide s-brief" aria-label="Before the project">
+                <div class="frame">
+                    <div class="head">
+                        <p class="eyebrow" data-anim>1 · Before the project</p>
+                        <h2 class="h2" data-anim>Investor content lived on the corporate site, with no live data and no analytics</h2>
+                    </div>
+                    <div class="brief__obj" data-anim><img src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/img/obj-slow-lg.jpg" alt="" width="1024" height="1024"></div>
+                    <div class="body">
+                        <ul class="challenges">
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">Corporate release cycle</h3>
+                                <p class="ch__line" data-rt-field="line">Investor pages were a section of adnoc.ae, so every update waited for the next release.</p>
+                            </li>
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">No Euroland integration</h3>
+                                <p class="ch__line" data-rt-field="line">Share data for the six listed companies sat on six separate sites.</p>
+                            </li>
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">No engagement data</h3>
+                                <p class="ch__line" data-rt-field="line">Results and presentations were static PDFs that couldn't be measured.</p>
+                            </li>
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">No visibility</h3>
+                                <p class="ch__line" data-rt-field="line">No view of how investors actually used the content.</p>
+                            </li>
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">High production cost</h3>
+                                <p class="ch__line" data-rt-field="line">Every change needed developer time and resources.</p>
+                            </li>
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">Off brand</h3>
+                                <p class="ch__line" data-rt-field="line">The pages didn't follow ADNOC's new design language.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2 · The problem -->
+            <section class="slide swiper-slide s-brief" aria-label="The problem">
+                <div class="frame">
+                    <div class="head">
+                        <p class="eyebrow" data-anim>2 · The problem</p>
+                        <h2 class="h2" data-anim>The data was outdated, and no one could see what investors cared about</h2>
+                    </div>
+                    <div class="brief__obj" data-anim><img src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/img/obj-agents-lg.jpg" alt="" width="1024" height="1024"></div>
+                    <div class="body">
+                        <ul class="challenges">
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">Outdated data</h3>
+                                <p class="ch__line" data-rt-field="line">Prices, returns and filings on the page lagged behind the market.</p>
+                            </li>
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">No investor insight</h3>
+                                <p class="ch__line" data-rt-field="line">No visibility into what investors actually read and care about.</p>
+                            </li>
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">Split equity story</h3>
+                                <p class="ch__line" data-rt-field="line">The story was spread across press releases and subsidiary pages.</p>
+                            </li>
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">Compliance friction</h3>
+                                <p class="ch__line" data-rt-field="line">Debt content needed a residency check and a disclaimer before access.</p>
+                            </li>
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">Invisible to AI</h3>
+                                <p class="ch__line" data-rt-field="line">AI crawlers were blocked, so search and AI engines couldn't read the pages.</p>
+                            </li>
+                            <li class="ch" data-rt-component="challenge" data-anim>
+                                <h3 class="ch__name" data-rt-field="name">Weak first impression</h3>
+                                <p class="ch__line" data-rt-field="line">A Group raising capital worldwide needed an investor site to match.</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3 · The solution -->
+            <section class="slide swiper-slide s-out" aria-label="The solution">
+                <div class="frame">
+                    <div class="head">
+                        <p class="eyebrow" data-anim>3 · The solution</p>
+                        <h2 class="h2" data-anim>A no-code RELAYTO hub with Euroland data built in</h2>
+                    </div>
+                    <div class="body">
+                        <ul class="outs">
+                            <li class="out cut is-indicative" data-rt-component="outcome" data-anim>
+                                <p class="out__area" data-rt-field="area">Engagement</p>
+                                <p class="out__fig" data-rt-field="figure">Up to 8x</p>
+                                <p class="out__line" data-rt-field="line">more time spent than on the PDFs and static pages it replaces.</p><span class="out__pic"><img data-rt-field="image" src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/img/obj-engagement.jpg" alt="" width="520" height="520"></span>
+                            </li>
+                            <li class="out cut is-indicative" data-rt-component="outcome" data-anim>
+                                <p class="out__area" data-rt-field="area">Incoming traffic</p>
+                                <p class="out__fig" data-rt-field="figure">Up to 3x</p>
+                                <p class="out__line" data-rt-field="line">more search and AI referrals to one dedicated investor domain.</p><span class="out__pic"><img data-rt-field="image" src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/img/obj-traffic.jpg" alt="" width="520" height="520"></span>
+                            </li>
+                            <li class="out cut" data-rt-component="outcome" data-anim>
+                                <p class="out__area" data-rt-field="area">SEO &amp; AI</p>
+                                <p class="out__fig" data-rt-field="figure">4x</p>
+                                <p class="out__line" data-rt-field="line">more SEO and AI readability across the investor site.</p><span class="out__pic"><img data-rt-field="image" src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/img/obj-seo.jpg" alt="" width="520" height="520"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <nav class="chrome" aria-label="Slides">
+        <div class="chrome__dots"></div>
+        <div class="chrome__nav">
+            <a class="chrome__btn chrome__pdf" href="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/pdf/relayto-adnoc-investors-case-study-adnoc.pdf" target="_blank" rel="noopener" data-pdf>PDF</a>
+            <button class="chrome__btn chrome__prev" type="button" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square">
+                    <path d="M15 5l-7 7 7 7" />
+                </svg></button>
+            <button class="chrome__btn chrome__next" type="button" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square">
+                    <path d="M9 5l7 7-7 7" />
+                </svg></button>
+        </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/deck.js"></script>
+    <script>
+        /* fade the arrow that has nowhere to go (first and last slide) */
+        (function() {
+            var d = document.querySelector('.chrome__dots'),
+                p = document.querySelector('.chrome__prev'),
+                n = document.querySelector('.chrome__next');
+            if (!d || !p || !n) return;
+
+            function u() {
+                var b = d.querySelectorAll('.chrome__dot'),
+                    i = -1;
+                b.forEach(function(x, k) {
+                    if (x.classList.contains('is-on')) i = k;
+                });
+                p.classList.toggle('is-off', i <= 0);
+                n.classList.toggle('is-off', b.length > 0 && i === b.length - 1);
+            }
+            new MutationObserver(u).observe(d, {
+                subtree: true,
+                childList: true,
+                attributes: true,
+                attributeFilter: ['class']
+            });
+            u();
+        })();
+    </script>
+</body>
+
+</html>
