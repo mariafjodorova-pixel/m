@@ -33,7 +33,9 @@
       "label": "Challenge", "title": "name", "repeat": true,
       "fields": [
         {"name": "name", "label": "Name", "type": "text", "maxLength": 28},
-        {"name": "line", "label": "One line", "type": "text", "multiline": true}
+        {"name": "line", "label": "One line", "type": "text", "multiline": true},
+        {"name": "tag", "label": "Result it addresses (tag on the card)", "type": "text", "maxLength": 24},
+        {"name": "target", "label": "Highlight as one of the three main results", "type": "toggle", "target": ":scope", "class": "is-target"}
       ]
     },
     "compare": {
@@ -161,6 +163,195 @@
             min-height: 2.76em
         }
 
+        /* slides 1 and 2: flag the pain points that map to the three headline results */
+        .s-brief .body {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(12px, 1.6vh, 20px)
+        }
+
+        .s-brief .challenges {
+            flex: 1;
+            min-height: 0
+        }
+
+        .focus {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px 10px;
+            font-size: clamp(13px, .95vw, 17px)
+        }
+
+        .focus__lead {
+            opacity: .7;
+            margin-right: 4px
+        }
+
+        .focus__chip {
+            display: inline-block;
+            padding: .32em .85em;
+            border: 1px solid #d9580b;
+            background: #fff;
+            color: #a8470a;
+            font-weight: 500
+        }
+
+        .s-brief .ch {
+            position: relative
+        }
+
+        .s-brief .ch__tag {
+            position: absolute;
+            top: clamp(12px, 1vw, 18px);
+            right: clamp(12px, 1vw, 18px);
+            padding: .25em .7em;
+            background: #d9580b;
+            color: #fff;
+            font-size: clamp(11px, .8vw, 14px);
+            font-weight: 500;
+            white-space: nowrap
+        }
+
+        .s-brief .ch__tag:empty {
+            display: none
+        }
+
+        .s-brief .ch.is-target {
+            box-shadow: inset 4px 0 0 #d9580b
+        }
+
+        .s-brief .ch:not(.is-target)>:not(.ch__tag) {
+            opacity: .68
+        }
+
+        /* last slide: three big result cards, then a smaller row of supporting points */
+        .s-out .body {
+            display: flex;
+            flex-direction: column;
+            gap: clamp(10px, 1.4vh, 16px)
+        }
+
+        .s-out .outs__label {
+            margin: 0;
+            font-size: clamp(12px, .85vw, 16px);
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            opacity: .65
+        }
+
+        .s-out .outs__label~.outs__label {
+            margin-top: clamp(8px, 1.6vh, 20px)
+        }
+
+        .s-out .outs {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: clamp(12px, 1.1vw, 22px)
+        }
+
+        .s-out .outs--hero {
+            grid-template-columns: repeat(3, minmax(0, 1fr))
+        }
+
+        .s-out .outs--hero .out {
+            position: relative;
+            box-sizing: border-box;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            grid-template-rows: auto 1fr auto;
+            column-gap: 16px;
+            min-height: clamp(320px, 42vh, 480px);
+            padding: clamp(24px, 2.3vw, 44px)
+        }
+
+        .s-out .outs--hero .out__area {
+            grid-column: 1;
+            grid-row: 1;
+            margin: 0;
+            font-size: clamp(16px, 1.2vw, 24px)
+        }
+
+        .s-out .outs--hero .out__pic {
+            position: static;
+            display: block;
+            grid-column: 2;
+            grid-row: 1;
+            justify-self: end;
+            align-self: start;
+            width: clamp(110px, 9.5vw, 190px);
+            margin: 0
+        }
+
+        .s-out .outs--hero .out__pic img {
+            display: block;
+            width: 100%;
+            height: auto
+        }
+
+        .s-out .outs--hero .out__fig {
+            grid-column: 1 / -1;
+            grid-row: 2;
+            align-self: end;
+            margin: 0;
+            font-size: clamp(52px, 4.6vw, 96px);
+            line-height: 1;
+            white-space: nowrap
+        }
+
+        .s-out .outs--hero .out__line {
+            grid-column: 1 / -1;
+            grid-row: 3;
+            margin: clamp(12px, 1.6vh, 20px) 0 0;
+            font-size: clamp(17px, 1.3vw, 26px)
+        }
+
+        .s-out .outs--sm {
+            grid-template-columns: repeat(5, minmax(0, 1fr))
+        }
+
+        .s-out .outs--sm .out {
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-height: 0;
+            padding: clamp(14px, 1.2vw, 22px)
+        }
+
+        .s-out .outs--sm .out__area {
+            margin: 0;
+            font-size: clamp(12px, .85vw, 16px)
+        }
+
+        .s-out .outs--sm .out__fig {
+            margin: 0;
+            font-size: clamp(24px, 2vw, 40px);
+            line-height: 1.05
+        }
+
+        .s-out .outs--sm .out__line {
+            margin: 0;
+            min-height: 0;
+            font-size: clamp(13px, .95vw, 17px)
+        }
+
+        @media (max-width: 900px) {
+            .s-out .outs--hero {
+                grid-template-columns: 1fr
+            }
+
+            .s-out .outs--hero .out {
+                min-height: 0
+            }
+
+            .s-out .outs--sm {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+            }
+        }
+
         /* slide arrows: centred vertically on the left and right edges */
         .chrome {
             top: 0
@@ -249,28 +440,40 @@
                     </div>
                     <div class="brief__obj" data-anim><img src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/img/obj-slow-lg.jpg" alt="" width="1024" height="1024"></div>
                     <div class="body">
+                        <div class="focus" data-anim>
+                            <span class="focus__lead">Mainly addressed in this project</span>
+                            <span class="focus__chip">Engagement</span>
+                            <span class="focus__chip">Incoming traffic</span>
+                            <span class="focus__chip">SEO &amp; AI readability</span>
+                        </div>
                         <ul class="challenges">
-                            <li class="ch" data-rt-component="challenge" data-anim>
+                            <li class="ch is-target" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag">Incoming traffic</span>
                                 <h3 class="ch__name" data-rt-field="name">Corporate release cycle</h3>
                                 <p class="ch__line" data-rt-field="line">Investor pages were a section of adnoc.ae, so every update waited for the next release.</p>
                             </li>
                             <li class="ch" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">No Euroland integration</h3>
                                 <p class="ch__line" data-rt-field="line">Share data for the six listed companies sat on six separate sites.</p>
                             </li>
-                            <li class="ch" data-rt-component="challenge" data-anim>
+                            <li class="ch is-target" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag">Engagement</span>
                                 <h3 class="ch__name" data-rt-field="name">No engagement data</h3>
                                 <p class="ch__line" data-rt-field="line">Results and presentations were static PDFs that couldn't be measured.</p>
                             </li>
-                            <li class="ch" data-rt-component="challenge" data-anim>
+                            <li class="ch is-target" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag">Engagement</span>
                                 <h3 class="ch__name" data-rt-field="name">No visibility</h3>
                                 <p class="ch__line" data-rt-field="line">No view of how investors actually used the content.</p>
                             </li>
                             <li class="ch" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">High production cost</h3>
                                 <p class="ch__line" data-rt-field="line">Every change needed developer time and resources.</p>
                             </li>
                             <li class="ch" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">Off brand</h3>
                                 <p class="ch__line" data-rt-field="line">The pages didn't follow ADNOC's new design language.</p>
                             </li>
@@ -288,28 +491,40 @@
                     </div>
                     <div class="brief__obj" data-anim><img src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/img/obj-agents-lg.jpg" alt="" width="1024" height="1024"></div>
                     <div class="body">
+                        <div class="focus" data-anim>
+                            <span class="focus__lead">Mainly addressed in this project</span>
+                            <span class="focus__chip">Engagement</span>
+                            <span class="focus__chip">Incoming traffic</span>
+                            <span class="focus__chip">SEO &amp; AI readability</span>
+                        </div>
                         <ul class="challenges">
                             <li class="ch" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">Outdated data</h3>
                                 <p class="ch__line" data-rt-field="line">Prices, returns and filings on the page lagged behind the market.</p>
                             </li>
-                            <li class="ch" data-rt-component="challenge" data-anim>
+                            <li class="ch is-target" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag">Engagement</span>
                                 <h3 class="ch__name" data-rt-field="name">No investor insight</h3>
                                 <p class="ch__line" data-rt-field="line">No visibility into what investors actually read and care about.</p>
                             </li>
-                            <li class="ch" data-rt-component="challenge" data-anim>
+                            <li class="ch is-target" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag">Incoming traffic</span>
                                 <h3 class="ch__name" data-rt-field="name">Split equity story</h3>
                                 <p class="ch__line" data-rt-field="line">The story was spread across press releases and subsidiary pages.</p>
                             </li>
                             <li class="ch" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">Compliance friction</h3>
                                 <p class="ch__line" data-rt-field="line">Debt content needed a residency check and a disclaimer before access.</p>
                             </li>
-                            <li class="ch" data-rt-component="challenge" data-anim>
+                            <li class="ch is-target" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag">SEO &amp; AI</span>
                                 <h3 class="ch__name" data-rt-field="name">Invisible to AI</h3>
                                 <p class="ch__line" data-rt-field="line">AI crawlers were blocked, so search and AI engines couldn't read the pages.</p>
                             </li>
                             <li class="ch" data-rt-component="challenge" data-anim>
+                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">Weak first impression</h3>
                                 <p class="ch__line" data-rt-field="line">A Group raising capital worldwide needed an investor site to match.</p>
                             </li>
@@ -326,7 +541,8 @@
                         <h2 class="h2" data-anim>A no-code RELAYTO hub with Euroland data built in</h2>
                     </div>
                     <div class="body">
-                        <ul class="outs">
+                        <p class="outs__label" data-anim>The three results we mainly address</p>
+                        <ul class="outs outs--hero">
                             <li class="out cut is-indicative" data-rt-component="outcome" data-anim>
                                 <p class="out__area" data-rt-field="area">Engagement</p>
                                 <p class="out__fig" data-rt-field="figure">Up to 8x</p>
@@ -341,6 +557,34 @@
                                 <p class="out__area" data-rt-field="area">SEO &amp; AI</p>
                                 <p class="out__fig" data-rt-field="figure">4x</p>
                                 <p class="out__line" data-rt-field="line">more SEO and AI readability across the investor site.</p><span class="out__pic"><img data-rt-field="image" src="https://cdn.relayto.com/workspace/681cd5f91aa1320ced0500f4/files/adnoc-ir-case-study/assets/img/obj-seo.jpg" alt="" width="520" height="520"></span>
+                            </li>
+                        </ul>
+                        <p class="outs__label" data-anim>Also built in</p>
+                        <ul class="outs outs--sm">
+                            <li class="out cut" data-rt-component="outcome" data-anim>
+                                <p class="out__area" data-rt-field="area">Platform</p>
+                                <p class="out__fig" data-rt-field="figure">No-code</p>
+                                <p class="out__line" data-rt-field="line">The IR team edits the site itself, without developers.</p>
+                            </li>
+                            <li class="out cut" data-rt-component="outcome" data-anim>
+                                <p class="out__area" data-rt-field="area">Live data</p>
+                                <p class="out__fig" data-rt-field="figure">Euroland</p>
+                                <p class="out__line" data-rt-field="line">Live prices, charts and filings for all six companies.</p>
+                            </li>
+                            <li class="out cut" data-rt-component="outcome" data-anim>
+                                <p class="out__area" data-rt-field="area">Production cost</p>
+                                <p class="out__fig" data-rt-field="figure">−75%</p>
+                                <p class="out__line" data-rt-field="line">Updates no longer need developer time.</p>
+                            </li>
+                            <li class="out cut" data-rt-component="outcome" data-anim>
+                                <p class="out__area" data-rt-field="area">Speed</p>
+                                <p class="out__fig" data-rt-field="figure">2 days</p>
+                                <p class="out__line" data-rt-field="line">to a working first draft, and live in 3 months in English and Arabic.</p>
+                            </li>
+                            <li class="out cut" data-rt-component="outcome" data-anim>
+                                <p class="out__area" data-rt-field="area">Compliance</p>
+                                <p class="out__fig" data-rt-field="figure">Built in</p>
+                                <p class="out__line" data-rt-field="line">Residency gate and disclaimer on the page.</p>
                             </li>
                         </ul>
                     </div>
