@@ -33,9 +33,7 @@
       "label": "Challenge", "title": "name", "repeat": true,
       "fields": [
         {"name": "name", "label": "Name", "type": "text", "maxLength": 28},
-        {"name": "line", "label": "One line", "type": "text", "multiline": true},
-        {"name": "tag", "label": "Result it addresses (tag on the card)", "type": "text", "maxLength": 24},
-        {"name": "target", "label": "Highlight as one of the three main results", "type": "toggle", "target": ":scope", "class": "is-target"}
+        {"name": "line", "label": "One line", "type": "text", "multiline": true}
       ]
     },
     "compare": {
@@ -195,34 +193,6 @@
             background: #fff;
             color: #a8470a;
             font-weight: 500
-        }
-
-        .s-brief .ch {
-            position: relative
-        }
-
-        .s-brief .ch__tag {
-            position: absolute;
-            top: clamp(12px, 1vw, 18px);
-            right: clamp(12px, 1vw, 18px);
-            padding: .25em .7em;
-            background: #d9580b;
-            color: #fff;
-            font-size: clamp(11px, .8vw, 14px);
-            font-weight: 500;
-            white-space: nowrap
-        }
-
-        .s-brief .ch__tag:empty {
-            display: none
-        }
-
-        .s-brief .ch.is-target {
-            box-shadow: inset 4px 0 0 #d9580b
-        }
-
-        .s-brief .ch:not(.is-target)>:not(.ch__tag) {
-            opacity: .68
         }
 
         /* last slide: three big result cards, then a smaller row of supporting points */
@@ -447,33 +417,27 @@
                             <span class="focus__chip">SEO &amp; AI readability</span>
                         </div>
                         <ul class="challenges">
-                            <li class="ch is-target" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag">Incoming traffic</span>
+                            <li class="ch" data-rt-component="challenge" data-anim>
                                 <h3 class="ch__name" data-rt-field="name">Corporate release cycle</h3>
                                 <p class="ch__line" data-rt-field="line">Investor pages were a section of adnoc.ae, so every update waited for the next release.</p>
                             </li>
                             <li class="ch" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">No Euroland integration</h3>
                                 <p class="ch__line" data-rt-field="line">Share data for the six listed companies sat on six separate sites.</p>
                             </li>
-                            <li class="ch is-target" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag">Engagement</span>
+                            <li class="ch" data-rt-component="challenge" data-anim>
                                 <h3 class="ch__name" data-rt-field="name">No engagement data</h3>
                                 <p class="ch__line" data-rt-field="line">Results and presentations were static PDFs that couldn't be measured.</p>
                             </li>
-                            <li class="ch is-target" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag">Engagement</span>
+                            <li class="ch" data-rt-component="challenge" data-anim>
                                 <h3 class="ch__name" data-rt-field="name">No visibility</h3>
                                 <p class="ch__line" data-rt-field="line">No view of how investors actually used the content.</p>
                             </li>
                             <li class="ch" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">High production cost</h3>
                                 <p class="ch__line" data-rt-field="line">Every change needed developer time and resources.</p>
                             </li>
                             <li class="ch" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">Off brand</h3>
                                 <p class="ch__line" data-rt-field="line">The pages didn't follow ADNOC's new design language.</p>
                             </li>
@@ -499,32 +463,26 @@
                         </div>
                         <ul class="challenges">
                             <li class="ch" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">Outdated data</h3>
                                 <p class="ch__line" data-rt-field="line">Prices, returns and filings on the page lagged behind the market.</p>
                             </li>
-                            <li class="ch is-target" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag">Engagement</span>
+                            <li class="ch" data-rt-component="challenge" data-anim>
                                 <h3 class="ch__name" data-rt-field="name">No investor insight</h3>
                                 <p class="ch__line" data-rt-field="line">No visibility into what investors actually read and care about.</p>
                             </li>
-                            <li class="ch is-target" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag">Incoming traffic</span>
+                            <li class="ch" data-rt-component="challenge" data-anim>
                                 <h3 class="ch__name" data-rt-field="name">Split equity story</h3>
                                 <p class="ch__line" data-rt-field="line">The story was spread across press releases and subsidiary pages.</p>
                             </li>
                             <li class="ch" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">Compliance friction</h3>
                                 <p class="ch__line" data-rt-field="line">Debt content needed a residency check and a disclaimer before access.</p>
                             </li>
-                            <li class="ch is-target" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag">SEO &amp; AI</span>
+                            <li class="ch" data-rt-component="challenge" data-anim>
                                 <h3 class="ch__name" data-rt-field="name">Invisible to AI</h3>
                                 <p class="ch__line" data-rt-field="line">AI crawlers were blocked, so search and AI engines couldn't read the pages.</p>
                             </li>
                             <li class="ch" data-rt-component="challenge" data-anim>
-                                <span class="ch__tag" data-rt-field="tag"></span>
                                 <h3 class="ch__name" data-rt-field="name">Weak first impression</h3>
                                 <p class="ch__line" data-rt-field="line">A Group raising capital worldwide needed an investor site to match.</p>
                             </li>
