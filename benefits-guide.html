@@ -1,0 +1,2774 @@
+<!DOCTYPE html>
+<html lang="en" data-langs="en es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Benefits Guide</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.25.17/dist/css/uikit.min.css">
+    <link rel="stylesheet" href="https://cdn.relayto.com/workspace/67d988f7ccec91f6a203871b/files/benefits.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=ProximaNova:wght@400;500;600;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.25.17/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.25.17/dist/js/uikit-icons.min.js"></script>
+    <script src="https://cdn.relayto.com/workspace/67d988f7ccec91f6a203871b/files/benefits-glossary.js"></script>
+    <script src="https://cdn.relayto.com/workspace/67d988f7ccec91f6a203871b/files/benefits-platforms.js"></script>
+    <script src="https://cdn.relayto.com/workspace/67d988f7ccec91f6a203871b/files/benefits.js"></script>
+
+    <style data-source="imported">
+        :root {
+            --color-primary: #3375B8;
+            --color-primary-dark: #23507d;
+            --color-primary-rgb: 51, 117, 184;
+            --color-secondary: #16294F;
+            --color-accent: #1976D2;
+            --color-bg: #FFFFFF;
+            --color-text: #212529;
+            --font-heading: "ProximaNova", system-ui, sans-serif;
+            --font-body: "ProximaNova", system-ui, sans-serif
+        }
+    </style>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+        }
+    </style>
+    <style>
+        /* English/Spanish blocks (data-l="en" / data-l="es"): benefits.js shows only the language on screen.
+           Its stock rule uses display:revert, so keep each block's own layout when it is the one showing. */
+        [data-lang="es"] .uk-container[data-l="es"] {
+            display: flow-root;
+        }
+
+        .site-footer .uk-container[data-l="es"] {
+            display: none;
+        }
+
+        [data-lang="es"] .site-footer .uk-container[data-l="es"] {
+            display: grid;
+        }
+
+        [data-lang="es"] .site-footer .uk-container[data-l="en"] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-nav">
+        <div class="uk-container">
+            <nav uk-navbar="" class="uk-navbar">
+                <div class="uk-navbar-left"><a href="#hero" class="uk-navbar-item uk-logo"><img src="https://microsite.relayto.com/api/logos/logos/e7f315c5-c189-4ba5-b2d9-b4f246c772a6-logo-shrm-labs-new.png" alt="Logo" /></a></div>
+                <div class="uk-navbar-right">
+                    <ul class="uk-navbar-nav uk-visible@m">
+                        <li><a href="#overview"><span data-l="en">Overview</span><span data-l="es" lang="es">Resumen</span></a></li>
+                        <li><a href="#medical"><span data-l="en">Medical</span><span data-l="es" lang="es">Médico</span></a></li>
+                        <li><a href="#dental"><span data-l="en">Dental</span><span data-l="es" lang="es">Dental</span></a></li>
+                        <li><a href="#vision"><span data-l="en">Vision</span><span data-l="es" lang="es">Visión</span></a></li>
+                        <li><a href="#life-disability"><span data-l="en">Life insurance</span><span data-l="es" lang="es">Seguro de vida</span></a></li>
+                        <li><a href="#enrollment"><span data-l="en">Enrollment</span><span data-l="es" lang="es">Inscripción</span></a></li>
+                        <li><a href="#contact"><span data-l="en">Contacts</span><span data-l="es" lang="es">Contactos</span></a></li>
+                    </ul>
+                    <!-- the EN / ES switch is added here by benefits.js (data-langs on <html>) -->
+                    <a uk-navbar-toggle-icon="" href="#nav-offcanvas" uk-toggle="" aria-label="Abrir menú / Open menu" class="uk-navbar-toggle uk-hidden@m"></a>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <div id="nav-offcanvas" uk-offcanvas="overlay: true">
+        <div class="uk-offcanvas-bar"><button type="button" uk-close="" aria-label="Cerrar menú / Close menu" class="uk-offcanvas-close"></button>
+            <ul class="uk-nav">
+                <li><a href="#overview"><span data-l="en">Overview</span><span data-l="es" lang="es">Resumen</span></a></li>
+                <li><a href="#medical"><span data-l="en">Medical</span><span data-l="es" lang="es">Médico</span></a></li>
+                <li><a href="#dental"><span data-l="en">Dental</span><span data-l="es" lang="es">Dental</span></a></li>
+                <li><a href="#vision"><span data-l="en">Vision</span><span data-l="es" lang="es">Visión</span></a></li>
+                <li><a href="#life-disability"><span data-l="en">Life insurance</span><span data-l="es" lang="es">Seguro de vida</span></a></li>
+                <li><a href="#enrollment"><span data-l="en">Enrollment</span><span data-l="es" lang="es">Inscripción</span></a></li>
+                <li><a href="#contact"><span data-l="en">Contacts</span><span data-l="es" lang="es">Contactos</span></a></li>
+            </ul>
+        </div>
+    </div>
+    <section id="hero" class="hero-section">
+        <div class="uk-container" data-l="en">
+            <div class="hero-content">
+                <p class="hero-eyebrow">Employee Benefits Guide</p>
+                <h1>2026 Benefits Guide</h1>
+                <p class="hero-lead">Medical, dental, vision, life and AD&amp;D coverage — compare the plans side by side and see what each one covers.</p>
+                <ul class="hero-facts">
+                    <li><b>Plan year</b><span>2026</span></li>
+                    <li><b>Coverage effective</b><span>April 1, 2026 (Oxford Exclusive Plan) · 4/1/2026 (dental)</span></li>
+                </ul>
+                <div class="hero-actions"><a href="#medical">Compare medical plans</a><a href="#enrollment">How to enroll</a></div>
+            </div>
+        </div>
+        <div lang="es" class="uk-container" data-l="es">
+            <div class="hero-content">
+                <p class="hero-eyebrow">Guía de beneficios para empleados</p>
+                <h1>Guía de beneficios 2026</h1>
+                <p class="hero-lead">Cobertura médica, dental, de visión, de vida y AD&amp;D: compare los planes uno al lado del otro y vea lo que cubre cada uno.</p>
+                <ul class="hero-facts">
+                    <li><b>Año del plan</b><span>2026</span></li>
+                    <li><b>Inicio de la cobertura</b><span>1 de abril de 2026 (Oxford Exclusive Plan) · 1 de abril de 2026 (dental)</span></li>
+                </ul>
+                <div class="hero-actions"><a href="#medical">Comparar planes médicos</a><a href="#enrollment">Cómo inscribirse</a></div>
+            </div>
+        </div>
+    </section>
+    <section id="overview" class="uk-section">
+        <div class="uk-container" data-l="en">
+            <header class="sec-head">
+                <h2>Benefits Overview</h2>
+                <p class="sec-lead">Your 2026 benefits: medical plans from Oxford Health Insurance, Inc., dental and vision from Delta Dental, and life and AD&amp;D insurance.</p>
+            </header>
+            <dl class="facts">
+                <div class="fact">
+                    <dt>Plan year</dt>
+                    <dd>2026</dd>
+                </div>
+                <div class="fact">
+                    <dt>Medical coverage period (Oxford Exclusive Plan)</dt>
+                    <dd>April 1, 2026</dd>
+                </div>
+                <div class="fact">
+                    <dt>Dental effective date (High Plan and Low Plan)</dt>
+                    <dd>4/1/2026</dd>
+                </div>
+                <div class="fact">
+                    <dt>Basic life coverage renewal</dt>
+                    <dd>Your coverage renews every April 1.</dd>
+                </div>
+            </dl>
+            <div class="program-grid"><a href="#medical" class="program-card"><span class="pc-title">Medical</span><span class="pc-text">Oxford Health Insurance, Inc. — Direct Plan, Oxford Exclusive Plan</span></a><a href="#dental" class="program-card"><span class="pc-title">Dental</span><span class="pc-text">Delta Dental — High Plan, Low Plan</span></a><a href="#vision" class="program-card"><span class="pc-title">Vision</span><span class="pc-text">DeltaVision-Essential — Choice network, with VSP</span></a><a href="#life-disability" class="program-card"><span class="pc-title">Life &amp; AD&amp;D</span><span class="pc-text">Principal group term life and AD&amp;D · Voluntary Life – Salaried Employees</span></a></div>
+            <h3 class="block-title">Who pays and who is eligible</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Who pays and who is eligible, by benefit</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Benefit</th>
+                                <th scope="col">Who is eligible</th>
+                                <th scope="col">Who pays</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Group term life insurance (Principal)</th>
+                                <td>All eligible hourly employees. You'll receive coverage if you're an active, full-time employee. Seasonal, temporary, or contract employees aren't eligible. If you're on a regularly scheduled day off, holiday, vacation day, jury duty, funeral leave, or personal time off, you're still considered actively at work, as long as you're fulfilling your regular duties and were working the day immediately prior to your time off. If you were covered as an employee, you may be eligible as a retiree. Additional eligibility requirements may apply.</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Voluntary term life insurance</th>
+                                <td>Salaried Employees</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <dl class="details">
+                <dt>Medical dependents (Direct Plan and Oxford Exclusive Plan)</dt>
+                <dd>Eligible dependents include the employee's spouse and dependent children until the child reaches age 26. Benefits discontinue at the end of the Month. Domestic Partners covered with proper documentation.</dd>
+                <dt>Dental dependents (High Plan and Low Plan)</dt>
+                <dd>Dependent children are covered to age 26.</dd>
+            </dl>
+        </div>
+        <div lang="es" class="uk-container" data-l="es">
+            <header class="sec-head">
+                <h2>Resumen de beneficios</h2>
+                <p class="sec-lead">Sus beneficios de 2026: planes médicos de Oxford Health Insurance, Inc., dental y visión de Delta Dental, y seguro de vida y AD&amp;D.</p>
+            </header>
+            <dl class="facts">
+                <div class="fact">
+                    <dt>Año del plan</dt>
+                    <dd>2026</dd>
+                </div>
+                <div class="fact">
+                    <dt>Período de cobertura médica (Oxford Exclusive Plan)</dt>
+                    <dd>1 de abril de 2026</dd>
+                </div>
+                <div class="fact">
+                    <dt>Fecha de vigencia dental (High Plan y Low Plan)</dt>
+                    <dd>1 de abril de 2026</dd>
+                </div>
+                <div class="fact">
+                    <dt>Renovación del seguro de vida básico</dt>
+                    <dd>Su cobertura se renueva cada 1 de abril.</dd>
+                </div>
+            </dl>
+            <div class="program-grid"><a href="#medical" class="program-card"><span class="pc-title">Médico</span><span class="pc-text">Oxford Health Insurance, Inc. — Direct Plan, Oxford Exclusive Plan</span></a><a href="#dental" class="program-card"><span class="pc-title">Dental</span><span class="pc-text">Delta Dental — High Plan, Low Plan</span></a><a href="#vision" class="program-card"><span class="pc-title">Visión</span><span class="pc-text">DeltaVision-Essential — red Choice, con VSP</span></a><a href="#life-disability" class="program-card"><span class="pc-title">Vida y AD&amp;D</span><span class="pc-text">Seguro de vida a término grupal y AD&amp;D de Principal · Seguro de vida voluntario – Empleados asalariados</span></a></div>
+            <h3 class="block-title">Quién paga y quién es elegible</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Quién paga y quién es elegible, por beneficio</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Beneficio</th>
+                                <th scope="col">Quién es elegible</th>
+                                <th scope="col">Quién paga</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Seguro de vida a término grupal (Principal)</th>
+                                <td>Todos los empleados por hora elegibles. Recibirá cobertura si es un empleado activo de tiempo completo. Los empleados de temporada, temporales o por contrato no son elegibles. Si está en un día libre programado regularmente, feriado, día de vacaciones, servicio de jurado, licencia por duelo o tiempo libre personal, se le sigue considerando activo en el trabajo, siempre que cumpla con sus funciones habituales y haya trabajado el día inmediatamente anterior a su tiempo libre. Si estuvo cubierto como empleado, puede ser elegible como jubilado. Pueden aplicarse requisitos de elegibilidad adicionales.</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Seguro de vida a término voluntario</th>
+                                <td>Empleados asalariados</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <dl class="details">
+                <dt>Dependientes médicos (Direct Plan y Oxford Exclusive Plan)</dt>
+                <dd>Los dependientes elegibles incluyen al cónyuge del empleado y a los hijos dependientes hasta que el hijo cumpla 26 años. Los beneficios terminan al final del mes. Las parejas de hecho están cubiertas con la documentación adecuada.</dd>
+                <dt>Dependientes dentales (High Plan y Low Plan)</dt>
+                <dd>Los hijos dependientes están cubiertos hasta los 26 años.</dd>
+            </dl>
+        </div>
+    </section>
+    <section id="medical" class="uk-section">
+        <div class="uk-container" data-l="en">
+            <header class="sec-head">
+                <h2>Medical Plans</h2>
+                <p class="sec-lead">Oxford Health Insurance, Inc.: Direct Plan (in-network and out-of-network benefits) and Oxford Exclusive Plan on the Liberty Network, coverage period April 1, 2026.</p>
+            </header>
+            <div class="plan-cards">
+                <article class="plan-card">
+                    <h3 class="plan-name">Direct Plan</h3>
+                    <p class="plan-meta">In-network: $1,000 Ded / $2,500 OOP Max · Oxford Health Insurance, Inc.</p>
+                    <p class="plan-pitch"><b>In-network and out-of-network benefits.</b> In-network primary care is a $30 copay per visit; out-of-network care is Deductible &amp; 30% Coinsurance.</p>
+                    <p class="callout warn">These services require precertification through Oxford: imaging, emergency transportation, outpatient surgery, hospital stays, maternity, home health care, rehabilitation and hospice. Members must call Oxford at <a href="tel:+18004446222">1-800-444-6222</a> at least 14 days in advance of request of treatment to request precertification.</p>
+                </article>
+                <article class="plan-card">
+                    <h3 class="plan-name">Oxford Exclusive Plan</h3>
+                    <p class="plan-meta">$2,500 Ded / $8,000 OOP Max · Oxford Health Insurance, Inc. · Liberty Network</p>
+                    <p class="plan-pitch"><b>Liberty Network.</b> In-Network benefits, with a $30 copay per visit for primary care and a $50 copay per visit for specialists.</p>
+                </article>
+            </div>
+            <h3 class="block-title">Key numbers</h3>
+            <div data-kind="key" class="table-shell">
+                <div class="table-scroll">
+                    <table data-compare="plans" class="cmp-table">
+                        <caption class="uk-hidden-visually">Key numbers — deductible and out-of-pocket maximum across all plans</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Key number</th>
+                                <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Deductible (Individual)</th>
+                                <td>IN: $1,000 | OON: $2,000</td>
+                                <td>IN: $2,500</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Deductible (Family)</th>
+                                <td>IN: $2,000 | OON: $4,000</td>
+                                <td>IN: $5,000</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Out-of-pocket maximum (Individual)</th>
+                                <td>IN: $2,500 | OON: $5,000<small class="cell-note">(Including Deductible)</small></td>
+                                <td>IN: $8,000<small class="cell-note">(Including Deductible)</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Out-of-pocket maximum (Family)</th>
+                                <td>IN: $5,000 | OON: $10,000<small class="cell-note">(Including Deductible)</small></td>
+                                <td>IN: $16,000<small class="cell-note">(Including Deductible)</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Coinsurance</th>
+                                <td>IN: 10% | OON: 30%</td>
+                                <td>IN: 50%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Financial Accumulation Period</th>
+                                <td>IN: Calendar Year | OON: Calendar Year</td>
+                                <td>IN: Calendar Year</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="note">IN = In-Network · OON = Out-of-Network</p>
+            <p class="note">All Copayments, Deductibles, and Coinsurance (medical and prescription) paid for In-Network Covered Services contribute to the In-Network, Out-of-Pocket Maximum.</p>
+            <h3 class="block-title">Compare coverage by service</h3>
+            <ul uk-accordion="multiple: true; transition: ease; duration: 300" class="uk-accordion">
+                <li class="uk-open"><a href="" class="uk-accordion-title">Office visits</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Office visits — cost comparison across all plans</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Primary care visit</th>
+                                            <td>IN: $30 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $30 copay per visit</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Specialist visit</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $50 copay per visit</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Adult preventive care</th>
+                                            <td>IN: No Charge | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: No Charge</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Infant and Pediatric Preventive Care</th>
+                                            <td>IN: No Charge | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: No Charge</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Telehealth (virtual visits)</th>
+                                            <td>IN: No Charge | OON: In-Network Benefit Only</td>
+                                            <td>IN: No Charge</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Physician House Calls</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $50 copay per visit</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Allergy Care - Testing and Treatment</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $50 copay per visit</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">IN = In-Network · OON = Out-of-Network</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Diagnostic tests</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Diagnostic tests — cost comparison across all plans</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Preferred Laboratory Services</th>
+                                            <td>IN: No Charge | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: No Charge</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Non-Preferred Laboratory Services - Hospital Setting</th>
+                                            <td>IN: Deductible &amp; 50% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Non-Preferred Laboratory Services - Freestanding Facility</th>
+                                            <td>IN: Deductible &amp; 50% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Oxford Exclusive Plan — laboratory:</b> See your Certificate of Coverage for additional Lab details</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Radiology Services - Hospital Setting</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Radiology Services - Freestanding Facility</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">MRIs, MRAs, CT Scans, and PET Scans - Outpatient Hospital Services</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">MRIs, MRAs, CT Scans, and PET Scans - Freestanding Radiology Facility</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertification (imaging):</b> These services require precertification through Oxford. Members must call Oxford at <a href="tel:+18004446222">1-800-444-6222</a> at least 14 days in advance of request of treatment to request precertification.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">IN = In-Network · OON = Out-of-Network</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Emergency &amp; urgent care</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Emergency and urgent care — cost comparison across all plans</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">At Hospital Emergency Room</th>
+                                            <td>IN: $100 copay &amp; 10% Coinsurance, waived if admitted | OON: $100 copay &amp; 10% Coinsurance, waived if admitted</td>
+                                            <td>IN: $100 copay per visit then 50% Coinsurance; waived if admitted</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan and Oxford Exclusive Plan — notification:</b> If member is admitted to the hospital, notification is required</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Emergency transportation</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 10% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertification (emergency transportation):</b> These services require precertification through Oxford. Members must call Oxford at <a href="tel:+18004446222">1-800-444-6222</a> at least 14 days in advance of request of treatment to request precertification.</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Urgent care (Urgi-Center)</th>
+                                            <td>IN: $40 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $75 copay per visit</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">IN = In-Network · OON = Out-of-Network</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Outpatient surgery</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Outpatient surgery — cost comparison across all plans</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Outpatient Surgery - Hospital Setting</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Outpatient Surgery - Freestanding Facility</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertification:</b> These services require precertification through Oxford. Members must call Oxford at <a href="tel:+18004446222">1-800-444-6222</a> at least 14 days in advance of request of treatment to request precertification.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">IN = In-Network · OON = Out-of-Network</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Hospital stay</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Hospital stay — cost comparison across all plans</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Inpatient facility</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Inpatient physician</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">All Drugs and Medication (Hospital Care)</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertification:</b> These services require precertification through Oxford. Members must call Oxford at <a href="tel:+18004446222">1-800-444-6222</a> at least 14 days in advance of request of treatment to request precertification.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">IN = In-Network · OON = Out-of-Network</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Mental health &amp; substance use</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Mental health and substance use — cost comparison across all plans</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Outpatient — mental/behavioral health, office visit</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $50 copay per visit</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Outpatient — mental/behavioral health, other services</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Mental Health Care - Intensive Behavioral Therapy</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $50 copay per visit</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Inpatient — mental/behavioral health</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Outpatient — substance use</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $50 copay per visit</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Substance Use Disorder Services - Intensive Behavioral Therapy</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $50 copay per visit</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Substance Use Disorder Services - Outpatient Partial Hospitalization</th>
+                                            <td></td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Inpatient — substance use</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertification:</b> Mental health and substance use disorder services can be precertified through Oxford's Behavioral Health Department by calling <a href="tel:+18002016991">1-800-201-6991</a>.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">IN = In-Network · OON = Out-of-Network</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Pregnancy</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Pregnancy — cost comparison across all plans</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Prenatal office visits</th>
+                                            <td>IN: No Charge | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: No Charge</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Hospital Services for Mother and Child (childbirth facility)</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertification:</b> These services require precertification through Oxford. Members must call Oxford at <a href="tel:+18004446222">1-800-444-6222</a> at least 14 days in advance of request of treatment to request precertification.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">IN = In-Network · OON = Out-of-Network</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Recovery &amp; special needs</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Recovery and special needs — cost comparison across all plans</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Home health care visits</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance<small class="cell-note">60 Visits per Calendar Year</small></td>
+                                            <td>IN: $50 copay per visit<small class="cell-note">60 Visits per Calendar Year</small></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Rehabilitation services (outpatient)</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance<small class="cell-note">60 combined Outpatient Visits per Calendar Year</small></td>
+                                            <td>IN: $50 copay per visit<small class="cell-note">60 combined Outpatient Visits per Calendar Year</small></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">60 Inpatient Days per Calendar Year (Short Term Rehab &amp; Habilitative Services)</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Skilled nursing care</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance<small class="cell-note">30 Days per Calendar Year</small></td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance<small class="cell-note">30 Days per Calendar Year</small></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Hospice care</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance<small class="cell-note">180 days per lifetime combined Inpatient &amp; Home</small></td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance<small class="cell-note">Inpatient Care · 180 days per lifetime combined Inpatient &amp; Home</small></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Home Hospice Care Visits</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $50 copay per visit</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Durable medical equipment</th>
+                                            <td>IN: No Charge | OON: Deductible &amp; 30% Coinsurance<small class="cell-note">Unlimited; Precertification required for items over $500</small></td>
+                                            <td>IN: No Charge<small class="cell-note">Unlimited; Precertification required for items over $500</small></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Medical Supplies When Medically Necessary</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertification (home health care, rehabilitation, hospice):</b> These services require precertification through Oxford. Members must call Oxford at <a href="tel:+18004446222">1-800-444-6222</a> at least 14 days in advance of request of treatment to request precertification.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">IN = In-Network · OON = Out-of-Network</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Prescription drugs</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Prescription drugs — cost comparison across all plans</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Tier</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Tier 1 — retail (30-day)</th>
+                                            <td>IN: $15 copay | OON: $15 copay</td>
+                                            <td>IN: $15 copay</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Tier 1 — mail order (90-day)</th>
+                                            <td>IN: $30 copay | OON: $30 copay</td>
+                                            <td>IN: $30 copay</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Tier 2 — retail (30-day)</th>
+                                            <td>IN: $35 copay | OON: $35 copay</td>
+                                            <td>IN: $35 copay</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Tier 2 — mail order (90-day)</th>
+                                            <td>IN: $70 copay | OON: $70 copay</td>
+                                            <td>IN: $70 copay</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Tier 3 — retail (30-day)</th>
+                                            <td>IN: $75 copay | OON: $75 copay</td>
+                                            <td>IN: $75 copay</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Tier 3 — mail order (90-day)</th>
+                                            <td>IN: $150 copay | OON: $150 copay</td>
+                                            <td>IN: $150 copay</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">IN = In-Network · OON = Out-of-Network</p>
+                        <p class="note">The Prescription Drug Benefit is based on a per Calendar Year Limit for any applicable deductibles and/or maximum limits.</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Other covered services</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Other covered services — comparison across all plans</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Chiropractic care</th>
+                                            <td>IN: $40 copay per visit | OON: Deductible &amp; 50% Coinsurance<small class="cell-note">Out-of-Network coverage limited to $500 per Calendar Year per Member</small></td>
+                                            <td>IN: $40 copay per visit</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Hearing aids</th>
+                                            <td>IN: No Charge | OON: Deductible &amp; 30% Coinsurance<small class="cell-note">Limited to 1 hearing aid for each hearing impaired ear every 24 months.</small></td>
+                                            <td>IN: No Charge<small class="cell-note">Limited to 1 hearing aid for each hearing impaired ear every 24 months.</small></td>
+                                        </tr>
+                                        <tr class="group-row">
+                                            <th colspan="3">Infertility</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Specialist Office Visits</th>
+                                            <td>IN: $50 copay per visit | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: $50 copay per visit</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Outpatient Facility Services</th>
+                                            <td></td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Outpatient Surgery - Hospital Setting</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Outpatient Surgery - Freestanding Facility</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Inpatient Facility Services</th>
+                                            <td>IN: Deductible &amp; 10% Coinsurance | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Deductible &amp; 50% Coinsurance</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Infertility Medications</th>
+                                            <td>IN: Covered subject to the applicable Prescription Drug Out-of-Pocket Expense | OON: Deductible &amp; 30% Coinsurance</td>
+                                            <td>IN: Covered subject to the applicable Prescription Drug Out-of-Pocket Expense</td>
+                                        </tr>
+                                        <tr class="group-row">
+                                            <th colspan="3">Exercise facility</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Exercise Facility - Subscriber</th>
+                                            <td>IN: $200 reimbursement per 6 month period | OON: $200 reimbursement per 6 month period</td>
+                                            <td>IN: $200 reimbursement per 6 month period</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Exercise Facility - Spouse/Dependents over age 13</th>
+                                            <td>IN: $100 reimbursement per 6 month period | OON: $100 reimbursement per 6 month period</td>
+                                            <td>IN: $100 reimbursement per 6 month period</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">IN = In-Network · OON = Out-of-Network</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Excluded services</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <p class="note">Direct Plan and Oxford Exclusive Plan</p>
+                        <ul class="pill-list excl">
+                            <li>cosmetic surgery</li>
+                            <li>routine foot care</li>
+                            <li>custodial care</li>
+                            <li>personal comfort or convenience items</li>
+                            <li>private or special duty nursing</li>
+                            <li>learning and behavioral disorders</li>
+                            <li>Workers' Compensation</li>
+                            <li>military service-related conditions</li>
+                            <li>dental services (unless otherwise stated)</li>
+                            <li>vision correction services and supplies (unless otherwise stated)</li>
+                        </ul>
+                        <p class="note">Direct Plan: Refer to the Certificate of Coverage for a more complete listing of all benefits, limitations, and exclusions.</p>
+                    </div>
+                </li>
+            </ul>
+            <p class="note">This sample summary of coverage is provided for informational purposes only. The applicable Summary of Benefits will be issued to eligible enrolled members as part of the Certificate of Coverage. Coverage is subject to the terms and conditions of the Certificate.</p>
+            <h3 class="block-title">Plan contacts</h3>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3>Direct Plan</h3>
+                    <p class="c-phone"><span class="c-label">Precertification (Oxford)</span><a href="tel:+18004446222">1-800-444-6222</a></p>
+                    <p class="c-phone"><span class="c-label">Behavioral Health Department</span><a href="tel:+18002016991">1-800-201-6991</a></p>
+                </div>
+            </div>
+        </div>
+        <div lang="es" class="uk-container" data-l="es">
+            <header class="sec-head">
+                <h2>Planes médicos</h2>
+                <p class="sec-lead">Oxford Health Insurance, Inc.: Direct Plan (beneficios dentro y fuera de la red) y Oxford Exclusive Plan en la red Liberty Network, período de cobertura 1 de abril de 2026.</p>
+            </header>
+            <div class="plan-cards">
+                <article class="plan-card">
+                    <h3 class="plan-name">Direct Plan</h3>
+                    <p class="plan-meta">Dentro de la red: deducible de $1,000 / máximo de bolsillo de $2,500 · Oxford Health Insurance, Inc.</p>
+                    <p class="plan-pitch"><b>Beneficios dentro y fuera de la red.</b> La atención primaria dentro de la red tiene un copago de $30 por visita; la atención fuera de la red es deducible y 30% de coseguro.</p>
+                    <p class="callout warn">Estos servicios requieren precertificación a través de Oxford: estudios de imagen, transporte de emergencia, cirugía ambulatoria, hospitalización, maternidad, atención médica a domicilio, rehabilitación y cuidados paliativos. Los miembros deben llamar a Oxford al <a href="tel:+18004446222">1-800-444-6222</a> al menos 14 días antes de la solicitud de tratamiento para solicitar la precertificación.</p>
+                </article>
+                <article class="plan-card">
+                    <h3 class="plan-name">Oxford Exclusive Plan</h3>
+                    <p class="plan-meta">Deducible de $2,500 / máximo de bolsillo de $8,000 · Oxford Health Insurance, Inc. · Liberty Network</p>
+                    <p class="plan-pitch"><b>Red Liberty Network.</b> Beneficios dentro de la red, con un copago de $30 por visita de atención primaria y un copago de $50 por visita al especialista.</p>
+                </article>
+            </div>
+            <h3 class="block-title">Cifras clave</h3>
+            <div data-kind="key" class="table-shell">
+                <div class="table-scroll">
+                    <table data-compare="plans" class="cmp-table">
+                        <caption class="uk-hidden-visually">Cifras clave: deducible y máximo de bolsillo de todos los planes</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Cifra clave</th>
+                                <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Deducible (individual)</th>
+                                <td>DR: $1,000 | FR: $2,000</td>
+                                <td>DR: $2,500</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Deducible (familiar)</th>
+                                <td>DR: $2,000 | FR: $4,000</td>
+                                <td>DR: $5,000</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Máximo de bolsillo (individual)</th>
+                                <td>DR: $2,500 | FR: $5,000<small class="cell-note">(Incluye el deducible)</small></td>
+                                <td>DR: $8,000<small class="cell-note">(Incluye el deducible)</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Máximo de bolsillo (familiar)</th>
+                                <td>DR: $5,000 | FR: $10,000<small class="cell-note">(Incluye el deducible)</small></td>
+                                <td>DR: $16,000<small class="cell-note">(Incluye el deducible)</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Coseguro</th>
+                                <td>DR: 10% | FR: 30%</td>
+                                <td>DR: 50%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Período de acumulación financiera</th>
+                                <td>DR: año calendario | FR: año calendario</td>
+                                <td>DR: año calendario</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+            <p class="note">Todos los copagos, deducibles y coseguros (médicos y de medicamentos recetados) pagados por servicios cubiertos dentro de la red se suman al máximo de bolsillo dentro de la red.</p>
+            <h3 class="block-title">Compare la cobertura por servicio</h3>
+            <ul uk-accordion="multiple: true; transition: ease; duration: 300" class="uk-accordion">
+                <li class="uk-open"><a href="" class="uk-accordion-title">Visitas al consultorio</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Visitas al consultorio: comparación de costos de todos los planes</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Servicio</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Visita de atención primaria</th>
+                                            <td>DR: copago de $30 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $30 por visita</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Visita al especialista</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $50 por visita</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Atención preventiva para adultos</th>
+                                            <td>DR: sin cargo | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: sin cargo</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Atención preventiva infantil y pediátrica</th>
+                                            <td>DR: sin cargo | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: sin cargo</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Telesalud (visitas virtuales)</th>
+                                            <td>DR: sin cargo | FR: solo beneficio dentro de la red</td>
+                                            <td>DR: sin cargo</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Visitas médicas a domicilio</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $50 por visita</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Atención de alergias: pruebas y tratamiento</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $50 por visita</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Pruebas de diagnóstico</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Pruebas de diagnóstico: comparación de costos de todos los planes</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Servicio</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Servicios de laboratorio preferidos</th>
+                                            <td>DR: sin cargo | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: sin cargo</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Servicios de laboratorio no preferidos: entorno hospitalario</th>
+                                            <td>DR: deducible y 50% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Servicios de laboratorio no preferidos: centro independiente</th>
+                                            <td>DR: deducible y 50% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Oxford Exclusive Plan — laboratorio:</b> Consulte su Certificado de cobertura para obtener más detalles sobre el laboratorio.</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Servicios de radiología: entorno hospitalario</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Servicios de radiología: centro independiente</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Resonancias (MRI, MRA), tomografías (CT) y PET: servicios hospitalarios ambulatorios</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Resonancias (MRI, MRA), tomografías (CT) y PET: centro de radiología independiente</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertificación (estudios de imagen):</b> Estos servicios requieren precertificación a través de Oxford. Los miembros deben llamar a Oxford al <a href="tel:+18004446222">1-800-444-6222</a> al menos 14 días antes de la solicitud de tratamiento para solicitar la precertificación.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Atención de emergencia y urgencia</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Atención de emergencia y urgencia: comparación de costos de todos los planes</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Servicio</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Sala de emergencias del hospital</th>
+                                            <td>DR: copago de $100 y 10% de coseguro, no se aplica si es hospitalizado | FR: copago de $100 y 10% de coseguro, no se aplica si es hospitalizado</td>
+                                            <td>DR: copago de $100 por visita y luego 50% de coseguro; no se aplica si es hospitalizado</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan y Oxford Exclusive Plan — notificación:</b> Si el miembro es hospitalizado, se requiere notificación.</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Transporte de emergencia</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 10% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertificación (transporte de emergencia):</b> Estos servicios requieren precertificación a través de Oxford. Los miembros deben llamar a Oxford al <a href="tel:+18004446222">1-800-444-6222</a> al menos 14 días antes de la solicitud de tratamiento para solicitar la precertificación.</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Atención de urgencia (Urgi-Center)</th>
+                                            <td>DR: copago de $40 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $75 por visita</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Cirugía ambulatoria</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Cirugía ambulatoria: comparación de costos de todos los planes</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Servicio</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Cirugía ambulatoria: entorno hospitalario</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Cirugía ambulatoria: centro independiente</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertificación:</b> Estos servicios requieren precertificación a través de Oxford. Los miembros deben llamar a Oxford al <a href="tel:+18004446222">1-800-444-6222</a> al menos 14 días antes de la solicitud de tratamiento para solicitar la precertificación.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Hospitalización</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Hospitalización: comparación de costos de todos los planes</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Servicio</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Centro hospitalario (internación)</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Médico (internación)</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Todos los medicamentos (atención hospitalaria)</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertificación:</b> Estos servicios requieren precertificación a través de Oxford. Los miembros deben llamar a Oxford al <a href="tel:+18004446222">1-800-444-6222</a> al menos 14 días antes de la solicitud de tratamiento para solicitar la precertificación.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Salud mental y consumo de sustancias</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Salud mental y consumo de sustancias: comparación de costos de todos los planes</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Servicio</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Ambulatorio — salud mental/conductual, visita al consultorio</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $50 por visita</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Ambulatorio — salud mental/conductual, otros servicios</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Salud mental: terapia conductual intensiva</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $50 por visita</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Internación — salud mental/conductual</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Ambulatorio — consumo de sustancias</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $50 por visita</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Trastornos por consumo de sustancias: terapia conductual intensiva</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $50 por visita</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Trastornos por consumo de sustancias: hospitalización parcial ambulatoria</th>
+                                            <td></td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Internación — consumo de sustancias</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertificación:</b> Los servicios de salud mental y trastornos por consumo de sustancias se pueden precertificar a través del Departamento de Salud Conductual de Oxford llamando al <a href="tel:+18002016991">1-800-201-6991</a>.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Embarazo</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Embarazo: comparación de costos de todos los planes</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Servicio</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Visitas prenatales al consultorio</th>
+                                            <td>DR: sin cargo | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: sin cargo</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Servicios hospitalarios para la madre y el niño (centro para el parto)</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertificación:</b> Estos servicios requieren precertificación a través de Oxford. Los miembros deben llamar a Oxford al <a href="tel:+18004446222">1-800-444-6222</a> al menos 14 días antes de la solicitud de tratamiento para solicitar la precertificación.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Recuperación y necesidades especiales</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Recuperación y necesidades especiales: comparación de costos de todos los planes</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Servicio</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Visitas de atención médica a domicilio</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro<small class="cell-note">60 visitas por año calendario</small></td>
+                                            <td>DR: copago de $50 por visita<small class="cell-note">60 visitas por año calendario</small></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Servicios de rehabilitación (ambulatorios)</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro<small class="cell-note">60 visitas ambulatorias combinadas por año calendario</small></td>
+                                            <td>DR: copago de $50 por visita<small class="cell-note">60 visitas ambulatorias combinadas por año calendario</small></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">60 días de internación por año calendario (rehabilitación a corto plazo y servicios de habilitación)</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Atención de enfermería especializada</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro<small class="cell-note">30 días por año calendario</small></td>
+                                            <td>DR: deducible y 50% de coseguro<small class="cell-note">30 días por año calendario</small></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Cuidados paliativos (hospicio)</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro<small class="cell-note">180 días de por vida, combinados entre internación y domicilio</small></td>
+                                            <td>DR: deducible y 50% de coseguro<small class="cell-note">Atención en internación · 180 días de por vida, combinados entre internación y domicilio</small></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Visitas de cuidados paliativos a domicilio</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $50 por visita</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Equipo médico duradero</th>
+                                            <td>DR: sin cargo | FR: deducible y 30% de coseguro<small class="cell-note">Ilimitado; se requiere precertificación para artículos de más de $500</small></td>
+                                            <td>DR: sin cargo<small class="cell-note">Ilimitado; se requiere precertificación para artículos de más de $500</small></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Suministros médicos cuando sean médicamente necesarios</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr class="note-row">
+                                            <td colspan="3"><b>Direct Plan — precertificación (atención a domicilio, rehabilitación, cuidados paliativos):</b> Estos servicios requieren precertificación a través de Oxford. Los miembros deben llamar a Oxford al <a href="tel:+18004446222">1-800-444-6222</a> al menos 14 días antes de la solicitud de tratamiento para solicitar la precertificación.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Medicamentos recetados</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Medicamentos recetados: comparación de costos de todos los planes</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Nivel</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Nivel 1 — farmacia minorista (30 días)</th>
+                                            <td>DR: copago de $15 | FR: copago de $15</td>
+                                            <td>DR: copago de $15</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Nivel 1 — pedido por correo (90 días)</th>
+                                            <td>DR: copago de $30 | FR: copago de $30</td>
+                                            <td>DR: copago de $30</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Nivel 2 — farmacia minorista (30 días)</th>
+                                            <td>DR: copago de $35 | FR: copago de $35</td>
+                                            <td>DR: copago de $35</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Nivel 2 — pedido por correo (90 días)</th>
+                                            <td>DR: copago de $70 | FR: copago de $70</td>
+                                            <td>DR: copago de $70</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Nivel 3 — farmacia minorista (30 días)</th>
+                                            <td>DR: copago de $75 | FR: copago de $75</td>
+                                            <td>DR: copago de $75</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Nivel 3 — pedido por correo (90 días)</th>
+                                            <td>DR: copago de $150 | FR: copago de $150</td>
+                                            <td>DR: copago de $150</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+                        <p class="note">El beneficio de medicamentos recetados se basa en un límite por año calendario para cualquier deducible y/o límite máximo aplicable.</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Otros servicios cubiertos</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <div class="table-shell">
+                            <div class="table-scroll">
+                                <table data-compare="plans" class="cmp-table">
+                                    <caption class="uk-hidden-visually">Otros servicios cubiertos: comparación de todos los planes</caption>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Servicio</th>
+                                            <th scope="col">Direct Plan<span class="opt-net">Oxford Health Insurance, Inc.</span></th>
+                                            <th scope="col">Oxford Exclusive Plan<span class="opt-net">Liberty Network</span></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">Atención quiropráctica</th>
+                                            <td>DR: copago de $40 por visita | FR: deducible y 50% de coseguro<small class="cell-note">La cobertura fuera de la red está limitada a $500 por año calendario por miembro</small></td>
+                                            <td>DR: copago de $40 por visita</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Audífonos</th>
+                                            <td>DR: sin cargo | FR: deducible y 30% de coseguro<small class="cell-note">Limitado a 1 audífono por cada oído con discapacidad auditiva cada 24 meses.</small></td>
+                                            <td>DR: sin cargo<small class="cell-note">Limitado a 1 audífono por cada oído con discapacidad auditiva cada 24 meses.</small></td>
+                                        </tr>
+                                        <tr class="group-row">
+                                            <th colspan="3">Infertilidad</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Visitas al consultorio del especialista</th>
+                                            <td>DR: copago de $50 por visita | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: copago de $50 por visita</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Servicios de centro ambulatorio</th>
+                                            <td></td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Cirugía ambulatoria: entorno hospitalario</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Cirugía ambulatoria: centro independiente</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Servicios de centro de internación</th>
+                                            <td>DR: deducible y 10% de coseguro | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: deducible y 50% de coseguro</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Medicamentos para la infertilidad</th>
+                                            <td>DR: cubiertos sujetos al gasto de bolsillo de medicamentos recetados aplicable | FR: deducible y 30% de coseguro</td>
+                                            <td>DR: cubiertos sujetos al gasto de bolsillo de medicamentos recetados aplicable</td>
+                                        </tr>
+                                        <tr class="group-row">
+                                            <th colspan="3">Gimnasio</th>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Gimnasio: suscriptor</th>
+                                            <td>DR: reembolso de $200 por período de 6 meses | FR: reembolso de $200 por período de 6 meses</td>
+                                            <td>DR: reembolso de $200 por período de 6 meses</td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">Gimnasio: cónyuge/dependientes mayores de 13 años</th>
+                                            <td>DR: reembolso de $100 por período de 6 meses | FR: reembolso de $100 por período de 6 meses</td>
+                                            <td>DR: reembolso de $100 por período de 6 meses</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <p class="note">DR = Dentro de la red · FR = Fuera de la red</p>
+                    </div>
+                </li>
+                <li><a href="" class="uk-accordion-title">Servicios excluidos</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <p class="note">Direct Plan y Oxford Exclusive Plan</p>
+                        <ul class="pill-list excl">
+                            <li>cirugía estética</li>
+                            <li>cuidado rutinario de los pies</li>
+                            <li>cuidado de custodia</li>
+                            <li>artículos de comodidad o conveniencia personal</li>
+                            <li>enfermería privada o de servicio especial</li>
+                            <li>trastornos del aprendizaje y del comportamiento</li>
+                            <li>compensación laboral (Workers' Compensation)</li>
+                            <li>afecciones relacionadas con el servicio militar</li>
+                            <li>servicios dentales (salvo que se indique lo contrario)</li>
+                            <li>servicios y suministros de corrección de la vista (salvo que se indique lo contrario)</li>
+                        </ul>
+                        <p class="note">Direct Plan: consulte el Certificado de cobertura para obtener una lista más completa de todos los beneficios, limitaciones y exclusiones.</p>
+                    </div>
+                </li>
+            </ul>
+            <p class="note">Este resumen de cobertura de muestra se proporciona solo con fines informativos. El Resumen de beneficios correspondiente se entregará a los miembros inscritos elegibles como parte del Certificado de cobertura. La cobertura está sujeta a los términos y condiciones del Certificado.</p>
+            <h3 class="block-title">Contactos del plan</h3>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3>Direct Plan</h3>
+                    <!-- Spanish cards write the phone numbers with dashes (same number): benefits.js hides a card whose links match another card, which would hide this one behind the English copy -->
+                    <p class="c-phone"><span class="c-label">Precertificación (Oxford)</span><a href="tel:+1-800-444-6222">1-800-444-6222</a></p>
+                    <p class="c-phone"><span class="c-label">Departamento de Salud Conductual</span><a href="tel:+1-800-201-6991">1-800-201-6991</a></p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section id="dental" class="uk-section">
+        <div class="uk-container" data-l="en">
+            <header class="sec-head">
+                <h2>Dental Coverage</h2>
+                <p class="sec-lead">Delta Dental: High Plan (Delta Dental PPO Plus Premier) and Low Plan (Delta Dental PPO), effective 4/1/2026.</p>
+            </header>
+            <h3 class="block-title">Key figures</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table data-compare="plans" class="cmp-table">
+                        <caption class="uk-hidden-visually">Dental key figures across both plans</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Feature</th>
+                                <th scope="col" data-type="PPO">High Plan<span class="opt-net">Delta Dental PPO Plus Premier</span></th>
+                                <th scope="col" data-type="PPO">Low Plan<span class="opt-net">Delta Dental PPO</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Effective</th>
+                                <td>Effective 4/1/2026</td>
+                                <td>4/1/2026</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Deductible (individual)</th>
+                                <td>PPO: $50 | PREM: $50 | NP: $50</td>
+                                <td>IN: $50 | OON: $50</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Deductible (family)</th>
+                                <td>PPO: $150 | PREM: $150 | NP: $150</td>
+                                <td>$150</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Deductible waived for</th>
+                                <td>Preventive and Diagnostic</td>
+                                <td>Preventive and Diagnostic</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Annual maximum</th>
+                                <td>PPO: $1,500 | PREM: $1,500 | NP: $1,500<small class="cell-note">per person</small></td>
+                                <td>IN: $1,500 | OON: $1,500<small class="cell-note">per person</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Carryover Max</th>
+                                <td>Carry over a portion of your unused standard annual maximum benefit limit into the next year and beyond to use on more expensive procedures in the future.</td>
+                                <td>Carry over a portion of your unused standard annual maximum benefit limit into the next year and beyond to use on more expensive procedures in the future.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Dependent children</th>
+                                <td>Dependent children are covered to age 26.</td>
+                                <td>Dependent children are covered to age 26.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="note">PPO = Delta Dental PPO dentist · PREM = Delta Dental Premier dentist · NP = Non-Participating dentist · IN = In-Network (If a Delta Dental PPO Dentist is Used) · OON = Out-of-Network (If a Delta Dental Premier or Non-Participating Dentist is Used)</p>
+            <h3 class="block-title">What the plan pays, by service</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table data-compare="plans" class="cmp-table">
+                        <caption class="uk-hidden-visually">Dental services — percentage the plan pays, both plans</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Service — plan pays</th>
+                                <th scope="col" data-type="PPO">High Plan<span class="opt-net">Delta Dental PPO Plus Premier</span></th>
+                                <th scope="col" data-type="PPO">Low Plan<span class="opt-net">Delta Dental PPO</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="group-row">
+                                <th colspan="3">Preventive &amp; Diagnostic</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Exams</th>
+                                <td rowspan="7">PPO: 100% | PREM: 100% | NP: 100%</td>
+                                <td rowspan="7">IN: 100% | OON: 100%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Cleanings</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Bitewing X-Rays</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Fluoride Treatments (Frequency limitations apply)</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Full Mouth X-Rays</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Space Maintainers</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Sealants</th>
+                            </tr>
+                            <tr class="group-row">
+                                <th colspan="3">Basic</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Fillings</th>
+                                <td rowspan="6">PPO: 80% | PREM: 80% | NP: 80%</td>
+                                <td rowspan="6">IN: 80% | OON: 80%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Simple Extractions</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Root Canals (Endodontics)</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Periodontics</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Oral Surgery</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Cone Beam Radiographs</th>
+                            </tr>
+                            <tr class="group-row">
+                                <th colspan="3">Major</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Crowns &amp; Gold Restorations</th>
+                                <td rowspan="4">PPO: 50% | PREM: 50% | NP: 50%</td>
+                                <td rowspan="4">IN: 50% | OON: 50%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Bridgework</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Full &amp; Partial Dentures</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Repair of Dentures</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="note">PPO = Delta Dental PPO dentist · PREM = Delta Dental Premier dentist · NP = Non-Participating dentist · IN = In-Network · OON = Out-of-Network</p>
+            <h3 class="block-title">Added programs (High Plan and Low Plan)</h3>
+            <dl class="details">
+                <dt>Oral Health Enhancement</dt>
+                <dd>Receive up to four dental cleanings and/or periodontal maintenance procedures in any combination per benefit period if you have been treated for periodontal (gum) disease in the past. Details on how to qualify can be found in your benefit booklet or online at <a href="https://DeltaDental.com/OHE" target="_blank" rel="noopener noreferrer">DeltaDental.com/OHE</a>.</dd>
+                <dt>Integrated Oral Health</dt>
+                <dd>If you have a defined medical condition such as Diabetes, Cardiovascular Disease, or Pregnancy, or are undergoing certain Cancer treatments, you may qualify for up to two additional cleanings per benefit period.</dd>
+                <dt>Special Health Care Needs benefit</dt>
+                <dd>Covered members with a qualifying special health care need have access to enhanced benefits such as additional cleanings and/or examinations and treatment modifications.</dd>
+                <dt>Hearing Savings Program</dt>
+                <dd>Get access to savings on hearing aids and services through Amplifon Hearing Health Care at no additional cost.</dd>
+            </dl>
+            <h3 class="block-title">How networks affect your cost</h3>
+            <div class="callout good">
+                <p>You'll save the most when visiting an in-network dentist.</p>
+            </div>
+            <dl class="details">
+                <dt>Your dentist's network impacts how much you pay out of pocket</dt>
+                <dd>Dentists who participate in the Delta Dental PPO network will have the lowest costs and out-of-pocket expenses. Dentists who participate in the Delta Dental Premier network will have slightly higher out-of-pocket expenses than those in the PPO network. If you receive services from a non-participating, out-of-network dentist, you will pay the highest out-of-pocket costs and be responsible for your coinsurance amount plus the balance-billed amount (this is the difference between the dentist's submitted fee for the claim and Delta Dental's approved fee).</dd>
+                <dt>Balance billing</dt>
+                <dd>In-network dentists won't "balance bill" patients. This means dentists can't charge you the difference between their usual fee and the amount they've agreed to accept as payment from Delta Dental.</dd>
+                <dt>Cross-accumulation</dt>
+                <dd>Annual maximums and deductibles are not separate across Delta Dental's networks and will cross-accumulate if you see dentists in different networks throughout the year.</dd>
+            </dl>
+            <p class="note">This overview contains a general description of your dental care program as a convenient reference. Complete details of your program appear in your benefit booklet and the group contract between your plan sponsor and Delta Dental Inc., which governs the benefits and operation of your program. The group contract would control if there should be an inconsistency or difference between its provisions and the information in the overview.</p>
+        </div>
+        <div lang="es" class="uk-container" data-l="es">
+            <header class="sec-head">
+                <h2>Cobertura dental</h2>
+                <p class="sec-lead">Delta Dental: High Plan (Delta Dental PPO Plus Premier) y Low Plan (Delta Dental PPO), vigentes desde el 1 de abril de 2026.</p>
+            </header>
+            <h3 class="block-title">Cifras clave</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table data-compare="plans" class="cmp-table">
+                        <caption class="uk-hidden-visually">Cifras clave dentales de ambos planes</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Característica</th>
+                                <th scope="col" data-type="PPO">High Plan<span class="opt-net">Delta Dental PPO Plus Premier</span></th>
+                                <th scope="col" data-type="PPO">Low Plan<span class="opt-net">Delta Dental PPO</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Vigencia</th>
+                                <td>Vigente desde el 1 de abril de 2026</td>
+                                <td>1 de abril de 2026</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Deducible (individual)</th>
+                                <td>PPO: $50 | PREM: $50 | NP: $50</td>
+                                <td>DR: $50 | FR: $50</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Deducible (familiar)</th>
+                                <td>PPO: $150 | PREM: $150 | NP: $150</td>
+                                <td>$150</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Deducible no aplicable a</th>
+                                <td>Servicios preventivos y de diagnóstico</td>
+                                <td>Servicios preventivos y de diagnóstico</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Máximo anual</th>
+                                <td>PPO: $1,500 | PREM: $1,500 | NP: $1,500<small class="cell-note">por persona</small></td>
+                                <td>DR: $1,500 | FR: $1,500<small class="cell-note">por persona</small></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Carryover Max (traspaso del máximo)</th>
+                                <td>Traspase una parte de su límite de beneficio máximo anual estándar no utilizado al año siguiente y posteriores para usarlo en procedimientos más costosos en el futuro.</td>
+                                <td>Traspase una parte de su límite de beneficio máximo anual estándar no utilizado al año siguiente y posteriores para usarlo en procedimientos más costosos en el futuro.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Hijos dependientes</th>
+                                <td>Los hijos dependientes están cubiertos hasta los 26 años.</td>
+                                <td>Los hijos dependientes están cubiertos hasta los 26 años.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="note">PPO = dentista de Delta Dental PPO · PREM = dentista de Delta Dental Premier · NP = dentista no participante · DR = Dentro de la red (si se usa un dentista de Delta Dental PPO) · FR = Fuera de la red (si se usa un dentista de Delta Dental Premier o no participante)</p>
+            <h3 class="block-title">Lo que paga el plan, por servicio</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table data-compare="plans" class="cmp-table">
+                        <caption class="uk-hidden-visually">Servicios dentales: porcentaje que paga el plan, ambos planes</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Servicio — el plan paga</th>
+                                <th scope="col" data-type="PPO">High Plan<span class="opt-net">Delta Dental PPO Plus Premier</span></th>
+                                <th scope="col" data-type="PPO">Low Plan<span class="opt-net">Delta Dental PPO</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="group-row">
+                                <th colspan="3">Preventivos y de diagnóstico</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Exámenes</th>
+                                <td rowspan="7">PPO: 100% | PREM: 100% | NP: 100%</td>
+                                <td rowspan="7">DR: 100% | FR: 100%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Limpiezas</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Radiografías de aleta de mordida</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Tratamientos con flúor (se aplican límites de frecuencia)</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Radiografías de boca completa</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Mantenedores de espacio</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Selladores</th>
+                            </tr>
+                            <tr class="group-row">
+                                <th colspan="3">Básicos</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Empastes</th>
+                                <td rowspan="6">PPO: 80% | PREM: 80% | NP: 80%</td>
+                                <td rowspan="6">DR: 80% | FR: 80%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Extracciones simples</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Endodoncias (tratamientos de conducto)</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Periodoncia</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Cirugía oral</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Radiografías de haz cónico</th>
+                            </tr>
+                            <tr class="group-row">
+                                <th colspan="3">Mayores</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Coronas y restauraciones de oro</th>
+                                <td rowspan="4">PPO: 50% | PREM: 50% | NP: 50%</td>
+                                <td rowspan="4">DR: 50% | FR: 50%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Puentes</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Dentaduras completas y parciales</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Reparación de dentaduras</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="note">PPO = dentista de Delta Dental PPO · PREM = dentista de Delta Dental Premier · NP = dentista no participante · DR = Dentro de la red · FR = Fuera de la red</p>
+            <h3 class="block-title">Programas adicionales (High Plan y Low Plan)</h3>
+            <dl class="details">
+                <dt>Oral Health Enhancement</dt>
+                <dd>Reciba hasta cuatro limpiezas dentales y/o procedimientos de mantenimiento periodontal en cualquier combinación por período de beneficios si ha recibido tratamiento por enfermedad periodontal (de las encías) en el pasado. Puede encontrar detalles sobre cómo calificar en su folleto de beneficios o en línea en <a href="https://DeltaDental.com/OHE" target="_blank" rel="noopener noreferrer">DeltaDental.com/OHE</a>.</dd>
+                <dt>Integrated Oral Health</dt>
+                <dd>Si tiene una afección médica definida, como diabetes, enfermedad cardiovascular o embarazo, o está recibiendo ciertos tratamientos contra el cáncer, puede calificar para hasta dos limpiezas adicionales por período de beneficios.</dd>
+                <dt>Beneficio para necesidades especiales de atención médica</dt>
+                <dd>Los miembros cubiertos con una necesidad especial de atención médica que califique tienen acceso a beneficios mejorados, como limpiezas y/o exámenes adicionales y modificaciones del tratamiento.</dd>
+                <dt>Hearing Savings Program</dt>
+                <dd>Obtenga acceso a ahorros en audífonos y servicios a través de Amplifon Hearing Health Care sin costo adicional.</dd>
+            </dl>
+            <h3 class="block-title">Cómo afectan las redes a su costo</h3>
+            <div class="callout good">
+                <p>Ahorrará más cuando visite a un dentista dentro de la red.</p>
+            </div>
+            <dl class="details">
+                <dt>La red de su dentista influye en cuánto paga de su bolsillo</dt>
+                <dd>Los dentistas que participan en la red Delta Dental PPO tendrán los costos y gastos de bolsillo más bajos. Los dentistas que participan en la red Delta Dental Premier tendrán gastos de bolsillo un poco más altos que los de la red PPO. Si recibe servicios de un dentista no participante fuera de la red, pagará los costos de bolsillo más altos y será responsable de su monto de coseguro más el monto facturado como saldo (la diferencia entre la tarifa presentada por el dentista para el reclamo y la tarifa aprobada por Delta Dental).</dd>
+                <dt>Facturación de saldo</dt>
+                <dd>Los dentistas dentro de la red no facturarán el saldo a los pacientes. Esto significa que los dentistas no pueden cobrarle la diferencia entre su tarifa habitual y el monto que han aceptado recibir como pago de Delta Dental.</dd>
+                <dt>Acumulación cruzada</dt>
+                <dd>Los máximos anuales y los deducibles no están separados entre las redes de Delta Dental y se acumularán entre sí si visita a dentistas de diferentes redes durante el año.</dd>
+            </dl>
+            <p class="note">Este resumen contiene una descripción general de su programa de atención dental como referencia práctica. Los detalles completos de su programa aparecen en su folleto de beneficios y en el contrato grupal entre el patrocinador de su plan y Delta Dental Inc., que rige los beneficios y el funcionamiento de su programa. El contrato grupal prevalecerá si hubiera alguna inconsistencia o diferencia entre sus disposiciones y la información de este resumen.</p>
+        </div>
+    </section>
+    <section id="vision" class="uk-section">
+        <div class="uk-container" data-l="en">
+            <header class="sec-head">
+                <h2>Vision Coverage</h2>
+                <p class="sec-lead">DeltaVision-Essential from Delta Dental (DeltaVision in partnership with VSP), Choice network.</p>
+            </header>
+            <dl class="facts">
+                <div class="fact">
+                    <dt>Exam copay</dt>
+                    <dd>$10</dd>
+                </div>
+                <div class="fact">
+                    <dt>Materials copay</dt>
+                    <dd>$25</dd>
+                </div>
+                <div class="fact">
+                    <dt>Exam/Lens/Frame frequency</dt>
+                    <dd>12/12/24 (covered for children)</dd>
+                </div>
+                <div class="fact">
+                    <dt>Contacts frequency (in lieu of glasses)</dt>
+                    <dd>12</dd>
+                </div>
+                <div class="fact">
+                    <dt>Both frames and contacts in same year</dt>
+                    <dd>No; allows contacts in lieu of frames</dd>
+                </div>
+            </dl>
+            <h3 class="block-title">Exam and materials</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">DeltaVision-Essential — in-network coverage and out-of-network allowances</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Benefit</th>
+                                <th scope="col">In-network</th>
+                                <th scope="col">Out-of-network allowance</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Exam</th>
+                                <td>Copay: $10</td>
+                                <td>$45</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Single vision lenses</th>
+                                <td>covered in full</td>
+                                <td>$30</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Bifocal lenses</th>
+                                <td>covered in full</td>
+                                <td>$50</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Trifocal lenses</th>
+                                <td>covered in full</td>
+                                <td>$65</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Progressive lenses</th>
+                                <td>Standard Progressive lenses are covered</td>
+                                <td>$50</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lenticular lenses</th>
+                                <td></td>
+                                <td>$100</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Frames</th>
+                                <td>$130 (includes Walmart/Sam's Club)/ $70 Costco<small class="cell-note">20% savings on any amount above the retail allowance.</small></td>
+                                <td>$70</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Featured designer brands for frames</th>
+                                <td>An extra $20 allowance on featured designer brands for frames.</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Contacts — elective (conventional)</th>
+                                <td>$130</td>
+                                <td>$105</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Contacts — medically necessary</th>
+                                <td>Covered in full</td>
+                                <td>$210</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Contact lens fitting/evaluation</th>
+                                <td>Up to $60</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="note">Lens coverage: Glass or plastic single vision, lined bifocal, lined trifocal, or lenticular lenses are covered in full. Covered in full materials and services are less any applicable copay. Based on applicable laws, benefits and savings may vary by location. Benefits may also vary at participating retail chains. Promotions like rebates are continually evaluated and subject to change without notice.</p>
+            <h3 class="block-title">Lens enhancements (in-network)</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Lens enhancement prices in-network</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Enhancement</th>
+                                <th scope="col">You pay</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Anti-glare coating</th>
+                                <td>$41 single/$41 multifocal</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Impact-resistant lenses - adult</th>
+                                <td>$31 single/ $35 multifocal (covered for children)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Progressive lenses</th>
+                                <td>Standard Progressive lenses are covered</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Light-reactive lenses</th>
+                                <td>$75 single vision/ $75 multifocal</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Scratch-resistant coating</th>
+                                <td>$17 single vision/$17 multi focal</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="note">Prices shown reflect the standard plastic price for each respective category. Premium lens enhancement prices may vary. Prices are valid only through VSP Choice Network Providers and are subject to change without notice.</p>
+            <h3 class="block-title">Additional savings and programs</h3>
+            <dl class="details">
+                <dt>Laser vision correction (LASIK)</dt>
+                <dd>Average 15% off the regular price, or 5% off the promotional price; discounts only available from contracted facilities.</dd>
+                <dt>Additional pairs</dt>
+                <dd>20% savings on unlimited additional pairs of prescription glasses and/or nonprescription sunglasses from any VSP provider within 12 months of exam.</dd>
+                <dt>Retinal screening</dt>
+                <dd>Routine retinal screening covered for a maximum fee of $39.</dd>
+                <dt>VSP Diabetic Eyecare Plus Program</dt>
+                <dd>Retinal screening for members with diabetes, $0 copay; Additional exams and services for members with diabetic eye disease, glaucoma, or age-related macular degeneration. Limitations and coordination with your medical coverage may apply. Ask your VSP doctor for details. $20 copay per exam.</dd>
+                <dt>Low vision</dt>
+                <dd>Pre-approved low vision supplemental testing covered every two years; 75% coverage for approved low vision aids, up to $1,000 (less any amount paid for supplemental testing) every two years.</dd>
+                <dt>Eyeconic</dt>
+                <dd>Go to <a href="https://Eyeconic.com" target="_blank" rel="noopener noreferrer">Eyeconic.com</a> for an easy-to-use, convenient online eyewear option.</dd>
+                <dt>TruHearing</dt>
+                <dd>Save up to 60% on hearing aids and batteries. Visit <a href="https://TruHearing.com/VSP" target="_blank" rel="noopener noreferrer">TruHearing.com/VSP</a> or call <a href="tel:+18773967194">877.396.7194</a> for more information.</dd>
+            </dl>
+            <div class="callout info">
+                <p>Available in-network only (frames discount over allowance, additional pair, LASIK, retinal screening, lens coverage, Eyeconic, TruHearing).</p>
+            </div>
+            <div class="callout warn">
+                <p>Promotions and Featured Frame Brands do not apply at Costco Optical, Walmart, Sam's Club, and other participating retail chains. In-network status of the optometrist performing the exam may vary at participating retail chains. Please contact VSP and/or the optometrist at the retail location to verify network participation status before receiving services.</p>
+            </div>
+            <ul uk-accordion="multiple: true; transition: ease; duration: 300" class="uk-accordion">
+                <li><a href="" class="uk-accordion-title">Excluded items</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <ul class="pill-list excl">
+                            <li>plano lenses (lenses with refractive correction of less than ± .50 diopter)</li>
+                            <li>two pairs of glasses instead of bifocals</li>
+                            <li>replacement of lenses, frames, or contacts</li>
+                            <li>medical or surgical treatment</li>
+                            <li>orthoptics</li>
+                            <li>vision training or supplemental testing</li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div lang="es" class="uk-container" data-l="es">
+            <header class="sec-head">
+                <h2>Cobertura de visión</h2>
+                <p class="sec-lead">DeltaVision-Essential de Delta Dental (DeltaVision en asociación con VSP), red Choice.</p>
+            </header>
+            <dl class="facts">
+                <div class="fact">
+                    <dt>Copago del examen</dt>
+                    <dd>$10</dd>
+                </div>
+                <div class="fact">
+                    <dt>Copago de materiales</dt>
+                    <dd>$25</dd>
+                </div>
+                <div class="fact">
+                    <dt>Frecuencia de examen/lentes/marco</dt>
+                    <dd>12/12/24 (cubierto para niños)</dd>
+                </div>
+                <div class="fact">
+                    <dt>Frecuencia de lentes de contacto (en lugar de anteojos)</dt>
+                    <dd>12</dd>
+                </div>
+                <div class="fact">
+                    <dt>Marcos y lentes de contacto en el mismo año</dt>
+                    <dd>No; permite lentes de contacto en lugar de marcos</dd>
+                </div>
+            </dl>
+            <h3 class="block-title">Examen y materiales</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">DeltaVision-Essential: cobertura dentro de la red y asignaciones fuera de la red</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Beneficio</th>
+                                <th scope="col">Dentro de la red</th>
+                                <th scope="col">Asignación fuera de la red</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Examen</th>
+                                <td>Copago: $10</td>
+                                <td>$45</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lentes monofocales</th>
+                                <td>cubiertos en su totalidad</td>
+                                <td>$30</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lentes bifocales</th>
+                                <td>cubiertos en su totalidad</td>
+                                <td>$50</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lentes trifocales</th>
+                                <td>cubiertos en su totalidad</td>
+                                <td>$65</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lentes progresivos</th>
+                                <td>Los lentes progresivos estándar están cubiertos</td>
+                                <td>$50</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lentes lenticulares</th>
+                                <td></td>
+                                <td>$100</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Marcos</th>
+                                <td>$130 (incluye Walmart/Sam's Club)/ $70 Costco<small class="cell-note">20% de ahorro sobre cualquier monto que supere la asignación minorista.</small></td>
+                                <td>$70</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Marcas de diseñador destacadas para marcos</th>
+                                <td>Una asignación adicional de $20 en marcas de diseñador destacadas para marcos.</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lentes de contacto — opcionales (convencionales)</th>
+                                <td>$130</td>
+                                <td>$105</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lentes de contacto — médicamente necesarios</th>
+                                <td>Cubiertos en su totalidad</td>
+                                <td>$210</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Adaptación/evaluación de lentes de contacto</th>
+                                <td>Hasta $60</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="note">Cobertura de lentes: los lentes de vidrio o plástico monofocales, bifocales con línea, trifocales con línea o lenticulares están cubiertos en su totalidad. Los materiales y servicios cubiertos en su totalidad se entienden menos cualquier copago aplicable. Según las leyes aplicables, los beneficios y ahorros pueden variar según la ubicación. Los beneficios también pueden variar en las cadenas minoristas participantes. Las promociones, como los reembolsos, se evalúan continuamente y están sujetas a cambios sin previo aviso.</p>
+            <h3 class="block-title">Mejoras de lentes (dentro de la red)</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Precios de mejoras de lentes dentro de la red</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Mejora</th>
+                                <th scope="col">Usted paga</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Recubrimiento antirreflejo</th>
+                                <td>$41 monofocal/$41 multifocal</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lentes resistentes a impactos - adultos</th>
+                                <td>$31 monofocal/ $35 multifocal (cubierto para niños)</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lentes progresivos</th>
+                                <td>Los lentes progresivos estándar están cubiertos</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Lentes fotosensibles</th>
+                                <td>$75 monofocal/ $75 multifocal</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Recubrimiento resistente a rayones</th>
+                                <td>$17 monofocal/$17 multifocal</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <p class="note">Los precios indicados reflejan el precio estándar del plástico para cada categoría. Los precios de las mejoras de lentes premium pueden variar. Los precios son válidos solo a través de los proveedores de la red VSP Choice y están sujetos a cambios sin previo aviso.</p>
+            <h3 class="block-title">Ahorros y programas adicionales</h3>
+            <dl class="details">
+                <dt>Corrección de la vista con láser (LASIK)</dt>
+                <dd>Un promedio de 15% de descuento sobre el precio regular, o 5% de descuento sobre el precio promocional; descuentos disponibles solo en centros contratados.</dd>
+                <dt>Pares adicionales</dt>
+                <dd>20% de ahorro en pares adicionales ilimitados de anteojos recetados y/o anteojos de sol sin receta de cualquier proveedor de VSP dentro de los 12 meses posteriores al examen.</dd>
+                <dt>Examen de retina</dt>
+                <dd>Examen de retina de rutina cubierto por una tarifa máxima de $39.</dd>
+                <dt>VSP Diabetic Eyecare Plus Program</dt>
+                <dd>Examen de retina para miembros con diabetes, copago de $0; exámenes y servicios adicionales para miembros con enfermedad ocular diabética, glaucoma o degeneración macular relacionada con la edad. Pueden aplicarse limitaciones y coordinación con su cobertura médica. Pregunte a su médico de VSP para obtener detalles. Copago de $20 por examen.</dd>
+                <dt>Baja visión</dt>
+                <dd>Pruebas complementarias de baja visión aprobadas previamente cubiertas cada dos años; 75% de cobertura para ayudas de baja visión aprobadas, hasta $1,000 (menos cualquier monto pagado por pruebas complementarias) cada dos años.</dd>
+                <dt>Eyeconic</dt>
+                <dd>Visite <a href="https://Eyeconic.com" target="_blank" rel="noopener noreferrer">Eyeconic.com</a> para una opción de anteojos en línea práctica y fácil de usar.</dd>
+                <dt>TruHearing</dt>
+                <dd>Ahorre hasta un 60% en audífonos y baterías. Visite <a href="https://TruHearing.com/VSP" target="_blank" rel="noopener noreferrer">TruHearing.com/VSP</a> o llame al <a href="tel:+18773967194">877.396.7194</a> para obtener más información.</dd>
+            </dl>
+            <div class="callout info">
+                <p>Disponible solo dentro de la red (descuento en marcos sobre la asignación, par adicional, LASIK, examen de retina, cobertura de lentes, Eyeconic, TruHearing).</p>
+            </div>
+            <div class="callout warn">
+                <p>Las promociones y las marcas de marcos destacadas no se aplican en Costco Optical, Walmart, Sam's Club ni otras cadenas minoristas participantes. La condición de dentro de la red del optometrista que realiza el examen puede variar en las cadenas minoristas participantes. Comuníquese con VSP y/o con el optometrista de la tienda para verificar su participación en la red antes de recibir servicios.</p>
+            </div>
+            <ul uk-accordion="multiple: true; transition: ease; duration: 300" class="uk-accordion">
+                <li><a href="" class="uk-accordion-title">Artículos excluidos</a>
+                    <div data-print-expand="" class="uk-accordion-content">
+                        <ul class="pill-list excl">
+                            <li>lentes planos (lentes con corrección refractiva de menos de ± .50 dioptrías)</li>
+                            <li>dos pares de anteojos en lugar de bifocales</li>
+                            <li>reemplazo de lentes, marcos o lentes de contacto</li>
+                            <li>tratamiento médico o quirúrgico</li>
+                            <li>ortóptica</li>
+                            <li>entrenamiento visual o pruebas complementarias</li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+    <section id="life-disability" class="uk-section">
+        <div class="uk-container" data-l="en">
+            <header class="sec-head">
+                <h2>Life &amp; AD&amp;D Insurance</h2>
+                <p class="sec-lead">Principal group term life insurance for all eligible hourly employees, Principal Accidental Death and Dismemberment (AD&amp;D), and Voluntary Life for Salaried Employees.</p>
+            </header>
+            <h3 class="block-title">Group term life insurance — all eligible hourly employees (Principal)</h3>
+            <dl class="facts">
+                <div class="fact">
+                    <dt>Life benefit</dt>
+                    <dd>$50,000</dd>
+                </div>
+                <div class="fact">
+                    <dt>Guaranteed issue</dt>
+                    <dd>If you're under 70: $100,000 | If you're 70 or older: The lesser of $100,000 or the amount with the prior carrier</dd>
+                </div>
+                <div class="fact">
+                    <dt>Eligible class</dt>
+                    <dd>all eligible hourly employees</dd>
+                </div>
+                <div class="fact">
+                    <dt>Coverage renewal</dt>
+                    <dd>Your coverage renews every April 1.</dd>
+                </div>
+            </dl>
+            <dl class="details">
+                <dt>Guaranteed issue</dt>
+                <dd>Amount of coverage you may buy without answering medical questions.</dd>
+                <dt>Do I need to provide health information?</dt>
+                <dd>Benefit amounts up to the guaranteed issue won't require health information.</dd>
+                <dt>Benefit reduction</dt>
+                <dd>As you get older, your life insurance benefit amount decreases. Age reductions apply to the benefit amount after providing health information.</dd>
+            </dl>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Group term life age reductions</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Age</th>
+                                <th scope="col">Reduction</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">70</th>
+                                <td>35% reduction at age 70</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">75</th>
+                                <td>additional 20% reduction at age 75</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h3 class="block-title">Accidental Death and Dismemberment (AD&amp;D) — Principal</h3>
+            <dl class="facts">
+                <div class="fact">
+                    <dt>AD&amp;D benefit</dt>
+                    <dd>If you're accidentally injured on or off the job, you may receive a benefit equal to your life benefit.</dd>
+                </div>
+            </dl>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">AD&amp;D loss schedule</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Loss</th>
+                                <th scope="col">Benefit</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Loss of life, loss of both hands or both feet or one hand and one foot, or loss of sight of both eyes</th>
+                                <td>100%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Loss of one hand, or one foot, or sight of one eye</th>
+                                <td>50%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Loss of thumb and index finger on the same hand</th>
+                                <td>25%</td>
+                            </tr>
+                            <tr class="group-row">
+                                <th colspan="2">Loss of use or paralysis - total loss of movement for 12 consecutive months or permanent paralysis</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Quadriplegia</th>
+                                <td>100%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Paraplegia, hemiplegia, or loss of use of both hands or both feet or one hand and one foot.</th>
+                                <td>50%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Loss of use of one arm, one leg, one hand or one foot</th>
+                                <td>25%</td>
+                            </tr>
+                            <tr class="group-row">
+                                <th colspan="2">Loss of speech and/or hearing - total loss for 12 consecutive months</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Loss of speech and hearing in both ears</th>
+                                <td>100%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Loss of speech or hearing in both ears</th>
+                                <td>50%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Loss of hearing in one ear</th>
+                                <td>25%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h3 class="block-title">Additional benefits</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Additional AD&amp;D and life benefits</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Benefit</th>
+                                <th scope="col">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Seatbelt / airbag - If you die in a car accident while wearing a seat belt or protected by an airbag</th>
+                                <td>$10,000</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Repatriation - If you die at least 100 miles from your home</th>
+                                <td>Up to $2,000</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Education - If your children are enrolled in an accredited post-secondary school at the time of your death</th>
+                                <td>$3,000/year for up to 4 years</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Accelerated death benefit</th>
+                                <td>If you're terminally ill, you may be able to receive a portion of your life benefit.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Coverage during disability</th>
+                                <td>If you're disabled, you may be able to continue your coverage and not pay premium.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Conversion of terminated coverage</th>
+                                <td>If coverage terminates, you may be able to convert coverage to an individual policy.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h3 class="block-title">Voluntary Life – Salaried Employees</h3>
+            <div class="prose">
+                <p>Protect what matters most — the people you love. If you pass away, your life insurance proceeds will go to the beneficiaries you've designated.</p>
+            </div>
+            <dl class="facts">
+                <div class="fact">
+                    <dt>Eligible class</dt>
+                    <dd>Salaried Employees</dd>
+                </div>
+                <div class="fact">
+                    <dt>Child(ren) coverage options</dt>
+                    <dd>$5,000; $10,000; $15,000; $20,000; $25,000</dd>
+                </div>
+            </dl>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Voluntary life coverage amounts for employee and spouse</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Coverage</th>
+                                <th scope="col">Increments</th>
+                                <th scope="col">Minimum</th>
+                                <th scope="col">Maximum</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Employee</th>
+                                <td>$10,000</td>
+                                <td>$10,000</td>
+                                <td>$300,000 if under age 70; $150,000 if age 70 or older</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Spouse</th>
+                                <td>$5,000</td>
+                                <td>$5,000</td>
+                                <td>$100,000 if under age 70; $30,000 if age 70 or older</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Voluntary life age reductions</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Age</th>
+                                <th scope="col">Reduction</th>
+                                <th scope="col">Applies to</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">70</th>
+                                <td>35%</td>
+                                <td>Employee Coverage; Spouse Coverage</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">75</th>
+                                <td>additional 20%</td>
+                                <td>Employee Coverage; Spouse Coverage</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <ul class="pill-list incl">
+                <li>Amount of coverage you may buy without providing health information</li>
+                <li>As you get older, your life insurance benefit amount decreases</li>
+                <li>Amount of coverage may not exceed 100% of your benefit</li>
+                <li>Dependent children under 14 days old receive a $1,000 benefit</li>
+            </ul>
+        </div>
+        <div lang="es" class="uk-container" data-l="es">
+            <header class="sec-head">
+                <h2>Seguro de vida y AD&amp;D</h2>
+                <p class="sec-lead">Seguro de vida a término grupal de Principal para todos los empleados por hora elegibles, seguro por muerte accidental y desmembramiento (AD&amp;D) de Principal y seguro de vida voluntario para empleados asalariados.</p>
+            </header>
+            <h3 class="block-title">Seguro de vida a término grupal — todos los empleados por hora elegibles (Principal)</h3>
+            <dl class="facts">
+                <div class="fact">
+                    <dt>Beneficio de vida</dt>
+                    <dd>$50,000</dd>
+                </div>
+                <div class="fact">
+                    <dt>Emisión garantizada</dt>
+                    <dd>Si tiene menos de 70 años: $100,000 | Si tiene 70 años o más: el menor entre $100,000 o el monto con la aseguradora anterior</dd>
+                </div>
+                <div class="fact">
+                    <dt>Clase elegible</dt>
+                    <dd>todos los empleados por hora elegibles</dd>
+                </div>
+                <div class="fact">
+                    <dt>Renovación de la cobertura</dt>
+                    <dd>Su cobertura se renueva cada 1 de abril.</dd>
+                </div>
+            </dl>
+            <dl class="details">
+                <dt>Emisión garantizada</dt>
+                <dd>Monto de cobertura que puede comprar sin responder preguntas médicas.</dd>
+                <dt>¿Necesito proporcionar información de salud?</dt>
+                <dd>Los montos de beneficio hasta la emisión garantizada no requerirán información de salud.</dd>
+                <dt>Reducción del beneficio</dt>
+                <dd>A medida que envejece, el monto de su beneficio de seguro de vida disminuye. Las reducciones por edad se aplican al monto del beneficio después de proporcionar información de salud.</dd>
+            </dl>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Reducciones por edad del seguro de vida a término grupal</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Edad</th>
+                                <th scope="col">Reducción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">70</th>
+                                <td>reducción del 35% a los 70 años</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">75</th>
+                                <td>reducción adicional del 20% a los 75 años</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h3 class="block-title">Muerte accidental y desmembramiento (AD&amp;D) — Principal</h3>
+            <dl class="facts">
+                <div class="fact">
+                    <dt>Beneficio de AD&amp;D</dt>
+                    <dd>Si sufre una lesión accidental dentro o fuera del trabajo, puede recibir un beneficio igual a su beneficio de vida.</dd>
+                </div>
+            </dl>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Tabla de pérdidas de AD&amp;D</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Pérdida</th>
+                                <th scope="col">Beneficio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Pérdida de la vida, pérdida de ambas manos o ambos pies o de una mano y un pie, o pérdida de la vista de ambos ojos</th>
+                                <td>100%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Pérdida de una mano, o un pie, o la vista de un ojo</th>
+                                <td>50%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Pérdida del pulgar y el índice de la misma mano</th>
+                                <td>25%</td>
+                            </tr>
+                            <tr class="group-row">
+                                <th colspan="2">Pérdida del uso o parálisis: pérdida total del movimiento durante 12 meses consecutivos o parálisis permanente</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Cuadriplejia</th>
+                                <td>100%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Paraplejia, hemiplejia o pérdida del uso de ambas manos o ambos pies o de una mano y un pie.</th>
+                                <td>50%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Pérdida del uso de un brazo, una pierna, una mano o un pie</th>
+                                <td>25%</td>
+                            </tr>
+                            <tr class="group-row">
+                                <th colspan="2">Pérdida del habla y/o la audición: pérdida total durante 12 meses consecutivos</th>
+                            </tr>
+                            <tr>
+                                <th scope="row">Pérdida del habla y de la audición en ambos oídos</th>
+                                <td>100%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Pérdida del habla o de la audición en ambos oídos</th>
+                                <td>50%</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Pérdida de la audición en un oído</th>
+                                <td>25%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h3 class="block-title">Beneficios adicionales</h3>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Beneficios adicionales de AD&amp;D y vida</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Beneficio</th>
+                                <th scope="col">Detalles</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Cinturón de seguridad / bolsa de aire: si muere en un accidente automovilístico mientras usa el cinturón de seguridad o está protegido por una bolsa de aire</th>
+                                <td>$10,000</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Repatriación: si muere a 100 millas o más de su hogar</th>
+                                <td>Hasta $2,000</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Educación: si sus hijos están inscritos en una institución postsecundaria acreditada al momento de su muerte</th>
+                                <td>$3,000 por año durante hasta 4 años</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Beneficio por fallecimiento anticipado</th>
+                                <td>Si tiene una enfermedad terminal, es posible que pueda recibir una parte de su beneficio de vida.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Cobertura durante una discapacidad</th>
+                                <td>Si tiene una discapacidad, es posible que pueda continuar su cobertura sin pagar la prima.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Conversión de la cobertura terminada</th>
+                                <td>Si la cobertura termina, es posible que pueda convertirla en una póliza individual.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <h3 class="block-title">Seguro de vida voluntario – Empleados asalariados</h3>
+            <div class="prose">
+                <p>Proteja lo que más importa: las personas que ama. Si usted fallece, el pago de su seguro de vida irá a los beneficiarios que haya designado.</p>
+            </div>
+            <dl class="facts">
+                <div class="fact">
+                    <dt>Clase elegible</dt>
+                    <dd>Empleados asalariados</dd>
+                </div>
+                <div class="fact">
+                    <dt>Opciones de cobertura para hijos</dt>
+                    <dd>$5,000; $10,000; $15,000; $20,000; $25,000</dd>
+                </div>
+            </dl>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Montos de cobertura del seguro de vida voluntario para empleado y cónyuge</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Cobertura</th>
+                                <th scope="col">Incrementos</th>
+                                <th scope="col">Mínimo</th>
+                                <th scope="col">Máximo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">Empleado</th>
+                                <td>$10,000</td>
+                                <td>$10,000</td>
+                                <td>$300,000 si tiene menos de 70 años; $150,000 si tiene 70 años o más</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Cónyuge</th>
+                                <td>$5,000</td>
+                                <td>$5,000</td>
+                                <td>$100,000 si tiene menos de 70 años; $30,000 si tiene 70 años o más</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="table-shell">
+                <div class="table-scroll">
+                    <table class="cmp-table">
+                        <caption class="uk-hidden-visually">Reducciones por edad del seguro de vida voluntario</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Edad</th>
+                                <th scope="col">Reducción</th>
+                                <th scope="col">Se aplica a</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">70</th>
+                                <td>35%</td>
+                                <td>Cobertura del empleado; cobertura del cónyuge</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">75</th>
+                                <td>20% adicional</td>
+                                <td>Cobertura del empleado; cobertura del cónyuge</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <ul class="pill-list incl">
+                <li>Monto de cobertura que puede comprar sin proporcionar información de salud</li>
+                <li>A medida que envejece, el monto de su beneficio de seguro de vida disminuye</li>
+                <li>El monto de cobertura no puede superar el 100% de su beneficio</li>
+                <li>Los hijos dependientes menores de 14 días reciben un beneficio de $1,000</li>
+            </ul>
+        </div>
+    </section>
+    <section id="enrollment" class="uk-section">
+        <div class="uk-container" data-l="en">
+            <header class="sec-head">
+                <h2>Enrollment Information</h2>
+                <p class="sec-lead">Use this guide to choose your 2026 coverage during open enrollment.</p>
+            </header>
+            <h3 class="block-title">Your checklist</h3>
+            <ol class="steps">
+                <li>
+                    <h3>Compare the medical plans</h3>
+                    <p>Review the plan cards and key numbers in <a href="#medical">Medical</a>. The out-of-pocket maximum is the most you would pay in a year for in-network covered services — weigh it against what you pay for each plan.</p>
+                </li>
+                <li>
+                    <h3>Check your dentist and your prescriptions</h3>
+                    <p>Find an in-network dentist at <a href="https://DeltaDental.com/FAD" target="_blank" rel="noopener noreferrer">DeltaDental.com/FAD</a> and review the prescription drug tiers in <a href="#medical">Medical</a>.</p>
+                </li>
+                <li>
+                    <h3>Pick dental and vision</h3>
+                    <p>Compare the High Plan and Low Plan in <a href="#dental">Dental</a> and review the DeltaVision-Essential plan in <a href="#vision">Vision</a>.</p>
+                </li>
+                <li>
+                    <h3>Name your beneficiaries</h3>
+                    <p>Your life insurance proceeds go to the beneficiaries you've designated — see <a href="#life-disability">Life &amp; AD&amp;D</a>.</p>
+                </li>
+                <li>
+                    <h3>Enroll</h3>
+                    <p>Make your elections during open enrollment.</p>
+                </li>
+            </ol>
+        </div>
+        <div lang="es" class="uk-container" data-l="es">
+            <header class="sec-head">
+                <h2>Información de inscripción</h2>
+                <p class="sec-lead">Use esta guía para elegir su cobertura de 2026 durante la inscripción abierta.</p>
+            </header>
+            <h3 class="block-title">Su lista de verificación</h3>
+            <ol class="steps">
+                <li>
+                    <h3>Compare los planes médicos</h3>
+                    <p>Revise las tarjetas de los planes y las cifras clave en <a href="#medical">Médico</a>. El máximo de bolsillo es lo máximo que pagaría en un año por servicios cubiertos dentro de la red; compárelo con lo que paga por cada plan.</p>
+                </li>
+                <li>
+                    <h3>Verifique su dentista y sus recetas</h3>
+                    <p>Busque un dentista dentro de la red en <a href="https://DeltaDental.com/FAD" target="_blank" rel="noopener noreferrer">DeltaDental.com/FAD</a> y revise los niveles de medicamentos recetados en <a href="#medical">Médico</a>.</p>
+                </li>
+                <li>
+                    <h3>Elija dental y visión</h3>
+                    <p>Compare el High Plan y el Low Plan en <a href="#dental">Dental</a> y revise el plan DeltaVision-Essential en <a href="#vision">Visión</a>.</p>
+                </li>
+                <li>
+                    <h3>Designe a sus beneficiarios</h3>
+                    <p>El pago de su seguro de vida irá a los beneficiarios que haya designado; consulte <a href="#life-disability">Vida y AD&amp;D</a>.</p>
+                </li>
+                <li>
+                    <h3>Inscríbase</h3>
+                    <p>Haga sus elecciones durante la inscripción abierta.</p>
+                </li>
+            </ol>
+        </div>
+    </section>
+    <section id="contact" class="uk-section">
+        <div class="uk-container" data-l="en">
+            <header class="sec-head">
+                <h2>Contacts &amp; Resources</h2>
+                <p class="sec-lead">Carrier and vendor contacts for your dental, vision and hearing benefits.</p>
+            </header>
+            <p class="note">Medical plan contacts are in <a href="#medical">Medical</a>.</p>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3>Delta Dental</h3>
+                    <p class="c-phone"><span class="c-label">Customer Service</span><a href="tel:+18004529310">1-800-452-9310</a></p>
+                    <p class="c-web"><span class="c-label">Website</span><a href="https://DeltaDental.com" target="_blank" rel="noopener noreferrer">DeltaDental.com</a></p>
+                    <p class="c-find"><span class="c-label">Find a dentist</span><a href="https://DeltaDental.com/FAD" target="_blank" rel="noopener noreferrer">DeltaDental.com/FAD</a></p>
+                    <p class="note">Customer Service hours: Monday through Thursday, 8:00 a.m. to 6:30 p.m. EST, and Friday, 8:00 a.m. to 5:00 p.m. EST</p>
+                </div>
+                <div class="contact-card">
+                    <h3>VSP Customer Service</h3>
+                    <p class="c-phone"><span class="c-label">Phone</span><a href="tel:+18008777195">1-800-877-7195</a></p>
+                    <p class="note">vision benefits</p>
+                </div>
+                <div class="contact-card">
+                    <h3>TruHearing</h3>
+                    <p class="c-phone"><span class="c-label">Phone</span><a href="tel:+18773967194">877.396.7194</a></p>
+                    <p class="c-web"><span class="c-label">Website</span><a href="https://TruHearing.com/VSP" target="_blank" rel="noopener noreferrer">TruHearing.com/VSP</a></p>
+                    <p class="note">hearing aids and batteries</p>
+                </div>
+            </div>
+        </div>
+        <div lang="es" class="uk-container" data-l="es">
+            <header class="sec-head">
+                <h2>Contactos y recursos</h2>
+                <p class="sec-lead">Contactos de aseguradoras y proveedores para sus beneficios dentales, de visión y de audición.</p>
+            </header>
+            <p class="note">Los contactos de los planes médicos están en <a href="#medical">Médico</a>.</p>
+            <div class="contact-grid">
+                <!-- Spanish cards write the phone numbers with dashes (same numbers): benefits.js hides a card whose links match another card, which would hide these behind the English copies -->
+                <div class="contact-card">
+                    <h3>Delta Dental</h3>
+                    <p class="c-phone"><span class="c-label">Servicio al cliente</span><a href="tel:+1-800-452-9310">1-800-452-9310</a></p>
+                    <p class="c-web"><span class="c-label">Sitio web</span><a href="https://DeltaDental.com" target="_blank" rel="noopener noreferrer">DeltaDental.com</a></p>
+                    <p class="c-find"><span class="c-label">Buscar un dentista</span><a href="https://DeltaDental.com/FAD" target="_blank" rel="noopener noreferrer">DeltaDental.com/FAD</a></p>
+                    <p class="note">Horario de servicio al cliente: de lunes a jueves, de 8:00 a.m. a 6:30 p.m. EST, y viernes, de 8:00 a.m. a 5:00 p.m. EST</p>
+                </div>
+                <div class="contact-card">
+                    <h3>Servicio al cliente de VSP</h3>
+                    <p class="c-phone"><span class="c-label">Teléfono</span><a href="tel:+1-800-877-7195">1-800-877-7195</a></p>
+                    <p class="note">beneficios de visión</p>
+                </div>
+                <div class="contact-card">
+                    <h3>TruHearing</h3>
+                    <p class="c-phone"><span class="c-label">Teléfono</span><a href="tel:+1-877-396-7194">877.396.7194</a></p>
+                    <p class="c-web"><span class="c-label">Sitio web</span><a href="https://TruHearing.com/VSP" target="_blank" rel="noopener noreferrer">TruHearing.com/VSP</a></p>
+                    <p class="note">audífonos y baterías</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer class="site-footer">
+        <div class="uk-container" data-l="en">
+            <p class="disclaimer">This summary is for informational purposes only. Refer to official plan documents for complete details.</p>
+            <p class="docs">Based on 8 plan documents: Oxford Health Insurance, Inc. — Direct Plan Summary of Coverage, Oxford Health Insurance, Inc. — Summary of Coverage, Oxford Exclusive Plan, Delta Dental — High Plan overview (Delta Dental PPO Plus Premier), Delta Dental — Low Plan overview (Delta Dental PPO), Delta Dental — DeltaVision-Essential plan overview, Principal — Group term life insurance benefit summary for all eligible hourly employees, Principal — Accidental Death and Dismemberment (AD&amp;D) benefit summary, Group Voluntary Term Life Insurance benefit summary — Salaried Employees</p>
+        </div>
+        <div lang="es" class="uk-container" data-l="es">
+            <p class="disclaimer">Este resumen tiene fines únicamente informativos. Consulte los documentos oficiales del plan para obtener todos los detalles.</p>
+            <p class="docs">Basado en 8 documentos del plan: Oxford Health Insurance, Inc. — Direct Plan Summary of Coverage, Oxford Health Insurance, Inc. — Summary of Coverage, Oxford Exclusive Plan, Delta Dental — High Plan overview (Delta Dental PPO Plus Premier), Delta Dental — Low Plan overview (Delta Dental PPO), Delta Dental — DeltaVision-Essential plan overview, Principal — Group term life insurance benefit summary for all eligible hourly employees, Principal — Accidental Death and Dismemberment (AD&amp;D) benefit summary, Group Voluntary Term Life Insurance benefit summary — Salaried Employees</p>
+        </div>
+    </footer>
+</body>
+
+</html>
