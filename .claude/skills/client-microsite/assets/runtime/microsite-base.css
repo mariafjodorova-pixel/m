@@ -1,0 +1,58 @@
+/* microsite-base.css — the CSS the runtime relies on. Restyle freely with the client's tokens;
+   keep the mechanics (selectors, states, reduced-motion handling). */
+
+/* RELAYTO injects "html, body { height: 100% }". A sticky header can't leave its parent, so with a
+   viewport-tall body it would scroll away after one screen. Undo it (Westinghouse fix). */
+html, body { height: auto !important; min-height: 100%; }
+
+/* anchors land below the sticky header (the runtime keeps --header-h equal to its real height) */
+[id] { scroll-margin-top: calc(var(--header-h, 0px) + 16px); }
+
+/* sticky, not fixed: keeps working when the host scrolls the page in its own box or a transformed wrapper.
+   For a transparent header over the hero, pull the hero up under it: .hero { margin-top: calc(-1 * var(--header-h)) } */
+[data-header] { position: sticky; top: 0; z-index: 50; transition: background-color .25s, box-shadow .25s; }
+
+/* reading progress */
+[data-progress] { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; transform: scaleX(0); transform-origin: 0 50%; will-change: transform; }
+
+/* reveal: content stays visible without JS and with reduced motion */
+html.js .reveal { opacity: 0; transform: translateY(16px); transition: opacity .6s ease, transform .6s ease; }
+html.js .reveal.is-in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html.js .reveal { opacity: 1; transform: none; transition: none; }
+  * { scroll-behavior: auto !important; }
+}
+
+/* counters keep tabular digits so the reserved width holds */
+[data-count] { font-variant-numeric: tabular-nums; }
+
+/* YouTube facade */
+[data-yt] { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #000; }
+[data-yt] > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+[data-yt] > button { position: absolute; inset: 0; width: 100%; border: 0; background: transparent; cursor: pointer; }
+[data-yt] > iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+/* lightbox */
+dialog.lightbox { width: min(1200px, 94vw); height: min(820px, 90vh); max-width: none; max-height: none; padding: 0; border: 0; display: none; flex-direction: column; }
+dialog.lightbox[open] { display: flex; }
+dialog.lightbox::backdrop { background: rgba(0, 0, 0, .7); }
+.lightbox__bar { display: flex; align-items: center; gap: 16px; padding: 10px 16px; }
+.lightbox__title { flex: 1; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lightbox__close { font-size: 28px; line-height: 1; background: none; border: 0; cursor: pointer; min-width: 44px; min-height: 44px; }
+.lightbox__frame { flex: 1; }
+.lightbox__frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+/* background video fades in once it actually plays */
+video[data-bg-video] { opacity: 0; transition: opacity .8s; }
+video[data-bg-video].is-playing { opacity: 1; }
+
+/* a11y helpers */
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip-link { position: absolute; left: 16px; top: -100px; z-index: 100; }
+.skip-link:focus { top: 16px; }
+:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+
+/* the page body never scrolls sideways; wide things scroll inside their own box */
+html, body { overflow-x: clip; }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+img, video, svg { max-width: 100%; height: auto; }
